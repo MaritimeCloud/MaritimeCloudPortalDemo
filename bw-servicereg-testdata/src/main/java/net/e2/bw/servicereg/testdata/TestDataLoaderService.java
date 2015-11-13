@@ -13,11 +13,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.e2.bw.servicereg.core.service;
+package net.e2.bw.servicereg.testdata;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.e2.bw.servicereg.model.*;
+import net.e2.bw.servicereg.core.service.ServiceInstanceService;
+import net.e2.bw.servicereg.core.service.ServiceSpecificationService;
+import net.e2.bw.servicereg.model.AuthorizedUser;
+import net.e2.bw.servicereg.model.ServiceInstance;
+import net.e2.bw.servicereg.model.ServiceSpecification;
+import net.e2.bw.servicereg.model.ServiceType;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -31,18 +36,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class serves two purposes:
- * <ul>
- *     <li>Loads the system with test data</li>
- *     <li>Serves as an implementation of the OperationalServiceService service for now</li>
- * </ul>
+ * This class will load test data into the system
  */
 @Singleton
 @Lock(LockType.READ)
 @Startup
-public class TestDataLoaderService implements OperationalServiceService {
+public class TestDataLoaderService {
 
-    private List<OperationalService> operationalServices = new ArrayList<>();
     private List<ServiceSpecification> serviceSpecifications = new ArrayList<>();
     private List<ServiceInstance> serviceInstances = new ArrayList<>();
 
@@ -63,20 +63,6 @@ public class TestDataLoaderService implements OperationalServiceService {
     @PostConstruct
     void init() {
 
-
-        operationalServices.add(new OperationalService("lps", "imo", "Local Port Services", "Summary of Local Port Services"));
-        operationalServices.add(new OperationalService("mis", "imo", "Meteorological Information Services", "Summary of Meteorological Information Services"));
-        operationalServices.add(new OperationalService("msi", "imo", "Maritime Safety Information", "Summary of Maritime Safety Information"));
-        operationalServices.add(new OperationalService("msinm", "imo", "Maritime Safety Information & Notices to Mariners", "Summary of Maritime Safety Information & Notices to Mariners"));
-        operationalServices.add(new OperationalService("nas", "imo", "Navigational Assistance Service", "Summary of Navigational Assistance Service"));
-        operationalServices.add(new OperationalService("nga", "imo", "No-Go Area", "Summary of No-Go Area"));
-        operationalServices.add(new OperationalService("rme", "imo", "Route METOC", "Summary of Route METOC"));
-        operationalServices.add(new OperationalService("sre", "imo", "Strategical Route Exchange", "Summary of Strategical Route Exchange"));
-        operationalServices.add(new OperationalService("tos", "imo", "Traffic Organization Service", "Summary of Traffic Organization Service"));
-        operationalServices.add(new OperationalService("vsr", "imo", "Vessel Shore Reporting", "Summary of Vessel Shore Reporting"));
-        operationalServices.add(new OperationalService("wvtsg", "imo", "World Vessel Traffic Services Guide", "Summary of World Vessel Traffic Services Guide"));
-        operationalServices.add(new OperationalService("tre", "imo", "Tactical Route Exchange", "Summary of Tactical Route Exchange"));
-        operationalServices.add(new OperationalService("tus", "imo", "Tugs Services", "Summary of Tugs Services"));
 
         serviceSpecifications.add(new ServiceSpecification(
                 "imo-mcservicereg-rest",
@@ -217,19 +203,6 @@ public class TestDataLoaderService implements OperationalServiceService {
                 log.error("TEST DATA: Failed creating service instance " + service.getServiceInstanceId(), ex);
             }
         });
-    }
-
-    @Override
-    public OperationalService getOperationalService(String operationalServiceId) {
-        return operationalServices.stream()
-                .filter(s -> s.getOperationalServiceId().equals(operationalServiceId))
-                .findFirst()
-                .orElse(null);
-    }
-
-    @Override
-    public List<OperationalService> getOperationalServices() {
-        return operationalServices;
     }
 
 }

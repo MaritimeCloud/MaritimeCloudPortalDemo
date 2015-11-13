@@ -31,6 +31,11 @@
             <artifactId>bw-servicereg-ldap</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>net.e2.bw.servicereg</groupId>
+            <artifactId>bw-servicereg-testdata</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

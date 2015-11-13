@@ -46,6 +46,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>net.e2.bw.servicereg</groupId>
+            <artifactId>bw-servicereg-testdata</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
     </dependencies>
   </dependencyManagement>
 
@@ -107,6 +113,7 @@
     <module>bw-servicereg-model</module>
     <module>bw-servicereg-core</module>
     <module>bw-servicereg-ldap</module>
+    <module>bw-servicereg-testdata</module>
     <module>bw-servicereg-web</module>
   </modules>
 
