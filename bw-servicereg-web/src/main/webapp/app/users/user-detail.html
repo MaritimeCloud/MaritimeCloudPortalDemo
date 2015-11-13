@@ -1,0 +1,12 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h1 class="panel-title">{{user.userId}}</h1>
+    </div>
+    <table class="table-condensed">
+        <tr> <td colspan="2" align="center"> <img ng-if="user.userId" ng-src="/rest/api/users/{{user.userId}}/photo"/> </td> </tr>
+        <tr> <th class="text-right">Username : </th> <td>{{user.userId}} </td> </tr>
+        <tr> <th class="text-right">Name : </th> <td>{{user.firstName}} {{user.lastName}} </td> </tr>
+        <tr> <th class="text-right">Email Address : </th> <td>{{user.emailAddress}}</td>  </tr>
+    </table>
+</div>
+

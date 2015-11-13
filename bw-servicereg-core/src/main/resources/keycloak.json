@@ -1,0 +1,10 @@
+{
+  "realm": "balticweb",
+  "realm-public-key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuKr8vYd2bGU6kx8Z865C6t3y3QVdnR9GticuCHMxsA9xzI6jMjrHL48RU7virvaggb4qRP17S7o6erxnk0ohjbJYqfpoLlfexKdILouM1PG4IZoF2ns6rwu806tQNj0QRWTDvs8b6EZIgkSRHAcy19Qm3NANuWFjdDRrYqrY5s4Dy7EyG15obdPMdS0ElSeda3RjG//eYoygZ4TZfsYn1YrYJP1BmCxPJGkx+1NoWpLmEowAr7A5SAkPHzR8J+U3VHYkHmUQWPpVGiSoVXD7ov4CS86LP9hPr28m948VDNUzvtf07E8FecC9kfbjrOWeRxbwZx5fcpfV0mB5wTWVmQIDAQAB",
+  "auth-server-url": "http://localhost:8090/auth",
+  "ssl-required": "external",
+  "resource": "bw-servicereg-test",
+  "credentials": {
+    "secret": "07eb74f2-4c36-431e-becd-43c9aaed91a5"
+  }
+}

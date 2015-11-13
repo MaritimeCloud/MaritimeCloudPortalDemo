@@ -1,0 +1,37 @@
+
+<div class="panel panel-default organization">
+    <div><a href="#/orgs/{{org.organizationId}}"><img ng-if="org.organizationId" ng-src="/rest/api/org/{{org.organizationId}}/logo" height="80"/></a></div>
+    <div class="organization-name">{{org.name}}</div>
+    <div ng-if="org.url"><a href="{{org.url}}" class="organization-url" target="_blank"><span class="fa fa-globe"></span> {{org.url}}</a></div>
+    <div class="role-panel">
+
+        <span ng-if="hasOrganizationRole(org, orgRoles.admin) && org.applicantNo > 0"
+              class="badge role" popover="There are pending membership applications"
+              popover-trigger="mouseenter" popover-placement="top">{{org.applicantNo}}</span>
+
+        <span ng-if="hasOrganizationRole(org, orgRoles.admin)" class='label label-default role'>Admin</span>
+
+        <span ng-if="hasOrganizationRole(org, orgRoles.user) && !hasOrganizationRole(org, orgRoles.admin)" class='label label-default role'>Member</span>
+
+        <span class="btn-group role" ng-if="hasOrganizationRole(org, orgRoles.applicant)">
+            <button type="button" class="btn btn-xs btn-warning dropdown-toggle dropdown-label" data-toggle="dropdown">
+                Applied for membership <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" style="right:0; left: auto" role="menu">
+                <li><a href ng-click="cancelApplication(org)">Cancel</a></li>
+            </ul>
+        </span>
+
+        <span class="btn-group role" ng-if="hasOrganizationRole(org, orgRoles.invited)">
+            <button type="button" class="btn btn-xs btn-success dropdown-toggle dropdown-label" data-toggle="dropdown">
+                Invited <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" style="right:0; left: auto" role="menu">
+                <li><a href ng-click="acceptInvitation(org)">Accept invitation</a></li>
+                <li><a href ng-click="rejectInvitation(org)">Reject invitation</a></li>
+            </ul>
+        </span>
+
+        <div ng-transclude></div>
+    </div>
+</div>

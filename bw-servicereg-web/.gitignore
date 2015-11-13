@@ -1,0 +1,5 @@
+etc/
+node/
+node_modules/
+/src/main/webapp/ext/bower
+npm-debug.log

@@ -1,0 +1,40 @@
+<div class="row">
+    <div class="col-xs-12">
+        <h1>Service Registry Dashboard</h1>
+
+        <div>
+            <p>Organizations: {{statistics.organizations}}.<br/>
+                Services: {{statistics.services}}.<br/>
+                Specifications: {{statistics.servicesSpecifications}}.<br/>
+                Categories: {{statistics.operationalServices}}.<br/>
+                Users: {{statistics.users}}.</p>
+        </div>
+
+        <div>
+            <p>
+                <b>Welcome, {{currentUser.firstName}} {{currentUser.lastName}}</b>
+            </p>
+            <p ng-if="hasSiteRole(siteRoles.admin)">You're a site administrator.</p>
+        </div>
+
+        <br/>
+        <div>
+            <h4>
+                Organizations
+            </h4>
+            <p>
+                You have the following memberships:
+            </p>
+
+            <!-- ITEM: Users ORGANIZATIONS -->
+            <div class="row">
+                <div ng-repeat="org in organizations| orderBy:orderProp" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+
+                    <organization-list-details org="org" reload="loadUserMemberOrganizations()"></organization-list-details>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

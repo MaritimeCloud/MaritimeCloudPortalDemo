@@ -1,0 +1,26 @@
+<div class="boxed-group">
+    <div class="boxed-group-action" >
+        <div class="btn-group" style="margin-right: 10px;">
+            <label class="btn btn-default btn-xs" ng-model="filter.member" btn-checkbox="">&nbsp;&nbsp;Member&nbsp;&nbsp;</label>
+        </div>
+        <div class="btn-group">
+            <label class="btn btn-default btn-xs" ng-model="filter.country" btn-radio="''">&nbsp;&nbsp;All&nbsp;&nbsp;</label>
+            <label ng-repeat="c in countries" class="btn btn-default btn-xs" ng-model="filter.country" btn-radio="c">
+                <img ng-src="/app/img/flags/{{c|uppercase}}.png" width="16" tooltip="{{c|uppercase}}"/>
+            </label>
+        </div>
+        &nbsp;
+        <input ng-model="filter.query" placeholder="  Search">
+        <a ng-if="hasSiteRole(siteRoles.admin)" href="#/orgs/new" class="btn btn-xs btn-primary">+ New organization</a>
+    </div>
+    <h3>Organizations</h3>
+    <div class="boxed-group-inner">
+
+        <div class="row organization">
+            <div ng-repeat="org in organizations| filter:orgFilter | orderBy:orderProp"
+                 class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                <organization-list-details org="org" reload="loadUserOrganizations()"></organization-list-details>
+            </div>
+        </div>
+    </div>
+</div>

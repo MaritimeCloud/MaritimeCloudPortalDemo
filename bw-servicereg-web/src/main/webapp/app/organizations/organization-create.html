@@ -1,0 +1,68 @@
+<div class="row" cg-busy="busyPromise">
+    <div class="col-lg-6">
+        <h1>Create an organization</h1>
+
+        <p>Fill out the form below to register a new organization.</p>
+
+        <!--MESSAGES-->
+        <div ng-show="alertMessages" class="alert alert-danger">
+            <span ng-repeat="msg in alertMessages">{{msg}}<br /></span>
+        </div>
+        <div ng-show="message" class="alert alert-info">{{message}}</div>
+
+        <!--FORM-->
+        <form role="form" name="form">
+            <div class="form-group">
+                <label for="organizationId">Identifier</label>
+                <input 
+                    type="text" required class="form-control" id="organizationId" name="organizationId" placeholder="Enter a short id"
+                    ng-class="form.organizationId.$valid && form.organizationId.$dirty && idAlreadyExist ? 'mcp-invalid-input' : '' "
+                    ng-model="organization.organizationId"
+                    autocomplete='off' spellcheck='false'>
+                <div class="text-danger" ng-show="idAlreadyExist">
+                    Sorry, but this ID is already taken : (
+                </div>
+                <p class="help-block">This chosen string will be the identifier of the organization and cannot be changed once created.</p>
+            </div>
+            <!--div class="form-group">
+                <label for="orgMrn">Maritime Resource Name</label>
+                <input type="text" required class="form-control" id="orgMrn" placeholder="Maritime Resource Name" value="{{mrn()}}" readonly="readonly">
+                <p class="help-block">The Organization Maritime Resource Name.</p>
+            </div-->
+            <div class="form-group">
+                <label for="orgName">Name</label>
+                <input type="text" required class="form-control" id="orgName" placeholder="Enter the organization name" ng-model="organization.name"
+                       autocomplete='off' spellcheck='false'>
+                <p class="help-block">The name is used as the human readable representation of the organization. This name can be changed at any time.</p>
+            </div>
+            <div class="form-group">
+                <label for="orgSummary">Summary</label>
+                <textarea class="form-control" id="orgSummary" rows="3" placeholder="Enter a short description of the organization" ng-model="organization.summary"></textarea>
+                <p class="help-block">The summary is usually presented together with the name and should capture the essence of the organization in a few words.</p>
+            </div>
+            <div class="form-group">
+                <label for="orgUrl">Website URL</label>
+                <input type="text" required class="form-control" id="orgUrl" placeholder="Enter the organization website" ng-model="organization.url"
+                       autocomplete='off' spellcheck='false'>
+                <p class="help-block">The Organization website.</p>
+            </div>
+            <div class="form-group">
+                <label for="country">Country</label>
+                <select class='form-control input-sm' id='country'
+                        ng-model="organization.country"
+                        ng-options="country.code.toLowerCase() as country.name for country in countries">
+                    <option value="">None</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="orgLogo">Logo</label>
+                <input type="file" id="orgLogo" name="orgLogo">
+                <p class="help-block">Organization logo that will be used to enhance visual recognition.</p>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-success center" ng-disabled="!formIsSubmitable()" ng-click="submit()">Create organization</button>
+                <button class="btn btn-grey center" ui-sref='restricted.searchOrganizations'>Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

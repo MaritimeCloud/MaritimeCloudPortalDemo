@@ -1,0 +1,113 @@
+
+<div ng-show="viewState === 'list'" class="boxed-group">
+    <div class="boxed-group-action" >
+        Search: <input ng-model="filter_query">
+        <a ng-if="isAdmin()"
+           href="#/orgs/{{organizationId}}/members/invite" class="btn btn-sm btn-primary">+ Invite someone</a>
+        <a ng-if="!isMember()" class='btn btn-sm btn-primary' ui-sref='restricted.organizationMembersJoin({organizationId: organizationId})'>+ Join </a>
+    </div>
+    <h3>Members of {{organization.name}}</h3>
+    <div class="boxed-group-inner">
+
+        <div class="row">
+            <div ng-if="!members.length" class="col-lg-12"><i>The organization has {{memberCount}} members</i></div>
+            <div ng-repeat="member in members| filter:filter_query | orderBy:orderProp" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                <user-list-details user="member">
+                    <div class="role-panel">
+
+                        <span ng-if="isCurrentUser(member)" class="label label-primary role"> You </span>
+
+                        <span ng-if="hasOrganizationRole(member, orgRoles.admin)" class='label label-default role'>Admin</span>
+
+                        <span ng-if="hasOrganizationRole(member, orgRoles.user) && !hasOrganizationRole(member, orgRoles.admin)" class='label label-default'>Member</span>
+
+                        <span ng-if="isAdmin() && hasOrganizationRole(member, orgRoles.applicant)" class="btn-group role">
+                            <button type="button" class="btn btn-xs btn-warning dropdown-toggle dropdown-label" data-toggle="dropdown">
+                                Applied for membership <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" style="right:0; left: auto" role="menu">
+                                <li><a href ng-click="acceptApplication(member.userId)">Accept</a></li>
+                                <li><a href ng-click="rejectApplication(member.userId)">Reject</a></li>
+                            </ul>
+                        </span>
+                        <span ng-if="!isAdmin() && hasOrganizationRole(member, orgRoles.applicant)" class='label label-warning role'>Applied for membership</span>
+
+
+                        <span ng-if="(isCurrentUser(member) || isAdmin()) && hasOrganizationRole(member, orgRoles.invited)" class="btn-group role">
+                            <button type="button" class="btn btn-xs btn-success dropdown-toggle dropdown-label" data-toggle="dropdown">
+                                Invited <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" style="right:0; left: auto" role="menu">
+                                <li><a href ng-click="acceptInvitation(member.userId)">Accept invitation</a></li>
+                                <li><a href ng-click="rejectInvitation(member.userId)">Reject invitation</a></li>
+                            </ul>
+                        </span>
+                        <span ng-if="!(isCurrentUser(member) || isAdmin()) && hasOrganizationRole(member, orgRoles.invited)" class='label label-success role'>Invited</span>
+
+                        <div class="btn-group org-menu" ng-if="isCurrentUser(member) || isAdmin()">
+                            <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-cog"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" style="right:0; left: auto" role="menu">
+                                <li><a href ng-if="!isCurrentUser(member)" ng-click="confirmRemove(member)">Remove...</a></li>
+                                <li><a ng-if="isCurrentUser(member)" ng-click="confirmLeave()">Leave...</a></li>
+                                <li><a ng-if="isAdmin() && !hasOrganizationRole(member, orgRoles.admin)" ng-click="assignRole(member.userId, orgRoles.admin)">Make administrator</a></li>
+                                <li><a ng-if="isAdmin() && hasOrganizationRole(member, orgRoles.admin)" ng-click="removeRole(member.userId, orgRoles.admin)">Remove as administrator</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                </user-list-details>
+            </div>
+        </div>
+    </div>
+</div>
+
+<panel ng-show="viewState === 'confirm-remove'" category="danger" icon="user" title="Remove member?" offset="3">
+    <p>
+        Are you positive you want to remove <b><i>{{selectedMember.userId}}</i></b> from <i><b>{{organization.name}}</b></i>?
+    </p>
+    <panel-button btn-type="danger" ng-click="remove(selectedMember)">Yes - remove {{selectedMember.userId}}!</panel-button>
+    <panel-button btn-type="default" ng-click="cancel()">No, just kidding!</panel-button>
+</panel>
+
+<panel ng-show="viewState === 'remove-success'" category="primary" icon="user" title="Member removed" offset="3">
+    <p>
+        {{selectedMember.userId}} was successfully removed from the organization.
+    </p>
+    <panel-button btn-type="default" ng-click="cancel()">Close</panel-button>
+</panel>
+
+<panel ng-show="viewState === 'remove-failed'" category="danger" icon="user" title="Remove failed!" offset="3">
+    <p>
+        Eh, That went haywire!!!?
+    </p>
+    <p>
+        The member was probably NOT removed, Sorry!
+    </p>
+    <panel-button btn-type="default" ng-click="cancel()">Oh, I understand!</panel-button>
+</panel>
+
+<panel ng-show="viewState === 'confirm-leave'" category="danger" icon="user" title="Leave Organization?" offset="3">
+    <p>
+        Are you positive you want to leave <i><b>{{organization.name}}</b></i>?
+    </p>
+    <panel-button btn-type="danger" ng-click="leave()">Leave</panel-button>
+    <panel-button btn-type="default" ng-click="cancel()">Cancel</panel-button>
+</panel>
+
+<panel ng-show="viewState === 'leave-success'" category="primary" icon="user" title="Left Organization" offset="3">
+    <p>
+        You are no longer a member of {{organization.name}}.
+    </p>
+    <panel-button btn-type="default" ng-click="cancel()">Close</panel-button>
+</panel>
+
+<panel ng-show="viewState === 'leave-failed'" category="danger" icon="user" title="Leave failed!" offset="3">
+    <p>
+        Error leaving organization
+    </p>
+    <panel-button btn-type="default" ng-click="cancel()">OK</panel-button>
+</panel>

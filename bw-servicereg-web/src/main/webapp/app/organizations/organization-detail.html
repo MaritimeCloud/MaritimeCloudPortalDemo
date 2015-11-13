@@ -1,0 +1,129 @@
+
+<div class="org-header">
+    <h1>
+        <span>{{organization.name}}</span>
+        <a ng-if="isAdmin()" class="edit-org" href="#/orgs/{{organization.organizationId}}/settings" data-tooltip="Organization settings" data-tooltip-placement="right">
+            <span class="fa fa-gear"></span>
+        </a>
+        <img ng-if="organization.organizationId" ng-src="/rest/api/org/{{organization.organizationId}}/logo" class="pull-right" width="200"/>
+    </h1>
+    <p class="org-description">{{organization.summary}}</p>
+    <ul class="org-header-meta">
+        <li class="meta-item">
+            <span class="fa fa-globe"></span>
+            <a target="_blank" href="{{organization.url}}">{{organization.url}}</a>
+        </li>
+    </ul>
+</div>
+
+<tabset class="org-tabs">
+
+    <!--PROVIDED SERVICES-->
+    <tab heading="Services">
+        <div class="boxed-group">
+            <div class="boxed-group-action" >
+                <div ng-if="isAdmin()" style="float: right;">
+                    <a class="btn btn-primary btn-sm" href="#/orgs/{{organization.organizationId}}/si/create">+ Register Service</a>
+                </div>
+            </div>
+            <h3> Provided Services</h3>
+
+            <div class="boxed-group-inner">
+
+                <div ng-if="!serviceInstances.length">
+                    <i>This organization is not providing any services</i>
+                </div>
+
+                <div  class="container-fluid serviceInstanceListItem" ng-repeat="service in serviceInstances|limitTo:20">
+                    <div ng-controller="ServiceInstanceDetailsController">
+                        <span class="pull-right">({{service.serviceInstanceId}})</span>
+                        <h4>
+                            <span>{{service.name}} - {{service.specification.serviceType}}</span>
+                            <a ng-if="isAdmin()" class="edit-gear" href="#/orgs/{{organization.organizationId}}/si/{{service.serviceInstanceId}}/edit"
+                               data-tooltip="Service instance settings" data-tooltip-placement="right">
+                                <span class="fa fa-gear"></span></a>
+                            <a ng-if="isAdmin()" class="edit-gear" href="#/orgs/{{organization.organizationId}}/si/{{service.serviceInstanceId}}/members"
+                               data-tooltip="Service User Roles" data-tooltip-placement="right">
+                                <span class="fa fa-users"></span></a>
+                            <a ng-if="isAdmin()" class="edit-gear" href onclick="alert('not implemented yet')"
+                               data-tooltip="Remove Service" data-tooltip-placement="right">
+                                <span class="fa fa-trash"></span></a>
+                        </h4>
+                        <div class="row">
+                            <div class="col-sm-7 col-lg-5" >
+                                <thumbnail-map id="{{'tmap-' + $index}}" services="[service]" on-click="toggleDetails(); $digest()"></thumbnail-map>
+                            </div>
+                            <div class="col-sm-5 col-lg-7" >
+                                <p>{{service.summary}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-12">
+                                <h5 ng-click="toggleDetails()">{{details.isCollapsed ? '(more...)' : 'Service details:'}} </h5>
+                                <div collapse="details.isCollapsed">
+                                    <dl class="dl-horizontal">
+                                        <dt>Unique ID</dt><dd>{{service.serviceInstanceId}}</dd>
+                                        <dt>Endpoints:</dt>
+                                        <dt ng-repeat-start="endpoint in service.endpoints"></dt>
+                                        <dd ng-repeat-end class="truncated"><a target="_blank" href="{{endpoint.uri}}">{{endpoint.uri}}</a></dd>
+                                        <dd ng-show="service.endpoints.length===0" class="truncated"><i>no endpoints defined!</i></dd>
+                                        <h5>Service specification:</h5>
+                                        <dt>Name</dt><dd>{{service.specification.name}}</dd>
+                                        <dt>Id</dt><dd>{{service.specificationId}}</dd>
+                                        <dt>Type</dt><dd>{{service.specification.serviceType}}</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="serviceInstances.length > 20" class="container-fluid serviceInstanceListItem"> <br> ... and {{serviceInstances.length - 20}} more ...</div>
+            </div>
+        </div>
+    </tab>
+
+
+    <!-- SERVICE SPECIFICATIONS -->
+    <tab heading="Service Specifications">
+        <div class="boxed-group">
+            <div class="boxed-group-action" >
+                <div ng-if="isAdmin()" style="float: right;">
+                    <a class="btn btn-primary btn-sm" href="#/orgs/{{organization.organizationId}}/ss/create">+ Register Specification</a>
+                </div>
+            </div>
+            <h3> Service Specifications</h3>
+
+            <div class="boxed-group-inner">
+
+                <div ng-if="!specifications.length">
+                    <i>This organization has not defined any technical service specifications</i>
+                </div>
+                <ul ng-repeat="spec in specifications">
+                    <li>
+                        <h4>
+                            <span>{{spec.name}}</span>
+                            <a ng-if="isAdmin()" class="edit-gear" href="#/orgs/{{organization.organizationId}}/ss/{{spec.serviceSpecificationId}}/edit"
+                               data-tooltip="Service specification settings" data-tooltip-placement="right">
+                                <span class="fa fa-gear"></span>
+                            </a>
+                            <a ng-if="isAdmin()" class="edit-gear" href onclick="alert('not implemented yet')"
+                               data-tooltip="Remove Service Specification" data-tooltip-placement="right">
+                                <span class="fa fa-trash"></span>
+                            </a>
+                        </h4>
+                        <p>{{spec.summary}}</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </tab>
+
+
+    <!-- MEMBERS -->
+    <tab heading="Members">
+        <div ng-controller="OrganizationMembersController">
+            <div ng-include="'organizations/members/member-list.html'"/>
+        </div>
+    </tab>
+</tabset>
+

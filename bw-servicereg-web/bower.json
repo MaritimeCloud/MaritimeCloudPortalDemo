@@ -1,0 +1,35 @@
+{
+  "name": "BalticWebServiceReg",
+  "version": "0.1.0",
+  "ignore": [
+    ".jshintrc",
+    "**/*.txt",
+    "**/intro.js"
+  ],
+  "dependencies": {
+    "jquery": "1.11.3",
+    "bootstrap": "latest",
+    "angular": "~1.2.26",
+    "angular-resource": "~1.2.26",
+    "angular-bootstrap": "0.11.2",
+    "angular-ui-router": "0.2.10",
+    "angular-busy": "4.1.0",
+    "angular-leaflet-directive": "0.7.8",
+    "leaflet": "~0.7.3",
+    "leaflet.draw": "*",
+    "open-sans-fontface": "~1.1.0",
+    "components-font-awesome": "~4.2.0",
+    "angular-ui-select": "~0.8.1",
+    "angular-sanitize": "~1.2.26",
+    "angular-moment": "~0.9.0"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.2.26",
+    "chai": "*",
+    "mocha": "*"
+  },
+  "homepage": "https://github.com/EfficienSea2/BalticWebIdReg",
+  "resolutions": {
+    "angular": "1.2.26"
+  }
+}

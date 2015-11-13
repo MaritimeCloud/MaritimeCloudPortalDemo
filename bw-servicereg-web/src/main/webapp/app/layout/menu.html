@@ -1,0 +1,45 @@
+<nav class="navbar navbar-default" role="navigation">
+    <div class="navbar-container">
+
+        <!-- Responsive Navbar for angular-ui explained here: https://github.com/angular-ui/bootstrap/issues/1672 -->
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" ng-init="isCollapsed = true" ng-click="isCollapsed = !isCollapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#/" id="brand">Maritime Cloud <span class="brand-sub">Service Registry</span></a>
+        </div>
+        
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" data-collapse="isCollapsed">
+
+            <!--  navigation bar right -->
+            <ul class="nav navbar-nav navbar-right">
+
+                <!-- User -->
+                <li ng-if="currentUser" class="dropdown open">
+                    <a class='dropdown-toggle' href='#'>
+                        <i class='fa fa-gears' style='vertical-align: middle; margin-bottom: 4px'></i> {{currentUser.userId}}
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href ng-click="editProfile()"><i class="fa fa-cog"></i> Edit Profile </a></li>
+                    </ul>
+                </li>
+
+                <!-- Login & Join -->
+                <li ng-if="!currentUser">
+                    <a class="btn-primary" href="" ng-click="login()" id="menuLogin">Log In</a>
+                </li>
+                <!-- Logout -->
+                <li ng-if="currentUser">
+                    <a class="btn-grey" href="" ng-click="logout()" id="menuLogout">Log out</a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>

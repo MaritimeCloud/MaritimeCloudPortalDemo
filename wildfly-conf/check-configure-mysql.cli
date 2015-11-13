@@ -1,0 +1,20 @@
+# Use the Wildfly CLI to update the configuration.
+# Please refer to:
+# https://docs.jboss.org/author/display/AS71/CLI+Recipes
+
+# Start offline server
+embed-server --std-out=echo
+
+# Add mysql module
+module add \
+  --name=com.mysql \
+  --resources=mysql-connector-java-5.1.36.jar \
+  --dependencies=javax.api,javax.transaction.api
+
+# Add mysql driver
+/subsystem=datasources/jdbc-driver=mysql:add(driver-name=mysql,driver-module-name=com.mysql,driver-class-name=com.mysql.jdbc.Driver)
+
+# Reload and stop offline server
+reload --admin-only=false
+stop-embedded-server
+

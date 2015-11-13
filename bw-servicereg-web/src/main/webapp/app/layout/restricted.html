@@ -1,0 +1,12 @@
+<div class="main-container" id="main-container">
+    <!--SIDEBAR-->
+    <div ng-include="'layout/sidebar.html'"></div>
+    <!--MAIN CONTENT-->
+    <div class="main-content" ng-class="{'max-content': sidebar.isMinified}">
+        <div class="container-fluid">
+            <!-- PAGE CONTENT BEGINS -->
+            <div ui-view></div>
+            <!-- PAGE CONTENT ENDS -->
+        </div>
+    </div>
+</div>

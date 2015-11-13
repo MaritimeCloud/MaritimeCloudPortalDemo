@@ -1,0 +1,45 @@
+<div class="col-lg-6">
+    <h1>Update Service Specification {{serviceSpec.name}}</h1>
+    <p>Fill out the form below to register the service specification provisioned by your organization.</p>
+    <hr>
+
+    <i class="help-block">
+        <label>Service Specification ID:</label> {{serviceSpec.serviceSpecificationId}} <br/>
+    </i>
+
+    <!--MESSAGES-->
+    <div ng-show="alertMessages" class="alert alert-danger">
+        <span ng-repeat="msg in alertMessages">{{msg}}<br /></span>
+    </div>
+    <div ng-show="message" class="alert alert-info">{{message}}</div>
+
+    <!--FORM-->
+    <form role="form" name="form">
+
+        <div class="form-group">
+            <label for="serviceType">Service Type</label>
+            <select required class='form-control' id='serviceType'  mcp-focus-me
+                    ng-model="serviceSpec.serviceType" ng-options="serviceType for serviceType in serviceTypes"></select>
+            <p class="help-block">Select the service type.</p>
+        </div>
+
+        <div class="form-group">
+            <label for="serviceName">Name</label>
+            <input type="text" required class="form-control" id="serviceName" placeholder="Enter a service specification name" ng-model="serviceSpec.name"
+                   autocomplete='off' spellcheck='false'>
+            <p class="help-block">The name will be presented on result lists when searching for service specifications. It should distinguish this service from others offered by the organization.</p>
+        </div>
+
+        <div class="form-group">
+            <label for="serviceDescription">Summary</label>
+            <textarea class="form-control" id="serviceDescription" rows="3" placeholder="Enter a description of the service specification" ng-model="serviceSpec.summary"></textarea>
+            <p class="help-block">The description is usually presented together with the name and should capture the essence of the service specification in a few words.</p>
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-success center" ng-disabled="!form.$valid || !form.$dirty || !formIsSubmitable()" ng-click="submit()">Update Specification</button>
+            <button type="button" class="btn btn-grey center" ng-click="close()">Cancel</button>
+        </div>
+        <br>
+    </form>
+</div>

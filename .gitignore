@@ -1,0 +1,9 @@
+target/
+wildfly-9*
+.settings
+.project
+.classpath
+*~
+.DS_Store
+.idea
+*.iml
