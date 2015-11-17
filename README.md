@@ -10,7 +10,7 @@ Sub-projects:
 * bw-servicereg-core: Defines the main REST API
 * bw-servicereg-ldap: An LDAP implementation of the underlying services. Will store services in LDAP.
 * bw-servicereg-model: The model classes returned by the REST API.
-* bw-servicereg-model: Imports a lot of test services into the system.
+* bw-servicereg-testdata: Imports a lot of test services into the system.
 * bw-servicereg-web: The actual Service Registry web application.
 
 ## Prerequisites
