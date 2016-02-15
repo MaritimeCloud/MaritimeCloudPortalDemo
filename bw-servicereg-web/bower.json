@@ -18,7 +18,7 @@
     "leaflet": "~0.7.3",
     "leaflet.draw": "*",
     "open-sans-fontface": "~1.1.0",
-    "components-font-awesome": "~4.2.0",
+    "components-font-awesome": "~4.5.0",
     "angular-ui-select": "~0.8.1",
     "angular-sanitize": "~1.2.26",
     "angular-moment": "~0.9.0"
