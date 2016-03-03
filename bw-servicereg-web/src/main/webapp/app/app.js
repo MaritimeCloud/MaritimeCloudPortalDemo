@@ -20,13 +20,26 @@ var mcpApp = angular.module('mcpApp', [
   'mcp.organizations.service-specifications',
   'mcp.search.services',
   'mcp.users',
+  'mcp.vessels',
   'leaflet-directive'
 ]);
 
-mcpApp.config(['$stateProvider', 'stateHelperProvider', '$urlRouterProvider', 'SITE_ROLES',
-  function($stateProvider, stateHelperProvider, $urlRouterProvider, SITE_ROLES) {
+var applicationStartUrl = '/vessels';
+
+angular.element(document).ready(function () {
+	bootstrapKeycloak('mcpApp', 'check-sso');
+});
+
+mcpApp
+.config(['$httpProvider', '$stateProvider', 'stateHelperProvider', '$urlRouterProvider', 'SITE_ROLES',
+  function($httpProvider, $stateProvider, stateHelperProvider, $urlRouterProvider, SITE_ROLES) {
     $urlRouterProvider.when("", "/");
 
+    // Enable use of session cookies
+    $httpProvider.defaults.withCredentials = true;
+
+    $httpProvider.interceptors.push('authHttpInterceptor');
+    
     var publicArea = {
       name: 'public',
       templateUrl: 'layout/public.html',
@@ -51,6 +64,18 @@ mcpApp.config(['$stateProvider', 'stateHelperProvider', '$urlRouterProvider', 'S
           url: "/dashboard",
           templateUrl: 'partials/dashboard.html',
           controller: 'DashboardController'
+        },
+        {
+            name: 'vessels',
+            url: "/vessels",
+            templateUrl: 'vessels/vessel-list.html',
+            controller: 'VesselListController'
+        },
+        {
+            name: 'vesselDetails',
+            url: "/vessels/{vesselId}",
+            templateUrl: 'vessels/vessel-detail.html',
+            controller: 'VesselDetailController'
         },
         {
           name: 'users',
@@ -152,44 +177,46 @@ mcpApp.config(['$stateProvider', 'stateHelperProvider', '$urlRouterProvider', 'S
 
     stateHelperProvider.setNestedState(publicArea);
     stateHelperProvider.setNestedState(restrictedArea);
-  }])
 
+  }])
+  
     // PAGE TRANSITION: 
     // Register a "Restricting Route Access" listener
-    .run(function($rootScope, $state, $location, AUTH_EVENTS, AuthService) {
-      $rootScope.$on('$stateChangeStart', function(event, next, params) {
+    .run(function($rootScope, $state, $location, AuthServ, Auth) {
+        $rootScope.$on('$stateChangeStart', function(event, next, params) {
 
-        if($rootScope.stateChangeBypass) {
-          $rootScope.stateChangeBypass = false;
-          return;
-        }
+            if($rootScope.stateChangeBypass) {
+                $rootScope.stateChangeBypass = false;
+                return;
+            }
+            // If we are logged in and no route url is present, we will redirect to our start url
+            if(next.url === '/' && Auth.loggedIn) {
+                $rootScope.stateChangeBypass = true;
+            	$location.path(applicationStartUrl);
+            	return;
+            }
+            
+            var isRestrictedRoute = next.data && next.data.authorizedRoles;
 
-        var isRestrictedRoute = next.data && next.data.authorizedRoles;
-
-        if (isRestrictedRoute) {
-
-          event.preventDefault();
-
-          var targetUrl = window.location.pathname + "#" + next.url;
-
-          AuthService.checkSiteRoles(
-              next.data.authorizedRoles,
-              function (data) {
-                if (data == 'true') {
-                  $rootScope.stateChangeBypass = true;
-                  $state.go(next, params);
-                } else {
-                  console.error("Restriced Route Access: user is not authorized" + data)
-                  $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
-                }
-              },
-              function (data) {
-                console.log("Restriced Route Access: user is not logged in", next);
-                //CB todo: nextRoute must be defined again after transition to ui-route
-                $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated, targetUrl);
-              });
-        }
-      });
-
+            if (isRestrictedRoute) {
+                event.preventDefault();
+                var targetUrl = window.location.pathname + "#" + next.url;
+                // TODO: How should we handle the role management
+                AuthServ.hasRole('',
+                    function (data) {
+                        if (data) {
+                            $rootScope.stateChangeBypass = true;
+                            $state.go(next, params);
+                        } else {
+                            console.error("Restriced Route Access: user is not authorized" + data)
+                            // TODO: handle
+                        }
+                    },
+                    function (data) {
+                        console.log("Restriced Route Access: user is not logged in", next);
+                        // TODO: handle redirect to login
+                    }
+                );
+            }
+        });
     });
-

@@ -7,3 +7,4 @@ wildfly-9*
 .DS_Store
 .idea
 *.iml
+*.tern-project

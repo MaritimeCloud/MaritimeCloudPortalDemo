@@ -117,7 +117,13 @@
         <ul class="nav nav-list" ng-if="hasSiteRole(siteRoles.admin)">
             <li><a ui-sref="restricted.users"><i class="fa fa-users" style=""></i>&nbsp;&nbsp;Users </a></li>
         </ul>
-
+        
+        <!----------------------------------------------------->
+        <!-- VESSELS -->
+        <!----------------------------------------------------->
+        <ul class="nav nav-list" ng-if="hasSiteRole(siteRoles.admin)">
+            <li><a ui-sref="restricted.vessels"><i class="fa fa-ship" style=""></i>&nbsp;&nbsp;Vessels </a></li>
+        </ul>
     </accordion>
 
 

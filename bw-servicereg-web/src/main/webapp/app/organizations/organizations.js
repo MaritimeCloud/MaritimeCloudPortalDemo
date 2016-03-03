@@ -4,14 +4,60 @@
 
 angular.module('mcp.organizations', ['ui.bootstrap'])
 
-    .controller('DashboardController', ['$scope', 'UserService', 'ServiceStatsService',
-        function ($scope, UserService, ServiceStatsService) {
-
+    .controller('DashboardController', ['$scope', '$rootScope', '$http', 'UserService', 'ServiceStatsService', '$window',
+        function ($scope, $rootScope, $http, UserService, ServiceStatsService, $window) {
             $scope.orderProp = 'name';
+            
+            var loginBackendStatus =  $window.localStorage.getItem('loginBackendStatus');
+            var loginBackendStatusText = '';
+            if (loginBackendStatus == 'false') {
+            	loginBackendStatusText = 'NOT LOGGED IN TO BACKEND';
+                $window.localStorage.setItem('currentOrgShortName', '');
+            	$window.localStorage.setItem('loginBackendStatusText',  loginBackendStatusText);
+                $scope.loginStatusError = loginBackendStatusText;
+      		    $scope.loginStatusOk = null;
+            } else {
+            	loginBackendStatusText =  $window.localStorage.getItem('loginBackendStatusText');
+      		    $scope.loginStatusError = null;
+    		    $scope.loginStatusOk = loginBackendStatusText;
+            }
 
+            $scope.loginBackend = function () {
+          	    var loginName = 'DMA';
+          	    var loginPassword = 'ohg678vlhgkf4855hkjuulva5q';
+          	    var inputData = $.param({
+                    username: loginName,
+                    password: loginPassword       
+                });
+            	
+            	var config = {
+                    headers : {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                }
+                $window.localStorage.setItem('currentOrgShortName', '');
+            	$http.post('https://localhost:8443/login', inputData, config)
+            	.success(function (data, status, headers, config) {
+                    $window.localStorage.setItem('currentOrgShortName', loginName);
+            	    loginBackendStatusText = 'Logged in as ' + loginName;
+                    $window.localStorage.setItem('loginBackendStatusText',  loginBackendStatusText);
+                    $window.localStorage.setItem('loginBackendStatus',  true);
+            		$scope.loginStatusError = null;
+            		$scope.loginStatusOk = loginBackendStatusText;
+                })
+                .error(function (data, status, headers, config) {
+                	loginBackendStatusText = 'Error in login. Error was: ' + data + ", with status: " + status;
+                  	$window.localStorage.setItem('loginBackendStatusText',  loginBackendStatusText);
+                    $window.localStorage.setItem('loginBackendStatus',  false);
+                	
+          		    $scope.loginStatusError = loginBackendStatusText;
+        		    $scope.loginStatusOk = null;
+                });
+            };
+            
             $scope.$watch(
                 function () {
-                    return $scope.currentUser;
+                    return $scope.userName;
                 },
                 function (newValue, oldValue) {
                     if (newValue) {

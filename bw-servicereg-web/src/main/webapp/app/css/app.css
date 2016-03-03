@@ -278,6 +278,35 @@ ul.nav.nav-tabs  {
     opacity: 1.0;
 }
 
+/* Vessel list */
+
+.vessel {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.vessel a {
+    font-size: 10px;
+}
+
+.vessel-name {
+    font-size: 14px;
+}
+
+.vessel-name a {
+    font-size: 14px;
+}
+
+.vessel img {
+    opacity: 1.0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.vessel a:hover img {
+    opacity: 0.4;
+}
+
 /* Users list */
 .user {
     text-align: center;

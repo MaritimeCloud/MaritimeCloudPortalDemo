@@ -1,6 +1,7 @@
 <!doctype html>
 <!--<html lang="en" ng-app="mcpApp">-->
-<html lang="en" ng-app="mcpAppDev">
+<!--<html lang="en" ng-app="mcpAppDev">-->
+<html lang="en">
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <meta charset="utf-8" />
@@ -41,7 +42,10 @@
         <!-- leaflet -->
         <script src="../ext/bower/leaflet/dist/leaflet.js"></script>
         <script src="../ext/bower/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>        
-        <script src="../ext/bower/leaflet.draw/dist/leaflet.draw.js"></script>        
+        <script src="../ext/bower/leaflet.draw/dist/leaflet.draw.js"></script>     
+        
+        
+        <script src="http://localhost:8090/auth/js/keycloak.js"></script>   
 
         <!-- Maritime Cloud Scripts -->
         <script src="utils.js"></script>
@@ -50,6 +54,8 @@
         <script src="..//ext/bower/angular-mocks/angular-mocks.js"></script>
         <script src="app.js"></script>
         <script src="auth/auth.js"></script>
+        <script src="auth/auth-service.js"></script>
+        <script src="auth/auth-ctrl.js"></script>
         <script src="directives.js"></script>
         <script src="filters.js"></script>
         <script src="search/search.js"></script>
@@ -62,6 +68,7 @@
         <script src="organizations/service-instances/service-instances.js"></script>
         <script src="organizations/service-specifications/service-specifications.js"></script>
         <script src="users/users.js"></script>
+        <script src="vessels/vessels.js"></script>
 
         <!-- leaflet styles -->
         <link rel="stylesheet" href="../ext/bower/leaflet/dist/leaflet.css">
@@ -70,7 +77,7 @@
         <!-- Maritime Cloud Styles -->
         <link rel="stylesheet" href="css/app.css">
     </head>
-    <body class="" ng-controller="ApplicationController">
+    <body class="" ng-controller="AuthCtrl">
         <div ng-include="'layout/menu.html'"></div>
         <div ui-view></div>
         <div ng-include="'layout/footer.html'"></div>

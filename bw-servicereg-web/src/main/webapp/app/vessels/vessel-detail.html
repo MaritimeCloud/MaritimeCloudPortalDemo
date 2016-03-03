@@ -1,0 +1,14 @@
+<div class="panel panel-default table-responsive">
+    <div class="panel-heading">
+        <h1 class="panel-title">{{vessel.name}}</h1>
+    </div>
+    
+    <table class="table-condensed">
+        <tr> <th class="text-right">Vessel ID : </th> <td>{{vessel.id}} </td> </tr>
+        <tr> <th class="text-right">Name : </th> <td>{{vessel.name}} </td> </tr>
+        <tr ng-repeat="attribute in vessel.attributes">
+            <th class="text-right">{{attribute.attributeName}} : </th> <td>{{attribute.attributeValue}}</td>   
+        </tr>
+    </table>
+</div>
+

@@ -20,26 +20,25 @@
             <ul class="nav navbar-nav navbar-right">
 
                 <!-- User -->
-                <li ng-if="currentUser" class="dropdown open">
+                <li ng-if="isLoggedIn" class="dropdown open">
                     <a class='dropdown-toggle' href='#'>
-                        <i class='fa fa-gears' style='vertical-align: middle; margin-bottom: 4px'></i> {{currentUser.userId}}
+                        <i class='fa fa-gears' style='vertical-align: middle; margin-bottom: 4px'></i> {{userName}}
                         <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href ng-click="editProfile()"><i class="fa fa-cog"></i> Edit Profile </a></li>
+                        <li><a ng-click="accountManagement()"><i class="fa fa-cog"></i> Edit Profile </a></li>
                     </ul>
                 </li>
 
                 <!-- Login & Join -->
-                <li ng-if="!currentUser">
+                <li ng-if="!isLoggedIn">
                     <a class="btn-primary" href="" ng-click="login()" id="menuLogin">Log In</a>
                 </li>
                 <!-- Logout -->
-                <li ng-if="currentUser">
+                <li ng-if="isLoggedIn">
                     <a class="btn-grey" href="" ng-click="logout()" id="menuLogout">Log out</a>
                 </li>
             </ul>
-
         </div>
     </div>
 </nav>

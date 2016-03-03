@@ -38,29 +38,29 @@
         $rootScope.$broadcast('event:auth-loginCancelled', data);
       }
     };
-  }])
+  }]);
 
   /**
    * $http interceptor.
    * On 401 response (without 'ignoreAuthModule' option) stores the request
    * and broadcasts 'event:auth-loginRequired'.
    */
-  .config(['$httpProvider', function($httpProvider) {
-    $httpProvider.interceptors.push(['$rootScope', '$q', 'httpBuffer', function($rootScope, $q, httpBuffer) {
-      return {
-        responseError: function(rejection) {
-          if (rejection.status === 401 && !rejection.config.ignoreAuthModule) {
-            var deferred = $q.defer();
-            httpBuffer.append(rejection.config, deferred);
-            $rootScope.$broadcast('event:auth-loginRequired', rejection);
-            return deferred.promise;
-          }
-          // otherwise, default behaviour
-          return $q.reject(rejection);
-        }
-      };
-    }]);
-  }]);
+//  .config(['$httpProvider', function($httpProvider) {
+//    $httpProvider.interceptors.push(['$rootScope', '$q', 'httpBuffer', function($rootScope, $q, httpBuffer) {
+//      return {
+//        responseError: function(rejection) {
+//          if (rejection.status === 401 && !rejection.config.ignoreAuthModule) {
+//            var deferred = $q.defer();
+//            httpBuffer.append(rejection.config, deferred);
+//            $rootScope.$broadcast('event:auth-loginRequired', rejection);
+//            return deferred.promise;
+//          }
+//          // otherwise, default behaviour
+//          return $q.reject(rejection);
+//        }
+//      };
+//    }]);
+//  }]);
 
   /**
    * Private module, a utility, required internally by 'http-auth-interceptor'.

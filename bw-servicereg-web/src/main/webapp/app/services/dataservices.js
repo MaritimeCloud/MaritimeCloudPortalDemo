@@ -7,6 +7,9 @@
 var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
 
     .constant("servicePort", /*"8080"*/ null)
+    .constant("servicePortBackend", "8443")
+    .constant("loginType", "oidc")
+    
     .factory('serviceBaseUrl', ['$location', 'servicePort',
       function ($location, servicePort) {
         var protocol = $location.protocol();
@@ -14,24 +17,41 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
         var port = servicePort ? servicePort : $location.port();
         return protocol + "://" + host + ":" + port;
       }])
+      
+    .factory('serviceBaseUrlBackend', ['$location', 'servicePortBackend',
+      function ($location, servicePortBackend) {
+        var protocol = 'http';
+        var host = 'localhost';
+        var port = servicePortBackend ? servicePortBackend : $location.port();
+        return protocol + "://" + host + ":" + port;
+      }])
 
-    .factory('UserService', ['$resource', 'serviceBaseUrl',
-      function ($resource, serviceBaseUrl) {
-        var resource = $resource(serviceBaseUrl + '/rest/api/users/:userId', {}, {
-          query: {method: 'GET', params: {userId: ''}, isArray: false},
-          count: {method: 'GET', params: {userId: 'count'}, isArray: false},
-          post: {method: 'POST', params: {}, isArray: false},
-          put: {method: 'PUT', params: {}, isArray: false},
-          queryUserMemberOrganizations: {method: 'GET', url: '/rest/api/users/:userId/member-organizations', isArray: true},
-          queryUserOrganizations: {method: 'GET', url: '/rest/api/users/:userId/organizations', isArray: true}
+    .factory('VesselService', ['$resource', 'serviceBaseUrlBackend', 'loginType', 'Auth', function ($resource, serviceBaseUrlBackend, loginType, Auth) {
+        var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/vessel/:vesselId', {}, {
+        	query: {method: 'GET', params: {userId: ''}, isArray: false},
+            count: {method: 'GET', params: {userId: 'count'}, isArray: false},
+            post: {method: 'POST', params: {}, isArray: false},
+            put: {method: 'PUT', params: {}, isArray: false},
+            getVesselList: {method: 'GET', url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/vessels', isArray: true}
         });
 
-        return resource;
-      }])
+          return resource;
+        }])
+
+    .factory('UserService', ['$resource', 'serviceBaseUrl', function ($resource, serviceBaseUrl) {
+    	var resource = $resource(serviceBaseUrl + '/rest/api/users/:userId', {}, {
+    		query: {method: 'GET', params: {userId: ''}, isArray: false},
+            count: {method: 'GET', params: {userId: 'count'}, isArray: false},
+            post: {method: 'POST', params: {}, isArray: false},
+            put: {method: 'PUT', params: {}, isArray: false},
+            queryUserMemberOrganizations: {method: 'GET', url: '/rest/api/users/:userId/member-organizations', isArray: true},
+            queryUserOrganizations: {method: 'GET', url: '/rest/api/users/:userId/organizations', isArray: true}
+        });
+    	return resource;
+    }])
 
     .factory('OrganizationService', ['$resource', 'serviceBaseUrl',
       function ($resource, serviceBaseUrl) {
-
         var resource = $resource(serviceBaseUrl + '/rest/api/org/:organizationId', {}, {
           post: {method: 'POST'},
           put: {method: 'PUT', params: {organizationId: '@organizationId.identifier'}},

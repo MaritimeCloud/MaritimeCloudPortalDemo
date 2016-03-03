@@ -3,7 +3,14 @@
         <h1>Service Registry Dashboard</h1>
 
         <div>
-            <p>Organizations: {{statistics.organizations}}.<br/>
+        	<div ng-show="loginStatusOk" class="alert alert-info">{{loginStatusOk}}</div>
+        	<div ng-show="loginStatusError" class="alert alert-danger">{{loginStatusError}}
+        	    <div class="btn-group">
+                    <a class="btn btn-large btn-primary" ng-click="loginBackend()">Log In to backend</a>
+                </div>
+        	</div>
+            
+            <p>Organizatissons: {{statistics.organizations}}.<br/>
                 Services: {{statistics.services}}.<br/>
                 Specifications: {{statistics.servicesSpecifications}}.<br/>
                 Categories: {{statistics.operationalServices}}.<br/>
@@ -12,9 +19,8 @@
 
         <div>
             <p>
-                <b>Welcome, {{currentUser.firstName}} {{currentUser.lastName}}</b>
+                <b>Welcome, {{userName}}</b>
             </p>
-            <p ng-if="hasSiteRole(siteRoles.admin)">You're a site administrator.</p>
         </div>
 
         <br/>

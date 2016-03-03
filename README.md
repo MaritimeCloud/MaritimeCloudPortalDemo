@@ -1,3 +1,7 @@
+# NOTE: Currently not updated
+
+The project is currently undergoing a Major rewrite and thus this readme is NOT up to date...
+
 # BalticWebServiceReg
 Mock-up BalticWeb Service Registry. 
 

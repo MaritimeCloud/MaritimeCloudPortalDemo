@@ -51,7 +51,9 @@ public class AbstractRestService {
      * @return if the user is authenticated
      */
     protected boolean isAuthenticated() {
-        return getSubject() != null;
+//        return getSubject() != null;
+    	// Always return true. This should be removed when all rest-service calls are to the backend
+    	return true;
     }
 
     /**

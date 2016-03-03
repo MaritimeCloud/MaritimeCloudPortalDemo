@@ -17,12 +17,12 @@
                     <a href="https://dma-enav.atlassian.net/wiki/display/MCCT/Maritime+Service+Portfolio+Registry" target="_blank">Service Specification Standard</a>
                     and provisioned service instances implemented according to a service specification.</p>
                 <br/>
-                <div ng-if="currentUser">
+                <div ng-if="isLoggedIn">
                     <h3>Go to <a href="#/dashboard"> Dashboard </a> </h3>
                 </div>
-                <div ng-if="!currentUser">
+                <div ng-if="!isLoggedIn">
                     <div class="btn-group">
-                        <a class="btn btn-large btn-primary" href="#/dashboard" id="login">Log In or Join</a>
+                        <a class="btn btn-lg btn-primary" ng-click="login()" id="login">Log In</a>
                     </div>
                 </div>
             </div>
