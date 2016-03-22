@@ -1,14 +1,57 @@
-<div class="panel panel-default table-responsive">
-    <div class="panel-heading">
-        <h1 class="panel-title">{{vessel.name}}</h1>
+<div class="boxed-group table-responsive">
+    <h3>{{vessel.name}}
+        <a ng-if="isAdmin()" class="edit edit-gear" href="#/vessels/{{vessel.id}}/edit" data-tooltip="Edit {{vessel.name}}" data-tooltip-placement="right">
+            <span class="fa fa-gear"></span>
+        </a>
+        <a ng-if="isAdmin()" class="edit edit-gear" href='' ng-click="deleteVessel($event)" data-tooltip="Delete {{vessel.name}}" data-tooltip-placement="right">
+            <span class="fa fa-trash"></span>
+        </a>
+    </h3>
+    <div class="boxed-group-inner">
+        <div class="text-left col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <img class="vessel-img" ng-src="{{vessel.imageUrl}}"/>
+        </div>
+        <table class="table-condensed">
+            <tr> <th class="text-right">Vessel ID : </th> <td>{{vessel.id}} </td> </tr>
+            <tr> <th class="text-right">Name : </th> <td>{{vessel.name}} </td> </tr>
+            <tr ng-repeat="attribute in vessel.attributes">
+                <th class="text-right">{{attribute.attributeName}} : </th> <td>{{attribute.attributeValue}}</td>   
+            </tr>
+        </table>
     </div>
     
-    <table class="table-condensed">
-        <tr> <th class="text-right">Vessel ID : </th> <td>{{vessel.id}} </td> </tr>
-        <tr> <th class="text-right">Name : </th> <td>{{vessel.name}} </td> </tr>
-        <tr ng-repeat="attribute in vessel.attributes">
-            <th class="text-right">{{attribute.attributeName}} : </th> <td>{{attribute.attributeValue}}</td>   
-        </tr>
-    </table>
+    <div class="boxed-group-action" >
+        <a ng-if="isAdmin()" class="btn btn-primary btn-sm" href="#/certificates/generate/vessel/{{vessel.id}}">+ New certificate</a>
+    </div>
+    <h3>Certificates for {{vessel.name}}</h3>
+    <div class="boxed-group-inner">
+        <div ng-if="!vessel.certificates.length">
+            <i>No active certificates</i>
+        </div>
+        <table ng-if="vessel.certificates.length" class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="col-xs-6">Certificate</th>
+                    <th class="col-xs-2">Valid from</th>
+                    <th class="col-xs-2">Valid to</th>
+                    <th class="col-xs-2"> </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="certificate in vessel.certificates">
+                    <td>        
+    	                <textarea draggable="false" readonly style="width: 100%; height: 60px; resize: none;">
+    	                    {{certificate.certificate}}
+    	                </textarea>
+                    </td>
+                    <td class="vcenter"><span>{{certificate.start | date:dateFormat}}</span></td>
+                    <td class="vcenter">{{certificate.end | date:dateFormat}}</td>   
+                    <td class="vcenter">
+                        <a ng-if="isAdmin()" class="btn btn-danger btn-sm" ng-click="revokeCertificate($index)" ng-c>Revoke certificate</a>
+                    </td> 
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 

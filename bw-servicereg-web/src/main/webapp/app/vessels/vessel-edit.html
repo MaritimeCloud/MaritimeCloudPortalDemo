@@ -1,0 +1,51 @@
+<div class="row" cg-busy="busyPromise">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6">
+        <h1>Edit vessel</h1>
+        
+        <i class="help-block">
+            <label>Vessel ID: </label> {{vessel.id}} <br/>
+        </i>
+        <!--MESSAGES-->
+        <div ng-show="alertMessages" class="alert alert-danger">
+            <span ng-repeat="msg in alertMessages">{{msg}}<br /></span>
+        </div>
+        <div ng-show="message" class="alert alert-info">{{message}}</div>
+        <hr>
+        
+        <!--FORMS-->
+        <form role="form" name="form" class="form-horizontal">
+            <div class="form-group" ng-class="{ 'has-error' : form.name.$invalid && !form.name.$pristine }">
+                <label for="name" class="control-label col-xs-1 col-md-1">Name</label>
+                <div class="col-xs-11 col-md-11">
+                    <input type="text" required class="form-control" id="name" name="name" placeholder="Enter the vessel name" ng-model="vessel.name"
+                       autocomplete='off' spellcheck='false'>
+                    <p ng-show="form.name.$invalid && !form.name.$pristine" class="help-block">Name is required.</p>
+                </div>
+            </div>
+            <div class="form-group" ng-repeat="attribute in vessel.attributes">
+                <div class="col-xs-1">
+                    <button ng-click="removeAttribute($index)"><i class="fa fa-minus-square" style="color:red"></i></button>
+                </div>
+                <div class="col-xs-5" ng-class="{ 'has-error' : !isAttributeNameValid(attribute) }">
+                    <input type="text" required class="form-control  col-md-2" id="attName{{$index}}" name="attName{{$index}}" placeholder="Enter the name of the attribute" ng-model="attribute.attributeName"
+                          autocomplete='off' spellcheck='false'>
+                    <p ng-show="!isAttributeNameValid(attribute)" class="help-block">Attribute name is required.</p>
+                </div>
+                <div class="col-xs-6" ng-class="{ 'has-error' : !isAttributeValueValid(attribute) }">
+                    <input type="text" required class="form-control  col-md-2" id="attValue{{$index}}.value" name="attValue{{$index}}.value" placeholder="Enter the value of the attribute" ng-model="attribute.attributeValue"
+                          autocomplete='off' spellcheck='false'>
+                    <p ng-show="!isAttributeValueValid(attribute)" class="help-block">Attribute value is required.</p>
+                </div>  
+            </div>
+            <div class="form-group">
+                <div class="col-xs-offset-1 col-xs-11">
+                    <button class="btn btn-default" ng-click="addNewAttribute()">Add attribute</button>
+                </div>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-success" ng-disabled="form.$invalid" ng-click="submit()">Update</button>
+                <button class="btn btn-default" ui-sref='restricted.vesselDetails({vesselId: vessel.id})'>Cancel</button>
+            </div> 
+        </form> 
+    </div>
+</div>

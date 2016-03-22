@@ -46,7 +46,7 @@ angular.module('mcp.auth')
                 }
                 return deferred.promise;
             },
-            'responseError': function(response) {
+            'responseError': function(response) { // TODO error handling
                 if (response.status == 401) {
                     console.error('session timeout?');
                     Auth.keycloak.logout();

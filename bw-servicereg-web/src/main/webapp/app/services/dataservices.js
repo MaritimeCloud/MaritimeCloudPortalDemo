@@ -28,15 +28,44 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
 
     .factory('VesselService', ['$resource', 'serviceBaseUrlBackend', 'loginType', 'Auth', function ($resource, serviceBaseUrlBackend, loginType, Auth) {
         var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/vessel/:vesselId', {}, {
-        	query: {method: 'GET', params: {userId: ''}, isArray: false},
-            count: {method: 'GET', params: {userId: 'count'}, isArray: false},
             post: {method: 'POST', params: {}, isArray: false},
-            put: {method: 'PUT', params: {}, isArray: false},
-            getVesselList: {method: 'GET', url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/vessels', isArray: true}
+            put: {method: 'PUT', params: {vesselId: '@id'}, isArray: false},
+            deleteV: {method: 'DELETE', params: {vesselId: '@vesselId'}, isArray: false},
+            getVesselList: {
+            	method: 'GET', 
+            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/vessels', 
+            	isArray: true},
+            generateCertificate: {
+                method: 'GET',
+                params: {vesselId: '@vesselId'},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/vessel/:vesselId/generatecertificate'
+            },
+            revokeCertificate: {
+                method: 'POST',
+                params: {vesselId: '@vesselId', certId: '@certId'},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/vessel/:vesselId/certificates/:certId/revoke'
+            }
         });
 
-          return resource;
-        }])
+        resource.update = function (vessel, succes, error) {
+            return this.put(vessel, succes, error);
+        };
+        resource.create = function (vessel, succes, error) {
+            return this.post(vessel, succes, error);
+        };
+        resource.deleteVessel = function (vesselId, succes, error) {
+            return this.deleteV({vesselId: vesselId}, succes, error);
+        };
+        
+        resource.generateCertificateForVessel = function (vesselId, succes, error) {
+            return this.generateCertificate({vesselId: vesselId}, succes, error);
+        };
+        resource.revokeCertificateForVessel = function (vesselId, certId, succes, error) {
+            return this.revokeCertificate({vesselId: vesselId, certId: certId}, succes, error);
+        };
+        
+        return resource;
+      }])
 
     .factory('UserService', ['$resource', 'serviceBaseUrl', function ($resource, serviceBaseUrl) {
     	var resource = $resource(serviceBaseUrl + '/rest/api/users/:userId', {}, {
