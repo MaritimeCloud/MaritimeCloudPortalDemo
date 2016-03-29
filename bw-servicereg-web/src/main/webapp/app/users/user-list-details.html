@@ -1,7 +1,7 @@
 
 <div class="panel panel-default user">
-    <div><a href="#/users/{{user.userId}}"><img ng-if="user.userId" ng-src="/rest/api/users/{{user.userId}}/photo" height="80"/></a></div>
+    <div><a href="#/users/{{user.id}}"><img class="img-circle" ng-src="{{user.imageUrl}}" height="80"/></a></div>
     <div class="user-name">{{user.firstName}} {{user.lastName}}</div>
-    <div ng-if="user.emailAddress"><a href="mailto:{{user.emailAddress}}" target="_blank"><span class="fa fa-envelope-o"></span> {{user.emailAddress}}</a></div>
+    <div ng-if="user.email"><a href="mailto:{{user.email}}" target="_blank"><span class="fa fa-envelope-o"></span> {{user.email}}</a></div>
     <div ng-transclude></div>
 </div>

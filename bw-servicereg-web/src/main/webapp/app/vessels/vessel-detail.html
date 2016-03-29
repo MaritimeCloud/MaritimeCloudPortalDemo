@@ -28,7 +28,7 @@
         <div ng-if="!vessel.certificates.length">
             <i>No active certificates</i>
         </div>
-        <table ng-if="vessel.certificates.length" class="table table-striped">
+        <table ng-if="vessel.certificates.length" class="table">
             <thead>
                 <tr>
                     <th class="col-xs-6">Certificate</th>
@@ -46,7 +46,7 @@
                     </td>
                     <td class="vcenter"><span>{{certificate.start | date:dateFormat}}</span></td>
                     <td class="vcenter">{{certificate.end | date:dateFormat}}</td>   
-                    <td class="vcenter">
+                    <td class="vcenter text-right no-right-padding">
                         <a ng-if="isAdmin()" class="btn btn-danger btn-sm" ng-click="revokeCertificate($index)" ng-c>Revoke certificate</a>
                     </td> 
                 </tr>

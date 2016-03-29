@@ -34,7 +34,8 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
             getVesselList: {
             	method: 'GET', 
             	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/vessels', 
-            	isArray: true},
+            	isArray: true
+            },
             generateCertificate: {
                 method: 'GET',
                 params: {vesselId: '@vesselId'},
@@ -55,8 +56,7 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
         };
         resource.deleteVessel = function (vesselId, succes, error) {
             return this.deleteV({vesselId: vesselId}, succes, error);
-        };
-        
+        };        
         resource.generateCertificateForVessel = function (vesselId, succes, error) {
             return this.generateCertificate({vesselId: vesselId}, succes, error);
         };
@@ -67,7 +67,46 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
         return resource;
       }])
 
-    .factory('UserService', ['$resource', 'serviceBaseUrl', function ($resource, serviceBaseUrl) {
+    .factory('UserService', ['$resource', 'serviceBaseUrlBackend', 'loginType', 'Auth', function ($resource, serviceBaseUrlBackend, loginType, Auth) {
+    	var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/user/:userId', {}, {
+    		post: {method: 'POST', params: {}, isArray: false},
+            put: {method: 'PUT', params: {userId: '@id'}, isArray: false},
+            deleteU: {method: 'DELETE', params: {userId: '@userId'}, isArray: false},
+            getUserList: {
+            	method: 'GET', 
+            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/users', 
+            	isArray: true
+            },
+            generateCertificate: {
+                method: 'GET',
+                params: {userId: '@userId'},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/user/:userId/generatecertificate'
+            },
+            revokeCertificate: {
+                method: 'POST',
+                params: {userId: '@userId', certId: '@certId'},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/user/:userId/certificates/:certId/revoke'
+            }
+        });
+
+        resource.update = function (user, succes, error) {
+            return this.put(user, succes, error);
+        };
+        resource.create = function (user, succes, error) {
+            return this.post(user, succes, error);
+        };
+        resource.deleteUser = function (userId, succes, error) {
+            return this.deleteU({userId: userId}, succes, error);
+        };        
+        resource.generateCertificateForUser = function (userId, succes, error) {
+            return this.generateCertificate({userId: userId}, succes, error);
+        };
+        resource.revokeCertificateForUser = function (userId, certId, succes, error) {
+            return this.revokeCertificate({userId: userId, certId: certId}, succes, error);
+        };
+    	return resource;
+    }])
+    .factory('UserOldService', ['$resource', 'serviceBaseUrl', function ($resource, serviceBaseUrl) {
     	var resource = $resource(serviceBaseUrl + '/rest/api/users/:userId', {}, {
     		query: {method: 'GET', params: {userId: ''}, isArray: false},
             count: {method: 'GET', params: {userId: 'count'}, isArray: false},

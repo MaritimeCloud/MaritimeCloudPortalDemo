@@ -4,8 +4,8 @@
 
 angular.module('mcp.organizations', ['ui.bootstrap'])
 
-    .controller('DashboardController', ['$scope', '$rootScope', '$http', 'UserService', 'ServiceStatsService', '$window',
-        function ($scope, $rootScope, $http, UserService, ServiceStatsService, $window) {
+    .controller('DashboardController', ['$scope', '$rootScope', '$http', 'UserOldService', 'ServiceStatsService', '$window',
+        function ($scope, $rootScope, $http, UserOldService, ServiceStatsService, $window) {
             $scope.orderProp = 'name';
             
             var loginBackendStatus =  $window.localStorage.getItem('loginBackendStatus');
@@ -68,7 +68,7 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
                 });
 
             $scope.loadUserMemberOrganizations = function () {
-                UserService.queryUserMemberOrganizations({userId: $scope.currentUser.userId}, function (orgs) {
+            	UserOldService.queryUserMemberOrganizations({userId: $scope.currentUser.userId}, function (orgs) {
                     $scope.organizations = orgs;
                 });
             };
@@ -80,8 +80,8 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
         }])
 
 
-    .controller('OrganizationListController', ['$scope', '$stateParams', 'UserService',
-        function ($scope, $stateParams, UserService) {
+    .controller('OrganizationListController', ['$scope', '$stateParams', 'UserOldService',
+        function ($scope, $stateParams, UserOldService) {
 
             $scope.organizations = [];
             $scope.countries = [];
@@ -112,7 +112,7 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
             };
 
             $scope.loadUserOrganizations = function () {
-                UserService.queryUserOrganizations({userId: $scope.currentUser.userId}, function (orgs) {
+            	UserOldService.queryUserOrganizations({userId: $scope.currentUser.userId}, function (orgs) {
                     $scope.organizations = orgs;
                     $scope.countries = [];
 

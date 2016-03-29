@@ -1,16 +1,18 @@
 <div class="boxed-group">
-    <div class="boxed-group-action" > 
-        Search: <input ng-model="filter_query" ng-change="updateSearch()">
+    <div class="boxed-group-action" >
+        <div ng-if="isAdmin()" style="float: right;">
+            <a class="btn btn-primary btn-sm" href="#/users/create">+ Register user</a>
+        </div>
     </div>
     <h3>Users</h3>
     <div class="boxed-group-inner">
-
-        <div class="row">
+        <div ng-if="!users.length">
+            <i>No users</i>
+        </div>
+        <div ng-if="users.length" class="row">
             <div ng-repeat="user in users| filter:filter_query" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                 <user-list-details user="user"></user-list-details>
             </div>
         </div>
     </div>
-    <pagination total-items="page.totalElements" items-per-page="page.size" ng-model="currentPage" ng-change="pageChanged()" max-size="5"
-                Xclass="pagination-lg" rotate="false" boundary-links="true"></pagination>
 </div>

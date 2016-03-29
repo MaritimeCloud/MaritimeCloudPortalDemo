@@ -1,12 +1,54 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h1 class="panel-title">{{user.userId}}</h1>
+<div class="boxed-group table-responsive">
+    <h3>{{fullname}}
+        <a ng-if="isAdmin()" class="edit edit-gear" href="#/users/{{user.id}}/edit" data-tooltip="Edit {{fullname}}" data-tooltip-placement="right">
+            <span class="fa fa-gear"></span>
+        </a>
+        <a ng-if="isAdmin()" class="edit edit-gear" href='' ng-click="deleteUser($event)" data-tooltip="Delete {{fullname}}" data-tooltip-placement="right">
+            <span class="fa fa-trash"></span>
+        </a>
+    </h3>
+    <div class="boxed-group-inner">
+        <div class="text-left col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <img class="user-detail-img" ng-src="{{user.imageUrl}}"/>
+        </div>    
+        <table class="table-condensed">
+            <tr> <th class="text-right">First name : </th> <td>{{user.firstName}} </td> </tr>
+            <tr> <th class="text-right">Last name : </th> <td>{{user.lastName}} </td> </tr>
+            <tr> <th class="text-right">Email : </th> <td>{{user.email}}</td>  </tr>
+        </table>
     </div>
-    <table class="table-condensed">
-        <tr> <td colspan="2" align="center"> <img ng-if="user.userId" ng-src="/rest/api/users/{{user.userId}}/photo"/> </td> </tr>
-        <tr> <th class="text-right">Username : </th> <td>{{user.userId}} </td> </tr>
-        <tr> <th class="text-right">Name : </th> <td>{{user.firstName}} {{user.lastName}} </td> </tr>
-        <tr> <th class="text-right">Email Address : </th> <td>{{user.emailAddress}}</td>  </tr>
-    </table>
+    
+    <div class="boxed-group-action" >
+        <a ng-if="isAdmin()" class="btn btn-primary btn-sm" href="#/certificates/generate/user/{{user.id}}">+ New certificate</a>
+    </div>
+    <h3>Certificates for {{fullname}}</h3>
+    <div class="boxed-group-inner">
+        <div ng-if="!user.certificates.length">
+            <i>No active certificates</i>
+        </div>
+        <table ng-if="user.certificates.length" class="table">
+            <thead>
+                <tr>
+                    <th class="col-xs-6">Certificate</th>
+                    <th class="col-xs-2">Valid from</th>
+                    <th class="col-xs-2">Valid to</th>
+                    <th class="col-xs-2"> </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="certificate in user.certificates">
+                    <td>        
+    	                <textarea draggable="false" readonly style="width: 100%; height: 60px; resize: none;">
+    	                    {{certificate.certificate}}
+    	                </textarea>
+                    </td>
+                    <td class="vcenter"><span>{{certificate.start | date:dateFormat}}</span></td>
+                    <td class="vcenter">{{certificate.end | date:dateFormat}}</td>   
+                    <td class="vcenter text-right no-right-padding">
+                        <a ng-if="isAdmin()" class="btn btn-danger btn-sm" ng-click="revokeCertificate($index)" ng-c>Revoke certificate</a>
+                    </td> 
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
-

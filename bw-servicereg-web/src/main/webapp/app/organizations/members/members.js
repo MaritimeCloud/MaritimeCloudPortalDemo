@@ -112,8 +112,8 @@ angular.module('mcp.organizations.members', ['ui.bootstrap'])
       }])
 
 
-    .controller('OrganizationInviteMemberController', ['$scope', '$stateParams', 'UserService', 'OrganizationService', 'ORG_ROLES',
-      function ($scope, $stateParams, UserService, OrganizationService, ORG_ROLES) {
+    .controller('OrganizationInviteMemberController', ['$scope', '$stateParams', 'UserOldService', 'OrganizationService', 'ORG_ROLES',
+      function ($scope, $stateParams, UserOldService, OrganizationService, ORG_ROLES) {
 
         $scope.filter_query = '';
         $scope.viewState = 'invite';
@@ -138,7 +138,7 @@ angular.module('mcp.organizations.members', ['ui.bootstrap'])
 
         $scope.updateSearch = function (pattern) {
           if (pattern.trim().length > 0) {
-            $scope.busyPromiseSearch = UserService.query({userPattern: pattern, size: 10}, function (page) {
+            $scope.busyPromiseSearch = UserOldService.query({userPattern: pattern, size: 10}, function (page) {
               $scope.page = page;
               $scope.people = page.content;
             }).$promise;

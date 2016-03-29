@@ -104,10 +104,28 @@ mcpApp
           controller: 'UserListController'
         },
         {
+            name: 'userCreate',
+            url: "/users/create",
+            templateUrl: 'users/user-create.html',
+            controller: 'UserCreateController'
+        },
+        {
           name: 'userDetails',
           url: "/users/{userId}",
           templateUrl: 'users/user-detail.html',
           controller: 'UserDetailController'
+        },
+        {
+            name: 'userEdit',
+            url: "/users/{userId}/edit",
+            templateUrl: 'users/user-edit.html',
+            controller: 'UserEditController'
+        },
+        { 
+            name: 'generateCertificateUser',
+            url: "/certificates/generate/user/{userId}",
+            templateUrl: 'certificates/certificate-generate-user.html',
+            controller: 'CertificateUserGenerateController'
         },
         {
           name: 'searchOrganizations',

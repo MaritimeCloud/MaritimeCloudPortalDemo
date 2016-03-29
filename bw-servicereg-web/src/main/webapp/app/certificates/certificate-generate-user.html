@@ -1,12 +1,12 @@
 <!-- CREATE CERTIFICATE VIEW -->
-<panel ng-show="viewState === 'generate-certificate'" category="primary" icon="plus" title="Generate certificate for {{vessel.name}}" offset="3">
+<panel ng-show="viewState === 'generate-certificate'" category="primary" icon="plus" title="Generate certificate for {{fullname}}" offset="3">
     <p class="help-block">
         <i>
-            Generate a new certificate for {{vessel.name}}?
+            Generate a new certificate for {{fullname}}?
         </i>
     </p>
     <panel-button btn-type="primary" ng-click="generateCertificate()"> <i class="fa fa-plus"></i> Generate </panel-button>
-    <panel-button btn-type="default" ui-sref="restricted.vesselDetails({vesselId: vessel.id})"> Cancel <i class="fa fa-ban"></i> </panel-button>
+    <panel-button btn-type="default" ui-sref="restricted.userDetails({userId: user.id})"> Cancel <i class="fa fa-ban"></i> </panel-button>
 </panel>
 
 <panel ng-show="viewState === 'generate-success'" category="primary" icon="plus" title="Certificate generated" offset="3">
@@ -48,7 +48,7 @@
     	</div>
     </div>
     <panel-button btn-type="primary" ng-click="zipAndDownload()"> Zip &amp; download </panel-button>
-    <panel-button btn-type="default" ui-sref="restricted.vesselDetails({vesselId: vessel.id})"> Ok </panel-button>
+    <panel-button btn-type="default" ui-sref="restricted.userDetails({userId: user.id})"> Ok </panel-button>
 </panel>
 
 <panel ng-show="viewState === 'error'" category="danger" icon="user" title="Error" offset="3">
@@ -60,5 +60,5 @@
             {{error}}
         </i>
     </p>
-    <panel-button btn-type="default" ui-sref="restricted.vesselDetails({vesselId: vessel.id})">OK</panel-button>
+    <panel-button btn-type="default" ui-sref="restricted.userDetails({userId: user.id})">OK</panel-button>
 </panel>

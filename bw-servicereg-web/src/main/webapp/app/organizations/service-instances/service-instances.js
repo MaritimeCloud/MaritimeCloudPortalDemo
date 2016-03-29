@@ -300,9 +300,9 @@ angular.module('mcp.organizations.service-instances', [])
 
     .controller('ServiceInstanceMembersController', [
         '$scope', '$location', '$modal', '$stateParams',
-            'ServiceSpecificationService', 'ServiceInstanceService', 'UserService', 'OrganizationService',
+            'ServiceSpecificationService', 'ServiceInstanceService', 'UserOldService', 'OrganizationService',
         function ($scope, $location, $modal, $stateParams,
-                  ServiceSpecificationService, ServiceInstanceService, UserService, OrganizationService) {
+                  ServiceSpecificationService, ServiceInstanceService, UserOldService, OrganizationService) {
 
             var reportError = function (error) {
                 $scope.message = null;
@@ -386,7 +386,7 @@ angular.module('mcp.organizations.service-instances', [])
 
             $scope.updatePeopleSearch = function (pattern) {
                 if (pattern && pattern.trim().length > 0) {
-                    $scope.busyPromiseSearch = UserService.query({userPattern: pattern, size: 10}, function (page) {
+                    $scope.busyPromiseSearch = UserOldService.query({userPattern: pattern, size: 10}, function (page) {
                         $scope.peoplePage = page;
                         $scope.people = page.content;
                     }).$promise;

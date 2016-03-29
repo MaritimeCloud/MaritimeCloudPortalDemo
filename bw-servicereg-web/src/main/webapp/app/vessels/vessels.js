@@ -1,11 +1,10 @@
 'use strict';
 angular.module('mcp.vessels', ['ui.bootstrap'])
-    .controller('VesselListController', ['$scope', '$window', 'VesselService', 'Auth', function ($scope, $window, VesselService, Auth) {
+    .controller('VesselListController', ['$scope', 'VesselService', function ($scope, VesselService) {
     	$scope.isAdmin = function () {
             return true; // TODO role management
         };
     	$scope.updateSearch = function () {
-            var orgShortName = Auth.org;
             $scope.busyPromise = VesselService.getVesselList({}, function (result) {
             	angular.forEach(result, function(vessel, index){
             		vessel.imageUrl = '/app/img/no_ship.ico'; // TODO get image url from somewhere
@@ -18,9 +17,8 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
         $scope.updateSearch();
     }])
       
-    .controller('VesselDetailController', ['$scope', '$location', '$window', '$stateParams', 'VesselService', 'Auth', 'confirmDialog',
-        function ($scope, $location, $window, $stateParams, VesselService, Auth, confirmDialog) {
-            var orgShortName = Auth.org;
+    .controller('VesselDetailController', ['$scope', '$location', '$window', '$stateParams', 'VesselService', 'confirmDialog',
+        function ($scope, $location, $window, $stateParams, VesselService, confirmDialog) {
             $scope.dateFormat = dateFormat;
       	    $scope.isAdmin = function () {
                 return true; // TODO role management
@@ -97,10 +95,12 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
                     function (error) {
                         $scope.message = null;
                         $scope.alertMessages = ["Error on the serverside ", error.statusText];
+                        // TODO errorhandling
                     }
                 );
             };
-        }])
+        }
+    ])
         
     .controller('VesselCreateController', ['$scope', '$http', '$stateParams', '$location', 'VesselService', 'Auth',
         function ($scope, $http, $stateParams, $location, VesselService, Auth) {
@@ -126,7 +126,7 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
             $scope.submit = function () {
             	$scope.vessel.attributes = $scope.attributes;
                 $scope.alertMessages = null;
-                $scope.message = "Sending request to update vessel...";
+                $scope.message = "Sending request to create vessel...";
 
                 $scope.gotoVesselDetails = function () {
                     $location.path('/vessels/' + $scope.vessel.id).replace();
@@ -140,10 +140,12 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
                     function (error) {
                         $scope.message = null;
                         $scope.alertMessages = ["Error on the serverside ", error.statusText];
+                        // TODO errorhandling
                     }
                 );
             };
-        }])
+        }
+    ])
     
     .directive('vesselListDetails', function () {
         return {
