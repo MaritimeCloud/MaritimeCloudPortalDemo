@@ -16,6 +16,18 @@ angular.module('mcp.directives', [])
         }
       };
     })
+    .directive('select', function($interpolate) {
+        return {
+            restrict: 'E',
+            require: 'ngModel',
+            link: function(scope, elem, attrs, ctrl) {
+                var defaultOptionTemplate;
+                scope.defaultOptionText = attrs.defaultOption || 'Select...';
+                defaultOptionTemplate = '<option value="" disabled selected style="display: none;">{{defaultOptionText}}</option>';
+                elem.prepend($interpolate(defaultOptionTemplate)(scope));
+            }
+        };
+    })
 
     .directive('panel', function () {
       // as inspired by http://stackoverflow.com/questions/22584357/angularjs-is-there-a-difference-between-transclude-local-in-directive-controll?rq=1

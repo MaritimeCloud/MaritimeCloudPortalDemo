@@ -60,8 +60,8 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
         resource.generateCertificateForVessel = function (vesselId, succes, error) {
             return this.generateCertificate({vesselId: vesselId}, succes, error);
         };
-        resource.revokeCertificateForVessel = function (vesselId, certId, succes, error) {
-            return this.revokeCertificate({vesselId: vesselId, certId: certId}, succes, error);
+        resource.revokeCertificateForVessel = function (vesselId, certId, revokationReason, revokedAt, succes, error) {
+            return this.revokeCertificate({vesselId: vesselId, certId: certId, revokationReason: revokationReason, revokedAt: revokedAt}, succes, error);
         };
         
         return resource;
@@ -101,8 +101,8 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
         resource.generateCertificateForUser = function (userId, succes, error) {
             return this.generateCertificate({userId: userId}, succes, error);
         };
-        resource.revokeCertificateForUser = function (userId, certId, succes, error) {
-            return this.revokeCertificate({userId: userId, certId: certId}, succes, error);
+        resource.revokeCertificateForUser = function (userId, certId, revokationReason, revokedAt, succes, error) {
+            return this.revokeCertificate({userId: userId, certId: certId, revokationReason: revokationReason, revokedAt: revokedAt}, succes, error);
         };
     	return resource;
     }])

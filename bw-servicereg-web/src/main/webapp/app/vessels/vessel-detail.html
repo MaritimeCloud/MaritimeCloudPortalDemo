@@ -31,23 +31,22 @@
         <table ng-if="vessel.certificates.length" class="table">
             <thead>
                 <tr>
-                    <th class="col-xs-6">Certificate</th>
+                    <th class="col-xs-4">Certificate</th>
                     <th class="col-xs-2">Valid from</th>
                     <th class="col-xs-2">Valid to</th>
-                    <th class="col-xs-2"> </th>
+                    <th class="col-xs-4"> </th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="certificate in vessel.certificates">
-                    <td>        
-    	                <textarea draggable="false" readonly style="width: 100%; height: 60px; resize: none;">
-    	                    {{certificate.certificate}}
-    	                </textarea>
+                    <td class="vcenter">        
+    	                <span>Certificate for {{vessel.name}}</span>
                     </td>
                     <td class="vcenter"><span>{{certificate.start | date:dateFormat}}</span></td>
                     <td class="vcenter">{{certificate.end | date:dateFormat}}</td>   
                     <td class="vcenter text-right no-right-padding">
-                        <a ng-if="isAdmin()" class="btn btn-danger btn-sm" ng-click="revokeCertificate($index)" ng-c>Revoke certificate</a>
+                        <a ng-if="isAdmin()" class="btn btn-primary btn-sm" ng-click="zipAndDownloadCertificate(certificate)">Download certificate</a>
+                        <a ng-if="isAdmin()" class="btn btn-danger btn-sm" href="#/certificates/{{certificate.id}}/revoke/vessel/{{vessel.id}}">Revoke certificate</a>
                     </td> 
                 </tr>
             </tbody>

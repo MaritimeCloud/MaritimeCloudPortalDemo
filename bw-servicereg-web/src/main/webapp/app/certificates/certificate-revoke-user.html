@@ -1,0 +1,42 @@
+<!-- CREATE CERTIFICATE VIEW -->
+<panel category="primary" icon="minus" title="Revoke certificate for {{fullname}}" offset="3">
+    <div ng-show="error" class="alert alert-danger">
+        <p>
+            Error revoking certificate:
+            <br/>
+            <br/>
+            <i>
+                {{error}}
+            </i>
+        </p>
+    </div>
+    
+    <p class="help-block">
+        <i>
+            Please choose a reason and time for revocation.
+        </i>
+    </p>
+            
+        <form role="form" name="form">
+    <div class="row">
+        <div class="col-xs-12">
+            <select name="reas" ng-required="true" ng-change="updateReason(reason)" default-option="Choose reason..." class="form-control" ng-options="reason as reason.reasonText for reason in reasons track by reason.reasonId" ng-model="reason"></select>
+        </div>
+    </div>
+    <BR/>
+    <div class="row">
+        <div class="col-xs-12"  ng-class="{ 'has-error' : form.date.$invalid }">
+            <p class="input-group">
+                <input type="text" ng-change="updateDate(date)" ng-required="true" name="date" class="form-control" ng-click="openDate($event)" datepicker-popup ng-model="date" is-open="datePopup.opened" close-text="Close" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="openDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </p>
+            <div ng-show="form.date.$invalid" class="help-block">Date not valid.</div>
+        </div>
+    </div>
+    
+        </form> 
+    <panel-button btn-type="danger" ng-disabled="form.$invalid" ng-click="revokeCertificate()"> <i class="fa fa-minus"></i> Revoke </panel-button>
+    <panel-button btn-type="default" ui-sref="restricted.userDetails({userId: user.id})"> Cancel <i class="fa fa-ban"></i> </panel-button>
+</panel>

@@ -17,8 +17,8 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
         $scope.updateSearch();
     }])
       
-    .controller('VesselDetailController', ['$scope', '$location', '$window', '$stateParams', 'VesselService', 'confirmDialog',
-        function ($scope, $location, $window, $stateParams, VesselService, confirmDialog) {
+    .controller('VesselDetailController', ['$scope', '$location', '$window', '$stateParams', 'VesselService', 'confirmDialog', 'replaceSpacesFilter',
+        function ($scope, $location, $window, $stateParams, VesselService, confirmDialog, replaceSpacesFilter) {
             $scope.dateFormat = dateFormat;
       	    $scope.isAdmin = function () {
                 return true; // TODO role management
@@ -39,18 +39,16 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
                 		    }
                     );
     	    	});
-            };
-    	    $scope.revokeCertificate = function (index) {
-    	    	confirmDialog('Are you sure you want to revoke the certificate?').then(function () {
-    	    		VesselService.revokeCertificateForVessel($scope.vessel.id, $scope.vessel.certificates[index].id,
-                            function(data) {
-                                $scope.vessel.certificates.splice(index, 1);
-                		    },
-                            function(error) { 
-                		    	// TODO handle error
-                		    }
-                    );
-    	    	});
+            };    	    
+            $scope.zipAndDownloadCertificate = function (certificate) {
+            	// TODO maybe make generel as it's used at least in 3 different methods
+            	var zip = new JSZip();
+            	var vesselNameNoSpaces = replaceSpacesFilter($scope.vessel.name, '_');
+            	zip.file("Certificate_" + vesselNameNoSpaces + ".cer", certificate.certificate);
+            	
+            	var content = zip.generate({type:"blob"});
+            	// see FileSaver.js
+            	saveAs(content, "Certificate_" + vesselNameNoSpaces + ".zip");
             };
             $scope.gotoVesselList = function () {
                 $location.path('/vessels').replace();

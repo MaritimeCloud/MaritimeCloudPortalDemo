@@ -18,7 +18,8 @@ angular.module('mcp.users', ['ui.bootstrap'])
         $scope.updateSearch();
     }])
 
-    .controller('UserDetailController', ['$scope', '$stateParams', '$window', '$location', 'UserService', 'confirmDialog', function ($scope, $stateParams, $window, $location, UserService, confirmDialog) {
+    .controller('UserDetailController', ['$scope', '$stateParams', '$window', '$location', 'UserService', 'confirmDialog', 'replaceSpacesFilter', function ($scope, $stateParams, $window, $location, UserService, confirmDialog, replaceSpacesFilter) {
+        $scope.dateFormat = dateFormat;
     	$scope.isAdmin = function () {
             return true; // TODO role management
         };
@@ -40,17 +41,15 @@ angular.module('mcp.users', ['ui.bootstrap'])
                 );
 	    	});
         };
-	    $scope.revokeCertificate = function (index) {
-	    	confirmDialog('Are you sure you want to revoke the certificate?').then(function () {
-	    		UserService.revokeCertificateForUser($scope.user.id, $scope.user.certificates[index].id,
-                        function(data) {
-                            $scope.user.certificates.splice(index, 1);
-            		    },
-                        function(error) { 
-            		    	// TODO handle error
-            		    }
-                );
-	    	});
+        $scope.zipAndDownloadCertificate = function (certificate) {
+        	// TODO maybe make generel as it's used at least in 3 different methods
+        	var zip = new JSZip();
+        	var fullnameNoSpaces = replaceSpacesFilter($scope.fullname, '_');
+        	zip.file("Certificate_" + fullnameNoSpaces + ".cer", certificate.certificate);
+        	
+        	var content = zip.generate({type:"blob"});
+        	// see FileSaver.js
+        	saveAs(content, "Certificate_" + fullnameNoSpaces + ".zip");
         };
         $scope.gotoUserList = function () {
             $location.path('/users').replace();

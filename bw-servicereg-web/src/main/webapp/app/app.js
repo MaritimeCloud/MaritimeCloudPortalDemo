@@ -15,6 +15,7 @@ var mcpApp = angular.module('mcpApp', [
   'mcp.filters',
   'mcp.layout',
   'mcp.mapservices',
+  'mcp.models',
   'mcp.organizations',
   'mcp.organizations.members',
   'mcp.organizations.service-instances',
@@ -26,7 +27,7 @@ var mcpApp = angular.module('mcpApp', [
 ]);
 
 var applicationStartUrl = '/vessels';
-var dateFormat = 'yyyy-MM-dd HH:mm:ss';
+var dateFormat = 'yyyy-MM-dd';
 
 angular.element(document).ready(function () {
 	bootstrapKeycloak('mcpApp', 'check-sso');
@@ -95,7 +96,13 @@ mcpApp
             name: 'generateCertificateVessel',
             url: "/certificates/generate/vessel/{vesselId}",
             templateUrl: 'certificates/certificate-generate-vessel.html',
-            controller: 'CertificateVesselGenerateController'
+            controller: 'CertificateGenerateVesselController'
+        },
+        { 
+            name: 'revokeCertificateVessel',
+            url: "/certificates/{certId}/revoke/vessel/{vesselId}",
+            templateUrl: 'certificates/certificate-revoke-vessel.html',
+            controller: 'CertificateRevokeVesselController'
         },
         {
           name: 'users',
@@ -125,7 +132,13 @@ mcpApp
             name: 'generateCertificateUser',
             url: "/certificates/generate/user/{userId}",
             templateUrl: 'certificates/certificate-generate-user.html',
-            controller: 'CertificateUserGenerateController'
+            controller: 'CertificateGenerateUserController'
+        },
+        { 
+            name: 'revokeCertificateUser',
+            url: "/certificates/{certId}/revoke/user/{userId}",
+            templateUrl: 'certificates/certificate-revoke-user.html',
+            controller: 'CertificateRevokeUserController'
         },
         {
           name: 'searchOrganizations',

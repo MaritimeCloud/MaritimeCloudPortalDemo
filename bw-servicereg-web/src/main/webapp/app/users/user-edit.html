@@ -31,6 +31,13 @@
                        autocomplete='off' spellcheck='false'>
                 <p ng-show="form.email.$invalid && !form.email.$pristine" class="help-block">Email not valid.</p>
             </div>
+            
+            <div class="form-group">
+                <label for="permissions" class="control-label">Permissions</label>
+                <input type="text" class="form-control" id="permissions" name="permissions" placeholder="Enter user specifik permissions" ng-model="user.permissions"
+                       autocomplete='off' spellcheck='false'>
+            </div>
+            
             <div>
                 <button type="submit" class="btn btn-success" ng-disabled="form.$invalid" ng-click="submit()">Update</button>
                 <button class="btn btn-default" ui-sref='restricted.userDetails({userId: user.id})'>Cancel</button>
