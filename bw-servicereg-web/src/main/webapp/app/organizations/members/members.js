@@ -4,8 +4,8 @@
 
 angular.module('mcp.organizations.members', ['ui.bootstrap'])
 
-    .controller('OrganizationMembersController', ['$scope', '$stateParams', 'OrganizationService', 'ORG_ROLES',
-      function ($scope, $stateParams, OrganizationService, ORG_ROLES) {
+    .controller('OrganizationMembersController', ['$scope', '$stateParams', 'OrganizationOldService', 'ORG_ROLES',
+      function ($scope, $stateParams, OrganizationOldService, ORG_ROLES) {
 
         $scope.organizationId = $stateParams.organizationId;
         $scope.members = [];
@@ -13,7 +13,7 @@ angular.module('mcp.organizations.members', ['ui.bootstrap'])
         $scope.orderProp = 'userId';
 
         $scope.loadMembers = function () {
-            OrganizationService.membershipQuery({ organizationId: $scope.organizationId }, function (members) {
+            OrganizationOldService.membershipQuery({ organizationId: $scope.organizationId }, function (members) {
                 $scope.members = members;
                 for (var m in members) {
                     var user = members[m];
@@ -22,7 +22,7 @@ angular.module('mcp.organizations.members', ['ui.bootstrap'])
                     }
                 }
             });
-            OrganizationService.membershipCount({ organizationId: $scope.organizationId }, function (count) {
+            OrganizationOldService.membershipCount({ organizationId: $scope.organizationId }, function (count) {
                 $scope.memberCount = count.membersCount;
             });
         };
@@ -63,67 +63,67 @@ angular.module('mcp.organizations.members', ['ui.bootstrap'])
         };
 
         $scope.remove = function () {
-          OrganizationService.updateRole($scope.organization, $scope.selectedMember.userId, ORG_ROLES.user, 'remove',
+          OrganizationOldService.updateRole($scope.organization, $scope.selectedMember.userId, ORG_ROLES.user, 'remove',
               function() { $scope.loadMembers(); $scope.viewState = 'remove-success'; },
               function () { $scope.viewState = 'remove-failed'; });
         };
 
         $scope.leave = function () {
-          OrganizationService.updateRole($scope.organization, $scope.selectedMember.userId, ORG_ROLES.user, 'remove',
+          OrganizationOldService.updateRole($scope.organization, $scope.selectedMember.userId, ORG_ROLES.user, 'remove',
               function() { $scope.loadMembers(); $scope.viewState = 'leave-success'; },
               function () { $scope.viewState = 'leave-failed'; });
         };
 
         $scope.acceptApplication = function (userId) {
-          OrganizationService.updateRole($scope.organization, userId, ORG_ROLES.applicant, 'accept',
+          OrganizationOldService.updateRole($scope.organization, userId, ORG_ROLES.applicant, 'accept',
               function() { $scope.loadMembers() },
               function (error) { console.error("Error accepting application " + error); })
         };
 
         $scope.rejectApplication = function (userId) {
-          OrganizationService.updateRole($scope.organization, userId, ORG_ROLES.applicant, 'reject',
+          OrganizationOldService.updateRole($scope.organization, userId, ORG_ROLES.applicant, 'reject',
               function() { $scope.loadMembers() },
               function (error) { console.error("Error cancelling application " + error); })
         };
 
         $scope.acceptInvitation = function (userId) {
-          OrganizationService.updateRole($scope.organization, userId, ORG_ROLES.invited, 'accept',
+          OrganizationOldService.updateRole($scope.organization, userId, ORG_ROLES.invited, 'accept',
               function() { $scope.loadMembers() },
               function (error) { console.error("Error accepting invitation " + error); })
         };
 
         $scope.rejectInvitation = function (userId) {
-          OrganizationService.updateRole($scope.organization, userId, ORG_ROLES.invited, 'reject',
+          OrganizationOldService.updateRole($scope.organization, userId, ORG_ROLES.invited, 'reject',
               function() { $scope.loadMembers() },
               function (error) { console.error("Error rejecting invitation " + error); })
         };
 
         $scope.assignRole = function (userId, role) {
-          OrganizationService.updateRole($scope.organization, userId, role, 'assign',
+          OrganizationOldService.updateRole($scope.organization, userId, role, 'assign',
               function() { $scope.loadMembers(); },
               function (error) { console.error("Error assigning role " + error); })
         };
 
         $scope.removeRole = function (userId, role) {
-          OrganizationService.updateRole($scope.organization, userId, role, 'remove',
+          OrganizationOldService.updateRole($scope.organization, userId, role, 'remove',
               function() { $scope.loadMembers(); },
               function (error) { console.error("Error assigning role " + error);})
         }
       }])
 
 
-    .controller('OrganizationInviteMemberController', ['$scope', '$stateParams', 'UserOldService', 'OrganizationService', 'ORG_ROLES',
-      function ($scope, $stateParams, UserOldService, OrganizationService, ORG_ROLES) {
+    .controller('OrganizationInviteMemberController', ['$scope', '$stateParams', 'UserOldService', 'OrganizationOldService', 'ORG_ROLES',
+      function ($scope, $stateParams, UserOldService, OrganizationOldService, ORG_ROLES) {
 
         $scope.filter_query = '';
         $scope.viewState = 'invite';
         $scope.orderProp = 'userId';
 
-        OrganizationService.get({organizationId: $stateParams.organizationId}, function (organization) {
+        OrganizationOldService.get({organizationId: $stateParams.organizationId}, function (organization) {
               $scope.organization = organization;
         });
 
-        OrganizationService.membershipQuery({ organizationId: $stateParams.organizationId }, function (members) {
+        OrganizationOldService.membershipQuery({ organizationId: $stateParams.organizationId }, function (members) {
             $scope.members = members;
         });
 
@@ -154,19 +154,19 @@ angular.module('mcp.organizations.members', ['ui.bootstrap'])
         };
 
         $scope.invite = function (member) {
-            OrganizationService.updateRole($scope.organization, member, ORG_ROLES.invited, 'assign',
+            OrganizationOldService.updateRole($scope.organization, member, ORG_ROLES.invited, 'assign',
                 function() { $scope.viewState = 'invite-success'; },
                 function () { $scope.viewState = 'error'; });
         };
       }])
 
-    .controller('UserJoinOrganizationController', ['$scope', '$stateParams', 'OrganizationService', 'ORG_ROLES',
-      function ($scope, $stateParams, OrganizationService, ORG_ROLES) {
+    .controller('UserJoinOrganizationController', ['$scope', '$stateParams', 'OrganizationOldService', 'ORG_ROLES',
+      function ($scope, $stateParams, OrganizationOldService, ORG_ROLES) {
         $scope.viewState = 'apply-form';
-        $scope.organization = OrganizationService.get({organizationId: $stateParams.organizationId});
+        $scope.organization = OrganizationOldService.get({organizationId: $stateParams.organizationId});
         $scope.join = function (addtionalMessage) {
 
-            OrganizationService.updateRoleWithMessage(
+            OrganizationOldService.updateRoleWithMessage(
                 $scope.organization,
                 $scope.currentUser.userId,
                 ORG_ROLES.applicant,

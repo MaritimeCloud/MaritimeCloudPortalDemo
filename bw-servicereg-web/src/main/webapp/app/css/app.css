@@ -284,11 +284,11 @@ ul.nav.nav-tabs  {
 }
 
 .organization img {
-    opacity: 0.4;
+    opacity: 1.0;
 }
 
 .organization a:hover img {
-    opacity: 1.0;
+    opacity: 0.4;
 }
 
 /* Device list */

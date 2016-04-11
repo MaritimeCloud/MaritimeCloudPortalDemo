@@ -2,8 +2,8 @@
 
 angular.module('mcp.search.services', [])
 
-    .controller('SearchServiceMapController', ['$scope', '$filter', 'mapService', 'leafletData', 'ServiceSpecificationService', 'OrganizationService', 'ServiceInstanceService', 'searchServiceFilterModel',
-      function ($scope, $filter, mapService, leafletData, ServiceSpecificationService, OrganizationService, ServiceInstanceService, searchServiceFilterModel) {
+    .controller('SearchServiceMapController', ['$scope', '$filter', 'mapService', 'leafletData', 'ServiceSpecificationService', 'OrganizationOldService', 'ServiceInstanceService', 'searchServiceFilterModel',
+      function ($scope, $filter, mapService, leafletData, ServiceSpecificationService, OrganizationOldService, ServiceInstanceService, searchServiceFilterModel) {
 
         var SEARCHMAP_ID = 'searchmap';
 
@@ -232,7 +232,7 @@ angular.module('mcp.search.services', [])
 
           // load members referenced by id
           service.specification = ServiceSpecificationService.get({serviceSpecificationId: $scope.selectedService.specificationId});
-          service.provider = OrganizationService.get({organizationId: $scope.selectedService.organizationId});
+          service.provider = OrganizationOldService.get({organizationId: $scope.selectedService.organizationId});
         }
 
         $scope.toggleSelectService = function (service) {
@@ -297,11 +297,11 @@ angular.module('mcp.search.services', [])
 
     // Search Filter Object
     // that holds the various filters supplied by controls in eg. the sidebar and used to filter services
-    .service('searchServiceFilterModel', function (OperationalServiceService, OrganizationService) {
+    .service('searchServiceFilterModel', function (OperationalServiceService, OrganizationOldService) {
       this.data = {
         operationalServices: OperationalServiceService.query(),
         serviceSpecifications: null,
-        organizations: OrganizationService.query(),
+        organizations: OrganizationOldService.query(),
         serviceTypes: {
           mms: 'MMS',
           rest: 'REST',

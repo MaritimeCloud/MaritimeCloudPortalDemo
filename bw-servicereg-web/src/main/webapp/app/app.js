@@ -27,7 +27,6 @@ var mcpApp = angular.module('mcpApp', [
   'leaflet-directive'
 ]);
 
-var applicationStartUrl = '/vessels';
 var dateFormat = 'yyyy-MM-dd';
 
 angular.element(document).ready(function () {
@@ -63,12 +62,6 @@ mcpApp
         authorizedRoles: [SITE_ROLES.admin, SITE_ROLES.user]
       },
       children: [
-        {
-          name: 'dashboard',
-          url: "/dashboard",
-          templateUrl: 'partials/dashboard.html',
-          controller: 'DashboardController'
-        },
         {
             name: 'devices',
             url: "/devices",
@@ -178,78 +171,78 @@ mcpApp
             controller: 'CertificateRevokeUserController'
         },
         {
+            name: 'myOrganization',
+            url: "/orgs/",
+            templateUrl: 'organizations/organization-detail.html',
+            controller: 'OrganizationDetailsController'
+          },
+        {
           name: 'searchOrganizations',
           url: "/orgs",
           templateUrl: 'organizations/organization-list.html',
           controller: 'OrganizationListController'
         },
         {
-          name: 'organizationCreate',
-          url: "/orgs/new",
-          templateUrl: 'organizations/organization-create.html',
-          controller: 'OrganizationCreateController'
-        },
-        {
           name: 'organizationDetails',
-          url: "/orgs/{organizationId}",
+          url: "/orgs/{shortName}",
           templateUrl: 'organizations/organization-detail.html',
           controller: 'OrganizationDetailsController'
         },
         {
-          name: 'organizationSettings',
-          url: "/orgs/{organizationId}/settings",
+          name: 'organizationEdit',
+          url: "/orgs/{shortName}/edit",
           templateUrl: 'organizations/organization-edit.html',
           controller: 'OrganizationEditController'
         },
         {
           name: 'organizationMembers',
-          url: "/orgs/{organizationId}/members",
+          url: "/orgs/{shortName}/members",
           templateUrl: 'organizations/members/member-list.html',
           controller: 'OrganizationMembersController'
         },
         {
           name: 'organizationMembersInvite',
-          url: "/orgs/{organizationId}/members/invite",
+          url: "/orgs/{shortName}/members/invite",
           templateUrl: 'organizations/members/membership.html',
           controller: 'OrganizationInviteMemberController'
         },
         {
           name: 'organizationMembersJoin',
-          url: "/orgs/{organizationId}/members/join",
+          url: "/orgs/{shortName}/members/join",
           templateUrl: 'organizations/members/membership.html',
           controller: 'UserJoinOrganizationController'
         },
         {
           name: 'serviceInstanceCreate',
-          url: "/orgs/{organizationId}/si/create",
+          url: "/orgs/{shortName}/si/create",
           templateUrl: 'organizations/service-instances/service-instance-create.html',
           controller: 'CreateServiceInstanceController',
           data: {createState: true}
         },
         {
           name: 'serviceInstanceEdit',
-          url: "/orgs/{organizationId}/si/{serviceInstanceId}/edit",
+          url: "/orgs/{shortName}/si/{serviceInstanceId}/edit",
           templateUrl: 'organizations/service-instances/service-instance-edit.html',
           controller: 'EditServiceInstanceController',
           data: {editState: true}
         },
         {
           name: 'serviceInstanceMembers',
-          url: "/orgs/{organizationId}/si/{serviceInstanceId}/members",
+          url: "/orgs/{shortName}/si/{serviceInstanceId}/members",
           templateUrl: 'organizations/service-instances/service-instance-members.html',
           controller: 'ServiceInstanceMembersController',
           data: {editState: true}
         },
         {
           name: 'serviceSpecificationCreate',
-          url: "/orgs/{organizationId}/ss/create",
+          url: "/orgs/{shortName}/ss/create",
           templateUrl: 'organizations/service-specifications/service-specification-create.html',
           controller: 'CreateServiceSpecificationController',
           data: {createState: true}
         },
         {
           name: 'serviceSpecificationEdit',
-          url: "/orgs/{organizationId}/ss/{serviceSpecificationId}/edit",
+          url: "/orgs/{shortName}/ss/{serviceSpecificationId}/edit",
           templateUrl: 'organizations/service-specifications/service-specification-edit.html',
           controller: 'EditServiceSpecificationController',
           data: {editState: true}
@@ -277,10 +270,10 @@ mcpApp
                 $rootScope.stateChangeBypass = false;
                 return;
             }
-            // If we are logged in and no route url is present, we will redirect to our start url
-            if(next.url === '/' && Auth.loggedIn) {
+            // If we are logged in and no route url is present, we will redirect to my organizations
+            if((next.url === '/' || next.name === 'restricted.myOrganization') && Auth.loggedIn) {
                 $rootScope.stateChangeBypass = true;
-            	$location.path(applicationStartUrl);
+            	$location.path('/orgs/' + auth.org);
             	return;
             }
             

@@ -37,8 +37,8 @@ var indexOfUri = function (endpoints, endpointUri) {
 angular.module('mcp.organizations.service-instances', [])
 
 
-    .controller('ServiceInstanceDetailsController', ['$scope', 'ServiceSpecificationService', 'OrganizationService',
-        function ($scope, ServiceSpecificationService, OrganizationService) {
+    .controller('ServiceInstanceDetailsController', ['$scope', 'ServiceSpecificationService', 'OrganizationOldService',
+        function ($scope, ServiceSpecificationService, OrganizationOldService) {
 
             $scope.details = {isCollapsed: true};
 
@@ -50,7 +50,7 @@ angular.module('mcp.organizations.service-instances', [])
                 serviceSpecificationId: $scope.service.specificationId
             });
 
-            $scope.service.provider = OrganizationService.get({
+            $scope.service.provider = OrganizationOldService.get({
                 organizationId: $scope.service.organizationId
             });
         }
@@ -300,9 +300,9 @@ angular.module('mcp.organizations.service-instances', [])
 
     .controller('ServiceInstanceMembersController', [
         '$scope', '$location', '$modal', '$stateParams',
-            'ServiceSpecificationService', 'ServiceInstanceService', 'UserOldService', 'OrganizationService',
+            'ServiceSpecificationService', 'ServiceInstanceService', 'UserOldService', 'OrganizationOldService',
         function ($scope, $location, $modal, $stateParams,
-                  ServiceSpecificationService, ServiceInstanceService, UserOldService, OrganizationService) {
+                  ServiceSpecificationService, ServiceInstanceService, UserOldService, OrganizationOldService) {
 
             var reportError = function (error) {
                 $scope.message = null;
@@ -398,7 +398,7 @@ angular.module('mcp.organizations.service-instances', [])
 
             $scope.updateOrganizationSearch = function (pattern) {
                 if (pattern && pattern.trim().length > 0) {
-                    $scope.busyPromiseSearch = OrganizationService.query({namePattern: pattern, size: 10}, function (organizations) {
+                    $scope.busyPromiseSearch = OrganizationOldService.query({namePattern: pattern, size: 10}, function (organizations) {
                         $scope.organizations = organizations;
                     }).$promise;
                 } else {

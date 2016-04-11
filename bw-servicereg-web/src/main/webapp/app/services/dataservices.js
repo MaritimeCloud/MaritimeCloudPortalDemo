@@ -148,6 +148,23 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
     	return resource;
     }])
     
+    .factory('OrganizationService', ['$resource', 'serviceBaseUrlBackend', 'loginType', function ($resource, serviceBaseUrlBackend, loginType) {
+        var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/:shortName', {}, {
+            put: {method: 'PUT', params: {shortName: '@shortName'}},
+            getOrganizationList: {
+            	method: 'GET', 
+            	url: serviceBaseUrlBackend + '/' + loginType + '/api/orgs', 
+            	isArray: true
+            }
+        });
+
+        resource.update = function (organization, succes, error) {
+            return this.put(organization, succes, error);
+        };
+
+        return resource;
+    }])
+    
     .factory('UserOldService', ['$resource', 'serviceBaseUrl', function ($resource, serviceBaseUrl) {
     	var resource = $resource(serviceBaseUrl + '/rest/api/users/:userId', {}, {
     		query: {method: 'GET', params: {userId: ''}, isArray: false},
@@ -159,8 +176,8 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
         });
     	return resource;
     }])
-
-    .factory('OrganizationService', ['$resource', 'serviceBaseUrl',
+    
+    .factory('OrganizationOldService', ['$resource', 'serviceBaseUrl',
       function ($resource, serviceBaseUrl) {
         var resource = $resource(serviceBaseUrl + '/rest/api/org/:organizationId', {}, {
           post: {method: 'POST'},
