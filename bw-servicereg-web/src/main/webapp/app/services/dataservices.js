@@ -25,6 +25,47 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
         var port = servicePortBackend ? servicePortBackend : $location.port();
         return protocol + "://" + host + ":" + port;
       }])
+      
+    
+    .factory('DeviceService', ['$resource', 'serviceBaseUrlBackend', 'loginType', 'Auth', function ($resource, serviceBaseUrlBackend, loginType, Auth) {
+    	var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/device/:deviceId', {}, {
+    		post: {method: 'POST', params: {}, isArray: false},
+            put: {method: 'PUT', params: {deviceId: '@id'}, isArray: false},
+            deleteD: {method: 'DELETE', params: {deviceId: '@deviceId'}, isArray: false},
+            getDeviceList: {
+            	method: 'GET', 
+            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/devices', 
+            	isArray: true
+            },
+            generateCertificate: {
+                method: 'GET',
+                params: {deviceId: '@deviceId'},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/device/:deviceId/generatecertificate'
+            },
+            revokeCertificate: {
+                method: 'POST',
+                params: {deviceId: '@deviceId', certId: '@certId'},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/device/:deviceId/certificates/:certId/revoke'
+            }
+        });
+
+        resource.update = function (device, succes, error) {
+            return this.put(device, succes, error);
+        };
+        resource.create = function (device, succes, error) {
+            return this.post(device, succes, error);
+        };
+        resource.deleteDevice = function (deviceId, succes, error) {
+            return this.deleteD({deviceId: deviceId}, succes, error);
+        };        
+        resource.generateCertificateForDevice = function (deviceId, succes, error) {
+            return this.generateCertificate({deviceId: deviceId}, succes, error);
+        };
+        resource.revokeCertificateForDevice = function (deviceId, certId, revokationReason, revokedAt, succes, error) {
+            return this.revokeCertificate({deviceId: deviceId, certId: certId, revokationReason: revokationReason, revokedAt: revokedAt}, succes, error);
+        };
+    	return resource;
+    }])
 
     .factory('VesselService', ['$resource', 'serviceBaseUrlBackend', 'loginType', 'Auth', function ($resource, serviceBaseUrlBackend, loginType, Auth) {
         var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/vessel/:vesselId', {}, {
@@ -106,6 +147,7 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
         };
     	return resource;
     }])
+    
     .factory('UserOldService', ['$resource', 'serviceBaseUrl', function ($resource, serviceBaseUrl) {
     	var resource = $resource(serviceBaseUrl + '/rest/api/users/:userId', {}, {
     		query: {method: 'GET', params: {userId: ''}, isArray: false},

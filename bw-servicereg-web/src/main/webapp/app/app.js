@@ -11,6 +11,7 @@ var mcpApp = angular.module('mcpApp', [
   'mcp.auth',
   'mcp.certificates',
   'mcp.dataservices',
+  'mcp.devices',
   'mcp.directives',
   'mcp.filters',
   'mcp.layout',
@@ -68,6 +69,42 @@ mcpApp
           templateUrl: 'partials/dashboard.html',
           controller: 'DashboardController'
         },
+        {
+            name: 'devices',
+            url: "/devices",
+            templateUrl: 'devices/device-list.html',
+            controller: 'DeviceListController'
+          },
+          {
+              name: 'deviceCreate',
+              url: "/devices/create",
+              templateUrl: 'devices/device-create.html',
+              controller: 'DeviceCreateController'
+          },
+          {
+            name: 'deviceDetails',
+            url: "/devices/{deviceId}",
+            templateUrl: 'devices/device-detail.html',
+            controller: 'DeviceDetailController'
+          },
+          {
+              name: 'deviceEdit',
+              url: "/devices/{deviceId}/edit",
+              templateUrl: 'devices/device-edit.html',
+              controller: 'DeviceEditController'
+          },
+          { 
+              name: 'generateCertificateDevice',
+              url: "/certificates/generate/device/{deviceId}",
+              templateUrl: 'certificates/certificate-generate-device.html',
+              controller: 'CertificateGenerateDeviceController'
+          },
+          { 
+              name: 'revokeCertificateDevice',
+              url: "/certificates/{certId}/revoke/device/{deviceId}",
+              templateUrl: 'certificates/certificate-revoke-device.html',
+              controller: 'CertificateRevokeDeviceController'
+          },     
         {
             name: 'vessels',
             url: "/vessels",

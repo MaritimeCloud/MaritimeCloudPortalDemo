@@ -1,0 +1,18 @@
+<div class="boxed-group">
+    <div class="boxed-group-action" >
+        <div ng-if="isAdmin()" style="float: right;">
+            <a class="btn btn-primary btn-sm" href="#/devices/create">+ Register device</a>
+        </div>
+    </div>
+    <h3>Devices</h3>
+    <div class="boxed-group-inner">
+        <div ng-if="!devices.length">
+            <i>No devices</i>
+        </div>
+        <div ng-if="devices.length" class="row">
+            <div ng-repeat="device in devices| filter:filter_query" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                <device-list-details device="device"></device-list-details>
+            </div>
+        </div>
+    </div>
+</div>

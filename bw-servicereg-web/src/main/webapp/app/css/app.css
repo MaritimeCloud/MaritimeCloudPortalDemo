@@ -291,6 +291,41 @@ ul.nav.nav-tabs  {
     opacity: 1.0;
 }
 
+/* Device list */
+
+.device {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.device a {
+    font-size: 10px;
+}
+
+.device-name {
+    font-size: 14px;
+}
+
+.device-name a {
+    font-size: 14px;
+}
+
+.device img {
+    opacity: 1.0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.device a:hover img {
+    opacity: 0.4;
+}
+
+.device-img {
+	max-height: 180px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 /* Vessel list */
 
 .vessel {

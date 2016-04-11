@@ -112,6 +112,13 @@
         </ul>        
 
         <!----------------------------------------------------->
+        <!-- DEVICES -->
+        <!----------------------------------------------------->
+        <ul class="nav nav-list" ng-if="hasSiteRole(siteRoles.admin)">
+            <li><a ui-sref="restricted.devices"><i class="fa fa-laptop" style=""></i>&nbsp;&nbsp;Devices </a></li>
+        </ul>
+        
+        <!----------------------------------------------------->
         <!-- USERS -->
         <!----------------------------------------------------->
         <ul class="nav nav-list" ng-if="hasSiteRole(siteRoles.admin)">
