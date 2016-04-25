@@ -11,30 +11,10 @@
     </parent>
 
     <artifactId>bw-servicereg-web</artifactId>
-    <name>BalticWeb Service Registry Webapp</name>
+    <name>Maritime Cloud Management Portal</name>
     <packaging>war</packaging>
 
     <dependencies>
-
-        <dependency>
-            <groupId>net.e2.bw.servicereg</groupId>
-            <artifactId>bw-servicereg-model</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>net.e2.bw.servicereg</groupId>
-            <artifactId>bw-servicereg-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>net.e2.bw.servicereg</groupId>
-            <artifactId>bw-servicereg-ldap</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>net.e2.bw.servicereg</groupId>
-            <artifactId>bw-servicereg-testdata</artifactId>
-        </dependency>
 
     </dependencies>
 

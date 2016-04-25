@@ -15,13 +15,13 @@ var mcpApp = angular.module('mcpApp', [
   'mcp.directives',
   'mcp.filters',
   'mcp.layout',
-  'mcp.mapservices',
+ // 'mcp.mapservices',
   'mcp.models',
   'mcp.organizations',
-  'mcp.organizations.members',
-  'mcp.organizations.service-instances',
-  'mcp.organizations.service-specifications',
-  'mcp.search.services',
+ // 'mcp.organizations.members',
+ // 'mcp.organizations.service-instances',
+  //'mcp.organizations.service-specifications',
+  //'mcp.search.services',
   'mcp.users',
   'mcp.vessels',
   'leaflet-directive'
@@ -34,8 +34,8 @@ angular.element(document).ready(function () {
 });
 
 mcpApp
-.config(['$httpProvider', '$stateProvider', 'stateHelperProvider', '$urlRouterProvider', 'SITE_ROLES',
-  function($httpProvider, $stateProvider, stateHelperProvider, $urlRouterProvider, SITE_ROLES) {
+.config(['$httpProvider', '$stateProvider', 'stateHelperProvider', '$urlRouterProvider',
+  function($httpProvider, $stateProvider, stateHelperProvider, $urlRouterProvider) {
     $urlRouterProvider.when("", "/");
 
     // Enable use of session cookies
@@ -59,7 +59,7 @@ mcpApp
       name: 'restricted',
       templateUrl: 'layout/restricted.html',
       data: {
-        authorizedRoles: [SITE_ROLES.admin, SITE_ROLES.user]
+        authorizedRoles: ['admin', 'user']
       },
       children: [
         {

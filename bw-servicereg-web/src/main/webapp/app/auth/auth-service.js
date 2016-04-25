@@ -13,7 +13,7 @@
  *  limitations under the License.
  */
 
-angular.module('mcp.auth')
+angular.module('mcp.auth', ['ui.bootstrap', 'ngStorage'])
     .factory('AuthServ', function(Auth) {
         return {
             hasRole: function (roles, success, error) {

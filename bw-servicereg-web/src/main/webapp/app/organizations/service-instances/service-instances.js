@@ -73,7 +73,7 @@ angular.module('mcp.organizations.service-instances', [])
                     operationalService: null,
                     specification: null
                 };
-            $scope.operationalServices = OperationalServiceService.query();
+            //$scope.operationalServices = OperationalServiceService.query();
             $scope.service = {
                     serviceInstanceId: null,
                     organizationId: $stateParams.organizationId,
@@ -90,7 +90,7 @@ angular.module('mcp.organizations.service-instances', [])
             $scope.protocol = "<select a specification type>";
 
 
-            $scope.selectOperationalService = function (selectedOperationalService) {
+           /* $scope.selectOperationalService = function (selectedOperationalService) {
                 $scope.specifications = selectedOperationalService
                     ? ServiceSpecificationService.query(
                         {operationalServiceId: selectedOperationalService.operationalServiceId}, function (data) {
@@ -98,7 +98,7 @@ angular.module('mcp.organizations.service-instances', [])
                             $scope.selection.specification = null;
                         })
                     : [];
-            };
+            };*/
 
             $scope.setServiceTypeProtocol = function (serviceSpecification) {
                 if (serviceSpecification) {

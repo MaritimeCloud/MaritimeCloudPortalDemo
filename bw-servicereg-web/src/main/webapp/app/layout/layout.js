@@ -4,8 +4,8 @@
 
 angular.module('mcp.layout', [])
 
-    .controller('SidebarController', ['$scope', '$state', 'searchServiceFilterModel', 'ServiceSpecificationService',
-      function ($scope, $state, searchServiceFilterModel, ServiceSpecificationService) {
+    .controller('SidebarController', ['$scope', '$state', /*'searchServiceFilterModel', 'ServiceSpecificationService',*/
+      function ($scope, $state/*, searchServiceFilterModel, ServiceSpecificationService*/) {
 
         // holder for accordion header 'open status' properties 
         $scope.isOpen = {
@@ -18,7 +18,7 @@ angular.module('mcp.layout', [])
         $scope.state = $state;
 
         // Search Map Filters
-
+/*
         $scope.operationalServices = searchServiceFilterModel.data.operationalServices;
         $scope.specifications = null;
         $scope.organizations = searchServiceFilterModel.data.organizations;
@@ -61,7 +61,7 @@ angular.module('mcp.layout', [])
         $scope.$watch('state.is("restricted.searchServiceMap")', function (newValue, oldValue) {
            $scope.isOpen.findService = newValue;
         });
-
+*/
       }])
     ;
 
