@@ -40,6 +40,8 @@ mcpApp
 
     // Enable use of session cookies
     $httpProvider.defaults.withCredentials = true;
+    
+    
 
     $httpProvider.interceptors.push('authHttpInterceptor');
     
@@ -48,9 +50,15 @@ mcpApp
       templateUrl: 'layout/public.html',
       children: [
         {
-          name: 'landingpage',
-          url: "/",
-          templateUrl: 'partials/landingpage.html'
+            name: 'landingpage',
+            url: "/",
+            templateUrl: 'partials/landingpage.html'
+        },
+        {
+            name: 'join',
+            url: "/join",
+            templateUrl: 'partials/join.html',
+            controller: 'JoinController'
         }
       ]
     };

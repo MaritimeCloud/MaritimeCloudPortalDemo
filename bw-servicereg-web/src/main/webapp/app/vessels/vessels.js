@@ -1,6 +1,6 @@
 'use strict';
 angular.module('mcp.vessels', ['ui.bootstrap'])
-    .controller('VesselListController', ['$scope', 'VesselService', function ($scope, VesselService) {
+    .controller('VesselListController', ['$scope', 'VesselService', 'replaceSpacesFilter', function ($scope, VesselService, replaceSpacesFilter) {
     	$scope.isAdmin = function () {
             return true; // TODO role management
         };
@@ -8,6 +8,10 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
             $scope.busyPromise = VesselService.getVesselList({}, function (result) {
             	angular.forEach(result, function(vessel, index){
             		vessel.imageUrl = '/app/img/no_ship.ico'; // TODO get image url from somewhere
+
+                	var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(vessel.name, '_'));
+                	vessel.imageUrl = '/app/img/vessels/' + fullnameNoSpaces + '.jpg';
+        	    	
             	});
                 $scope.vessels = result;
             });
@@ -25,6 +29,8 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
             };
     	    VesselService.get({vesselId: $stateParams.vesselId}, function (vessel) {
     	    	vessel.imageUrl = '/app/img/no_ship.ico'; // TODO get image url from somewhere
+            	var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(vessel.name, '_'));
+            	vessel.imageUrl = '/app/img/vessels/' + fullnameNoSpaces + '.jpg';
                 $scope.vessel = vessel;
                 $window.localStorage['vessel'] = JSON.stringify(vessel);
             });
@@ -55,11 +61,13 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
             };
         }
     ])
-    .controller('VesselEditController', ['$scope', '$http', '$stateParams', '$location', 'VesselService',
-        function ($scope, $http, $stateParams, $location, VesselService) {
+    .controller('VesselEditController', ['$scope', '$http', '$stateParams', '$location', 'VesselService', 'replaceSpacesFilter',
+        function ($scope, $http, $stateParams, $location, VesselService, replaceSpacesFilter) {
 
             VesselService.get({vesselId: $stateParams.vesselId}, function (vessel) {
     	    	vessel.imageUrl = '/app/img/no_ship.ico'; // TODO get image url from somewhere
+            	var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(vessel.name, '_'));
+            	vessel.imageUrl = '/app/img/vessels/' + fullnameNoSpaces + '.jpg';
                 $scope.vessel = vessel;
             });
             

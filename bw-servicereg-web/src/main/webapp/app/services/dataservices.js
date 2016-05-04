@@ -7,7 +7,7 @@
 var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
 
     .constant("servicePort", /*"8080"*/ null)
-    .constant("servicePortBackend", "8443")
+    .constant("servicePortBackend", "443")
     .constant("loginType", "oidc")
     
     .factory('serviceBaseUrl', ['$location', 'servicePort',
@@ -20,8 +20,8 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
       
     .factory('serviceBaseUrlBackend', ['$location', 'servicePortBackend',
       function ($location, servicePortBackend) {
-        var protocol = 'http';
-        var host = 'localhost';
+        var protocol = 'https';
+        var host = 'api.maritimecloud.net';
         var port = servicePortBackend ? servicePortBackend : $location.port();
         return protocol + "://" + host + ":" + port;
       }])
@@ -151,15 +151,25 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
     .factory('OrganizationService', ['$resource', 'serviceBaseUrlBackend', 'loginType', function ($resource, serviceBaseUrlBackend, loginType) {
         var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/:shortName', {}, {
             put: {method: 'PUT', params: {shortName: '@shortName'}},
+            applyOrg: {method: 'POST', params: {shortName: '@shortName'}},
             getOrganizationList: {
             	method: 'GET', 
             	url: serviceBaseUrlBackend + '/' + loginType + '/api/orgs', 
             	isArray: true
+            },
+            applyOrg: {
+                method: 'POST',
+                params: {},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/apply'
             }
         });
 
         resource.update = function (organization, succes, error) {
             return this.put(organization, succes, error);
+        };
+
+        resource.apply = function (organization, succes, error) {
+            return this.applyOrg(organization, succes, error);
         };
 
         return resource;

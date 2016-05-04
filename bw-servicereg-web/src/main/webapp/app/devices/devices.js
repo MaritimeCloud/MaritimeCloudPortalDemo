@@ -1,12 +1,19 @@
 'use strict';
 angular.module('mcp.devices', ['ui.bootstrap'])
 
-    .controller('DeviceListController', ['$scope', 'DeviceService', function ($scope, DeviceService) {
+    .controller('DeviceListController', ['$scope', 'DeviceService', 'replaceSpacesFilter', function ($scope, DeviceService, replaceSpacesFilter) {
     	$scope.isAdmin = function () {
             return true; // TODO role management
         };
     	$scope.updateSearch = function () {
             $scope.busyPromise = DeviceService.getDeviceList({}, function (result) {
+            	angular.forEach(result, function(device, index){
+            		// TODO get image url from somewhere
+
+                	var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(device.name, '_'));
+                	device.imageUrl = '/app/img/devices/' + fullnameNoSpaces + '.jpg';
+        	    	
+            	});
                 $scope.devices = result;
             });
         };
@@ -21,6 +28,8 @@ angular.module('mcp.devices', ['ui.bootstrap'])
             return true; // TODO role management
         };
     	DeviceService.get({deviceId: $stateParams.deviceId}, function (device) {
+        	var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(device.name, '_'));
+        	device.imageUrl = '/app/img/devices/' + fullnameNoSpaces + '.jpg';
                 $scope.device = device;
                 $window.localStorage['device'] = JSON.stringify(device);
         });
