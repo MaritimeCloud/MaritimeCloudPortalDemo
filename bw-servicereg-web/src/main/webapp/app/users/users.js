@@ -28,6 +28,11 @@ angular.module('mcp.users', ['ui.bootstrap'])
                 $scope.user = user;
                 $window.localStorage['user'] = JSON.stringify(user);
                 $scope.fullname = user.firstName + ' ' + user.lastName;
+                
+             // TODO How should revoked certificates be handled?
+                $scope.user.certificates = $scope.user.certificates.filter(function(certificate) {
+                    return !certificate.revoked;
+                });
         });
     	$scope.deleteUser = function () {
 	    	confirmDialog('Are you sure you want to delete the user?').then(function () {

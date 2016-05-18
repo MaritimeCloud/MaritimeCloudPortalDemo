@@ -1,7 +1,7 @@
 'use strict';
 angular.module('mcp.devices', ['ui.bootstrap'])
 
-    .controller('DeviceListController', ['$scope', 'DeviceService', 'replaceSpacesFilter', function ($scope, DeviceService, replaceSpacesFilter) {
+    .controller('DeviceListController', ['$scope', 'DeviceService', 'replaceSpacesFilter', 'Utils', function ($scope, DeviceService, replaceSpacesFilter, Utils) {
     	$scope.isAdmin = function () {
             return true; // TODO role management
         };
@@ -9,9 +9,16 @@ angular.module('mcp.devices', ['ui.bootstrap'])
             $scope.busyPromise = DeviceService.getDeviceList({}, function (result) {
             	angular.forEach(result, function(device, index){
             		// TODO get image url from somewhere
-
-                	var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(device.name, '_'));
-                	device.imageUrl = '/app/img/devices/' + fullnameNoSpaces + '.jpg';
+            		device.imageUrl = '/app/img/no_device.png'; // TODO get image url from somewhere
+            		
+            		var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(device.name, '_'));
+                	var imageUrl = '/app/img/devices/' + fullnameNoSpaces + '.jpg';
+                	
+            		Utils.isImage(imageUrl).then(function(result) {
+            			if (result) {
+                            device.imageUrl = imageUrl;
+            			}
+                    });
         	    	
             	});
                 $scope.devices = result;
@@ -22,16 +29,29 @@ angular.module('mcp.devices', ['ui.bootstrap'])
         $scope.updateSearch();
     }])
 
-    .controller('DeviceDetailController', ['$scope', '$stateParams', '$window', '$location', 'DeviceService', 'confirmDialog', 'replaceSpacesFilter', function ($scope, $stateParams, $window, $location, DeviceService, confirmDialog, replaceSpacesFilter) {
+    .controller('DeviceDetailController', ['$scope', '$stateParams', '$window', '$location', 'DeviceService', 'confirmDialog', 'replaceSpacesFilter', 'Utils', function ($scope, $stateParams, $window, $location, DeviceService, confirmDialog, replaceSpacesFilter, Utils) {
         $scope.dateFormat = dateFormat;
     	$scope.isAdmin = function () {
             return true; // TODO role management
         };
     	DeviceService.get({deviceId: $stateParams.deviceId}, function (device) {
-        	var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(device.name, '_'));
-        	device.imageUrl = '/app/img/devices/' + fullnameNoSpaces + '.jpg';
+    		device.imageUrl = '/app/img/no_device.png'; // TODO get image url from somewhere
+    		
+    		var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(device.name, '_'));
+        	var imageUrl = '/app/img/devices/' + fullnameNoSpaces + '.jpg';
+        	
+    		Utils.isImage(imageUrl).then(function(result) {
+    			if (result) {
+                    device.imageUrl = imageUrl;
+    			}
+            });
                 $scope.device = device;
                 $window.localStorage['device'] = JSON.stringify(device);
+                
+                // TODO How should revoked certificates be handled?
+                $scope.device.certificates = $scope.device.certificates.filter(function(certificate) {
+                    return !certificate.revoked;
+                });
         });
     	$scope.deleteDevice = function () {
 	    	confirmDialog('Are you sure you want to delete the device?').then(function () {

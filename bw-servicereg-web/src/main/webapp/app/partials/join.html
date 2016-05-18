@@ -1,20 +1,34 @@
 <div class="container-fluid">
-<div class="row" cg-busy="busyPromise">
-    <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6">
-        <h1>Register organization</h1>
+    <div class="row" cg-busy="busyPromise">
+        <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6">
+            <h1>Register organization</h1>
+
+            
+                
+
+In order to get an organization on to the Maritime Cloud it needs to perform a signup process. The process is currently manual but will be replaced with an automatic one in the future.
+<BR/>
+<BR/>
+To sign up - Send an email to Tomas Christensen at <a href="mailto:tgc@dma.dk" target="_blank">tgc@dma.dk</a> with the name of your organization and whom will be the main administrator.
+<BR/>
+<BR/>
+<a href="http://developers.maritimecloud.net/" target="_blank">More info about the Signup process and the Maritime Cloud</a>
+                
+            </p>
+
+<!-- 
+    
         
         <p>Fill out the form below to register a new organization for the Maritime Cloud.<br/>
         <i><b>Note</b> that the approval is currently a manual process. There will be send an email upon the approval.</i>
         </p>
         
-        <!--MESSAGES-->
         <div ng-show="alertMessages" class="alert alert-danger">
             <span ng-repeat="msg in alertMessages">{{msg}}<br /></span>
         </div>
         <div ng-show="message" class="alert alert-info">{{message}}</div>
         <hr>
         
-        <!--FORMS-->
         <form ng-show="!registered" role="form" name="form">
             <div class="form-group" ng-class="{ 'has-error' : form.name.$invalid && !form.name.$pristine }">
                 <label for="name" class="control-label">Name</label>
@@ -62,6 +76,7 @@
             </div> 
             <br/>
         </form>
+    -->
     </div>
 </div>
 </div>

@@ -1,16 +1,24 @@
 'use strict';
 angular.module('mcp.vessels', ['ui.bootstrap'])
-    .controller('VesselListController', ['$scope', 'VesselService', 'replaceSpacesFilter', function ($scope, VesselService, replaceSpacesFilter) {
+    .controller('VesselListController', ['$scope', 'VesselService', 'replaceSpacesFilter', 'Utils', function ($scope, VesselService, replaceSpacesFilter, Utils) {
     	$scope.isAdmin = function () {
             return true; // TODO role management
         };
     	$scope.updateSearch = function () {
             $scope.busyPromise = VesselService.getVesselList({}, function (result) {
             	angular.forEach(result, function(vessel, index){
-            		vessel.imageUrl = '/app/img/no_ship.ico'; // TODO get image url from somewhere
 
+            		vessel.imageUrl = '/app/img/no_ship.ico'; // TODO get image url from somewhere
+            		
                 	var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(vessel.name, '_'));
-                	vessel.imageUrl = '/app/img/vessels/' + fullnameNoSpaces + '.jpg';
+                	var imageUrl = '/app/img/vessels/' + fullnameNoSpaces + '.jpg';
+                	
+            		Utils.isImage(imageUrl).then(function(result) {
+            			if (result) {
+                            vessel.imageUrl = imageUrl;
+            			}
+                    });
+                	
         	    	
             	});
                 $scope.vessels = result;
@@ -21,18 +29,31 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
         $scope.updateSearch();
     }])
       
-    .controller('VesselDetailController', ['$scope', '$location', '$window', '$stateParams', 'VesselService', 'confirmDialog', 'replaceSpacesFilter',
-        function ($scope, $location, $window, $stateParams, VesselService, confirmDialog, replaceSpacesFilter) {
+    .controller('VesselDetailController', ['$scope', '$location', '$window', '$stateParams', 'VesselService', 'confirmDialog', 'replaceSpacesFilter', 'Utils',
+        function ($scope, $location, $window, $stateParams, VesselService, confirmDialog, replaceSpacesFilter, Utils) {
             $scope.dateFormat = dateFormat;
       	    $scope.isAdmin = function () {
                 return true; // TODO role management
             };
     	    VesselService.get({vesselId: $stateParams.vesselId}, function (vessel) {
     	    	vessel.imageUrl = '/app/img/no_ship.ico'; // TODO get image url from somewhere
+        		
             	var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(vessel.name, '_'));
-            	vessel.imageUrl = '/app/img/vessels/' + fullnameNoSpaces + '.jpg';
+            	var imageUrl = '/app/img/vessels/' + fullnameNoSpaces + '.jpg';
+            	
+        		Utils.isImage(imageUrl).then(function(result) {
+        			if (result) {
+                        vessel.imageUrl = imageUrl;
+        			}
+                });
+        		
                 $scope.vessel = vessel;
                 $window.localStorage['vessel'] = JSON.stringify(vessel);
+                
+             // TODO How should revoked certificates be handled?
+                $scope.vessel.certificates = $scope.vessel.certificates.filter(function(certificate) {
+                    return !certificate.revoked;
+                });
             });
     	    $scope.deleteVessel = function () {
     	    	confirmDialog('Are you sure you want to delete the vessel?').then(function () {
@@ -65,9 +86,6 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
         function ($scope, $http, $stateParams, $location, VesselService, replaceSpacesFilter) {
 
             VesselService.get({vesselId: $stateParams.vesselId}, function (vessel) {
-    	    	vessel.imageUrl = '/app/img/no_ship.ico'; // TODO get image url from somewhere
-            	var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(vessel.name, '_'));
-            	vessel.imageUrl = '/app/img/vessels/' + fullnameNoSpaces + '.jpg';
                 $scope.vessel = vessel;
             });
             
