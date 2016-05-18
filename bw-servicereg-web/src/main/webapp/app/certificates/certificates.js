@@ -23,9 +23,9 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
         	// TODO maybe make generel as it's used at least in 3 different methods
         	var zip = new JSZip();
         	var fullnameNoSpaces = replaceSpacesFilter($scope.device.name, '_');
-        	zip.file("Certificate_" + fullnameNoSpaces + ".cer", $scope.certificate);
-        	zip.file("PrivateKey_" + fullnameNoSpaces + ".pkr", $scope.privateKey);
-        	zip.file("PublicKey_" + fullnameNoSpaces + ".skr", $scope.publicKey);
+        	zip.file("Certificate_" + fullnameNoSpaces + ".pem", $scope.certificate);
+        	zip.file("PrivateKey_" + fullnameNoSpaces + ".pem", $scope.privateKey);
+        	zip.file("PublicKey_" + fullnameNoSpaces + ".pem", $scope.publicKey);
         	
         	var content = zip.generate({type:"blob"});
         	// see FileSaver.js
@@ -55,9 +55,9 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
         	// TODO maybe make generel as it's used at least in 3 different methods
         	var zip = new JSZip();
         	var fullnameNoSpaces = replaceSpacesFilter($scope.vessel.name, '_');
-        	zip.file("Certificate_" + fullnameNoSpaces + ".cer", $scope.certificate);
-        	zip.file("PrivateKey_" + fullnameNoSpaces + ".pkr", $scope.privateKey);
-        	zip.file("PublicKey_" + fullnameNoSpaces + ".skr", $scope.publicKey);
+        	zip.file("Certificate_" + fullnameNoSpaces + ".pem", $scope.certificate);
+        	zip.file("PrivateKey_" + fullnameNoSpaces + ".pem", $scope.privateKey);
+        	zip.file("PublicKey_" + fullnameNoSpaces + ".pem", $scope.publicKey);
         	
         	var content = zip.generate({type:"blob"});
         	// see FileSaver.js
@@ -88,9 +88,9 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
         	// TODO maybe make generel as it's used at least in 3 different methods
         	var zip = new JSZip();
         	var fullnameNoSpaces = replaceSpacesFilter($scope.fullname, '_');
-        	zip.file("Certificate_" + fullnameNoSpaces + ".cer", $scope.certificate);
-        	zip.file("PrivateKey_" + fullnameNoSpaces + ".pkr", $scope.privateKey);
-        	zip.file("PublicKey_" + fullnameNoSpaces + ".skr", $scope.publicKey);
+        	zip.file("Certificate_" + fullnameNoSpaces + ".pem", $scope.certificate);
+        	zip.file("PrivateKey_" + fullnameNoSpaces + ".pem", $scope.privateKey);
+        	zip.file("PublicKey_" + fullnameNoSpaces + ".pem", $scope.publicKey);
         	
         	var content = zip.generate({type:"blob"});
         	// see FileSaver.js
