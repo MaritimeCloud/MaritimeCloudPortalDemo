@@ -13,8 +13,8 @@ If Docker for some reason doesn't forward the default network to localhost run t
 
 Else if you just want to use the latest image from Docker hub, which we recommend, do
 
-  $ docker run --name mcportaldemo maritimecloud-portal-demo
+  $ docker run --name mcportaldemo dmadk/maritimecloud-portal-demo
 
 Or
 
-  $ docker run --net=host --name mcportaldemo maritimecloud-portal-demo
+  $ docker run --net=host --name mcportaldemo dmadk/maritimecloud-portal-demo
