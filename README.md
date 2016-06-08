@@ -3,6 +3,8 @@
 This project has been developed as a pure Mock-up project for showing the functionallity of the Maritime Cloud Identity Registry https://github.com/MaritimeCloud/IdentityRegistry
 The project started as another Portal and has shamelessly been altered without proper cleanup of legacy code. The reason for this was to speed up the development for showing t a functioning Portal at a Conference. Further development will be done in a new and fresh project.
 
+A running version can be found at https://portal.maritimecloud.net
+
 ## Prerequisites
 
 * Java 8
