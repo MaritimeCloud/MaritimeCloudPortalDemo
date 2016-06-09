@@ -9,7 +9,7 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
             	angular.forEach(result, function(vessel, index){
 
             		vessel.imageUrl = '/app/img/no_ship.ico'; // TODO get image url from somewhere
-            		
+            		/*
                 	var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(vessel.name, '_'));
                 	var imageUrl = '/app/img/vessels/' + fullnameNoSpaces + '.jpg';
                 	
@@ -18,6 +18,7 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
                             vessel.imageUrl = imageUrl;
             			}
                     });
+                    */
                 	
         	    	
             	});
@@ -38,6 +39,7 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
     	    VesselService.get({vesselId: $stateParams.vesselId}, function (vessel) {
     	    	vessel.imageUrl = '/app/img/no_ship.ico'; // TODO get image url from somewhere
         		
+    	    	/*
             	var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(vessel.name, '_'));
             	var imageUrl = '/app/img/vessels/' + fullnameNoSpaces + '.jpg';
             	
@@ -46,7 +48,8 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
                         vessel.imageUrl = imageUrl;
         			}
                 });
-        		
+        		*/
+    	    	
                 $scope.vessel = vessel;
                 $window.localStorage['vessel'] = JSON.stringify(vessel);
                 
@@ -118,8 +121,7 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
                     },
                     function (error) {
                         $scope.message = null;
-                        $scope.alertMessages = ["Error on the serverside ", error.statusText];
-                        // TODO errorhandling
+                        $scope.alertMessages = ["Error on the serverside: ", error.statusText, error.data.message];
                     }
                 );
             };
@@ -163,8 +165,7 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
                     },
                     function (error) {
                         $scope.message = null;
-                        $scope.alertMessages = ["Error on the serverside ", error.statusText];
-                        // TODO errorhandling
+                        $scope.alertMessages = ["Error on the serverside: ", error.statusText, error.data.message];
                     }
                 );
             };

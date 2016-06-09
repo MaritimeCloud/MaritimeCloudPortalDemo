@@ -10,7 +10,7 @@ angular.module('mcp.devices', ['ui.bootstrap'])
             	angular.forEach(result, function(device, index){
             		// TODO get image url from somewhere
             		device.imageUrl = '/app/img/no_device.png'; // TODO get image url from somewhere
-            		
+            		/*
             		var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(device.name, '_'));
                 	var imageUrl = '/app/img/devices/' + fullnameNoSpaces + '.jpg';
                 	
@@ -19,6 +19,7 @@ angular.module('mcp.devices', ['ui.bootstrap'])
                             device.imageUrl = imageUrl;
             			}
                     });
+            		*/
         	    	
             	});
                 $scope.devices = result;
@@ -36,7 +37,7 @@ angular.module('mcp.devices', ['ui.bootstrap'])
         };
     	DeviceService.get({deviceId: $stateParams.deviceId}, function (device) {
     		device.imageUrl = '/app/img/no_device.png'; // TODO get image url from somewhere
-    		
+    		/*
     		var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(device.name, '_'));
         	var imageUrl = '/app/img/devices/' + fullnameNoSpaces + '.jpg';
         	
@@ -44,7 +45,7 @@ angular.module('mcp.devices', ['ui.bootstrap'])
     			if (result) {
                     device.imageUrl = imageUrl;
     			}
-            });
+            });*/
                 $scope.device = device;
                 $window.localStorage['device'] = JSON.stringify(device);
                 
@@ -100,8 +101,7 @@ angular.module('mcp.devices', ['ui.bootstrap'])
                     },
                     function (error) {
                         $scope.message = null;
-                        $scope.alertMessages = ["Error on the serverside ", error.statusText];
-                        // TODO errorhandling
+                        $scope.alertMessages = ["Error on the serverside: ", error.statusText, error.data.message];
                     }
                 );
             };
@@ -128,8 +128,7 @@ angular.module('mcp.devices', ['ui.bootstrap'])
                     },
                     function (error) {
                         $scope.message = null;
-                        $scope.alertMessages = ["Error on the serverside ", error.statusText];
-                        // TODO errorhandling
+                        $scope.alertMessages = ["Error on the serverside: ", error.statusText, error.data.message];
                     }
                 );
             };

@@ -26,7 +26,7 @@ angular.module('mcp.organizations.service-specifications', [])
                   },
                   function (error) {
                       $scope.message = null;
-                      $scope.alertMessages = ["Error on the serverside ", error.statusText];
+                      $scope.alertMessages = ["Error on the serverside: ", error.statusText, error.data.message];
                   }
               );
           };
@@ -85,7 +85,7 @@ angular.module('mcp.organizations.service-specifications', [])
                   },
                   function (error) {
                       $scope.message = null;
-                      $scope.alertMessages = ["Error on the serverside ", error.statusText];
+                      $scope.alertMessages = ["Error on the serverside: ", error.statusText, error.data.message];
                   }
               );
           };

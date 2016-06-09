@@ -82,8 +82,7 @@ angular.module('mcp.users', ['ui.bootstrap'])
                     },
                     function (error) {
                         $scope.message = null;
-                        $scope.alertMessages = ["Error on the serverside ", error.statusText];
-                        // TODO errorhandling
+                        $scope.alertMessages = ["Error on the serverside: ", error.statusText, error.data.message];
                     }
                 );
             };
@@ -110,8 +109,7 @@ angular.module('mcp.users', ['ui.bootstrap'])
                     },
                     function (error) {
                         $scope.message = null;
-                        $scope.alertMessages = ["Error on the serverside ", error.statusText];
-                        // TODO errorhandling
+                        $scope.alertMessages = ["Error on the serverside: ", error.statusText, error.data.message];
                     }
                 );
             };
