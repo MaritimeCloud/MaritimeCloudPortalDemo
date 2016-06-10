@@ -7,6 +7,7 @@
 var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
 
     .constant("servicePort", /*"8080"*/ null)
+//    .constant("servicePortBackend", "8443")
     .constant("servicePortBackend", "443")
     .constant("loginType", "oidc")
     
@@ -20,6 +21,8 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
       
     .factory('serviceBaseUrlBackend', ['$location', 'servicePortBackend',
       function ($location, servicePortBackend) {
+//        var protocol = 'http';
+//        var host = 'localhost';
         var protocol = 'https';
         var host = 'api.maritimecloud.net';
         var port = servicePortBackend ? servicePortBackend : $location.port();
@@ -66,6 +69,47 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
         };
     	return resource;
     }])
+    
+    .factory('ServiceIdentityService', ['$resource', 'serviceBaseUrlBackend', 'loginType', 'Auth', function ($resource, serviceBaseUrlBackend, loginType, Auth) {
+        var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/service/:serviceId', {}, {
+            post: {method: 'POST', params: {}, isArray: false},
+            put: {method: 'PUT', params: {serviceId: '@id'}, isArray: false},
+            deleteS: {method: 'DELETE', params: {serviceId: '@serviceId'}, isArray: false},
+            getServiceList: {
+            	method: 'GET', 
+            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/services', 
+            	isArray: true
+            },
+            generateCertificate: {
+                method: 'GET',
+                params: {serviceId: '@serviceId'},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/service/:serviceId/generatecertificate'
+            },
+            revokeCertificate: {
+                method: 'POST',
+                params: {serviceId: '@serviceId', certId: '@certId'},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/service/:serviceId/certificates/:certId/revoke'
+            }
+        });
+
+        resource.update = function (service, succes, error) {
+            return this.put(service, succes, error);
+        };
+        resource.create = function (service, succes, error) {
+            return this.post(service, succes, error);
+        };
+        resource.deleteService = function (serviceId, succes, error) {
+            return this.deleteS({serviceId: serviceId}, succes, error);
+        };        
+        resource.generateCertificateForService = function (serviceId, succes, error) {
+            return this.generateCertificate({serviceId: serviceId}, succes, error);
+        };
+        resource.revokeCertificateForService = function (serviceId, certId, revokationReason, revokedAt, succes, error) {
+            return this.revokeCertificate({serviceId: serviceId, certId: certId, revokationReason: revokationReason, revokedAt: revokedAt}, succes, error);
+        };
+        
+        return resource;
+      }])
 
     .factory('VesselService', ['$resource', 'serviceBaseUrlBackend', 'loginType', 'Auth', function ($resource, serviceBaseUrlBackend, loginType, Auth) {
         var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/vessel/:vesselId', {}, {

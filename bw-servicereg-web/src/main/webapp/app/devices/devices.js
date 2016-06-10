@@ -30,7 +30,7 @@ angular.module('mcp.devices', ['ui.bootstrap'])
         $scope.updateSearch();
     }])
 
-    .controller('DeviceDetailController', ['$scope', '$stateParams', '$window', '$location', 'DeviceService', 'confirmDialog', 'replaceSpacesFilter', 'Utils', function ($scope, $stateParams, $window, $location, DeviceService, confirmDialog, replaceSpacesFilter, Utils) {
+    .controller('DeviceDetailController', ['$scope', '$stateParams', '$window', '$location', 'DeviceService', 'confirmDialog', 'replaceSpacesFilter', 'replaceNewlinesFilter', 'Utils', function ($scope, $stateParams, $window, $location, DeviceService, confirmDialog, replaceSpacesFilter, replaceNewlinesFilter, Utils) {
         $scope.dateFormat = dateFormat;
     	$scope.isAdmin = function () {
             return true; // TODO role management
@@ -70,7 +70,8 @@ angular.module('mcp.devices', ['ui.bootstrap'])
         	// TODO maybe make generel as it's used at least in 3 different methods
         	var zip = new JSZip();
         	var fullnameNoSpaces = replaceSpacesFilter($scope.device.name, '_');
-        	zip.file("Certificate_" + fullnameNoSpaces + ".cer", certificate.certificate);
+        	certificate.certificate = replaceNewlinesFilter(certificate.certificate);
+        	zip.file("Certificate_" + fullnameNoSpaces + ".pem", certificate.certificate);
         	
         	var content = zip.generate({type:"blob"});
         	// see FileSaver.js

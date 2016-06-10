@@ -2,7 +2,7 @@
 <panel ng-show="viewState === 'generate-certificate'" category="primary" icon="plus" title="Generate certificate for {{fullname}}" offset="3">
     <p class="help-block">
         <i>
-            Generate a new certificate for {{fullname}}?
+            Generate a new certificate for {{fullname}} - {{user.mrn}}?
         </i>
     </p>
     <panel-button btn-type="primary" ng-click="generateCertificate()"> <i class="fa fa-plus"></i> Generate </panel-button>

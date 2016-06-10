@@ -1,5 +1,5 @@
 <!-- CREATE CERTIFICATE VIEW -->
-<panel category="primary" icon="minus" title="Revoke certificate for {{vessel.name}}" offset="3">
+<panel category="primary" icon="minus" title="Revoke certificate for {{service.name}}" offset="3">
     <div ng-show="error" class="alert alert-danger">
         <p>
             Error revoking certificate:
@@ -12,7 +12,7 @@
     </div>
     
     <p class="help-block">
-        Revoking {{vessel.name}} - {{vessel.mrn}}</BR>
+        Revoking {{service.name}} - {{service.mrn}}</BR>
         </BR>
         <i>
             Please choose a reason and time for revocation.
@@ -40,5 +40,5 @@
     
         </form> 
     <panel-button btn-type="danger" ng-disabled="form.$invalid" ng-click="revokeCertificate()"> <i class="fa fa-minus"></i> Revoke </panel-button>
-    <panel-button btn-type="default" ui-sref="restricted.vesselDetails({vesselId: vessel.id})"> Cancel <i class="fa fa-ban"></i> </panel-button>
+    <panel-button btn-type="default" ui-sref="restricted.service-identityDetails({serviceId: service.id})"> Cancel <i class="fa fa-ban"></i> </panel-button>
 </panel>

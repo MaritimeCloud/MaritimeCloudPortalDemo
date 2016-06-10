@@ -1,7 +1,7 @@
 'use strict';
 angular.module('mcp.certificates', ['ui.bootstrap'])
     
-    .controller('CertificateGenerateDeviceController', ['$scope', '$window', 'DeviceService', 'replaceSpacesFilter', function ($scope, $window, DeviceService, replaceSpacesFilter) {
+    .controller('CertificateGenerateDeviceController', ['$scope', '$window', 'DeviceService', 'replaceSpacesFilter', 'replaceNewlinesFilter', function ($scope, $window, DeviceService, replaceSpacesFilter, replaceNewlinesFilter) {
     	$scope.device = JSON.parse($window.localStorage['device'] || '{}');
         $scope.viewState = 'generate-certificate';
 
@@ -23,6 +23,9 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
         	// TODO maybe make generel as it's used at least in 3 different methods
         	var zip = new JSZip();
         	var fullnameNoSpaces = replaceSpacesFilter($scope.device.name, '_');
+        	$scope.certificate = replaceNewlinesFilter($scope.certificate);
+        	$scope.privateKey = replaceNewlinesFilter($scope.privateKey);
+        	$scope.publicKey = replaceNewlinesFilter($scope.publicKey);
         	zip.file("Certificate_" + fullnameNoSpaces + ".pem", $scope.certificate);
         	zip.file("PrivateKey_" + fullnameNoSpaces + ".pem", $scope.privateKey);
         	zip.file("PublicKey_" + fullnameNoSpaces + ".pem", $scope.publicKey);
@@ -33,7 +36,42 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
         };
     }])
     
-    .controller('CertificateGenerateVesselController', ['$scope', '$window', 'VesselService', 'replaceSpacesFilter', function ($scope, $window, VesselService, replaceSpacesFilter) {
+    .controller('CertificateGenerateServiceIdentityController', ['$scope', '$window', 'ServiceIdentityService', 'replaceSpacesFilter', 'replaceNewlinesFilter', function ($scope, $window, ServiceIdentityService, replaceSpacesFilter, replaceNewlinesFilter) {
+    	$scope.service = JSON.parse($window.localStorage['service-identity'] || '{}');
+        $scope.viewState = 'generate-certificate';
+
+        $scope.generateCertificate = function () {
+        	ServiceIdentityService.generateCertificateForService($scope.service.id,
+                    function(data) {
+		                $scope.certificate = data.certificate;
+		                $scope.privateKey = data.privateKey;
+		                $scope.publicKey = data.publicKey;
+        		        $scope.viewState = 'generate-success'; 
+        		    },
+                    function(error) { 
+        		    	$scope.viewState = 'error'; 
+        		    	$scope.error = error.data;
+        		    }
+            );
+        };
+        $scope.zipAndDownload = function () {
+        	// TODO maybe make generel as it's used at least in 3 different methods
+        	var zip = new JSZip();
+        	var fullnameNoSpaces = replaceSpacesFilter($scope.service.name, '_');
+        	$scope.certificate = replaceNewlinesFilter($scope.certificate);
+        	$scope.privateKey = replaceNewlinesFilter($scope.privateKey);
+        	$scope.publicKey = replaceNewlinesFilter($scope.publicKey);
+        	zip.file("Certificate_" + fullnameNoSpaces + ".pem", $scope.certificate);
+        	zip.file("PrivateKey_" + fullnameNoSpaces + ".pem", $scope.privateKey);
+        	zip.file("PublicKey_" + fullnameNoSpaces + ".pem", $scope.publicKey);
+        	
+        	var content = zip.generate({type:"blob"});
+        	// see FileSaver.js
+        	saveAs(content, "Certificate_" + fullnameNoSpaces + ".zip");
+        };
+    }])
+    
+    .controller('CertificateGenerateVesselController', ['$scope', '$window', 'VesselService', 'replaceSpacesFilter', 'replaceNewlinesFilter', function ($scope, $window, VesselService, replaceSpacesFilter, replaceNewlinesFilter) {
     	$scope.vessel = JSON.parse($window.localStorage['vessel'] || '{}');
         $scope.viewState = 'generate-certificate';
 
@@ -55,6 +93,9 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
         	// TODO maybe make generel as it's used at least in 3 different methods
         	var zip = new JSZip();
         	var fullnameNoSpaces = replaceSpacesFilter($scope.vessel.name, '_');
+        	$scope.certificate = replaceNewlinesFilter($scope.certificate);
+        	$scope.privateKey = replaceNewlinesFilter($scope.privateKey);
+        	$scope.publicKey = replaceNewlinesFilter($scope.publicKey);
         	zip.file("Certificate_" + fullnameNoSpaces + ".pem", $scope.certificate);
         	zip.file("PrivateKey_" + fullnameNoSpaces + ".pem", $scope.privateKey);
         	zip.file("PublicKey_" + fullnameNoSpaces + ".pem", $scope.publicKey);
@@ -65,7 +106,7 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
         };
     }])
     
-    .controller('CertificateGenerateUserController', ['$scope', '$window', 'UserService', 'replaceSpacesFilter', function ($scope, $window, UserService, replaceSpacesFilter) {
+    .controller('CertificateGenerateUserController', ['$scope', '$window', 'UserService', 'replaceSpacesFilter', 'replaceNewlinesFilter', function ($scope, $window, UserService, replaceSpacesFilter, replaceNewlinesFilter) {
     	$scope.user = JSON.parse($window.localStorage['user'] || '{}');
         $scope.fullname = $scope.user.firstName + ' ' + $scope.user.lastName;
         $scope.viewState = 'generate-certificate';
@@ -88,6 +129,9 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
         	// TODO maybe make generel as it's used at least in 3 different methods
         	var zip = new JSZip();
         	var fullnameNoSpaces = replaceSpacesFilter($scope.fullname, '_');
+        	$scope.certificate = replaceNewlinesFilter($scope.certificate);
+        	$scope.privateKey = replaceNewlinesFilter($scope.privateKey);
+        	$scope.publicKey = replaceNewlinesFilter($scope.publicKey);
         	zip.file("Certificate_" + fullnameNoSpaces + ".pem", $scope.certificate);
         	zip.file("PrivateKey_" + fullnameNoSpaces + ".pem", $scope.privateKey);
         	zip.file("PublicKey_" + fullnameNoSpaces + ".pem", $scope.publicKey);
@@ -139,6 +183,51 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
 
         	$scope.gotoDeviceDetails = function () {
                 $location.path('/devices/' + $scope.device.id).replace();
+            };
+        };
+    }])
+    
+    .controller('CertificateRevokeServiceIdentityController', ['$scope', '$location', '$stateParams', '$window', 'ServiceIdentityService', 'CertificateRevocationViewModel', function ($scope, $location, $stateParams, $window, ServiceIdentityService, CertificateRevocationViewModel) {
+    	
+    	$scope.service = JSON.parse($window.localStorage['service-identity'] || '{}');
+        $scope.reasons = CertificateRevocationViewModel.reasons;
+             
+        $scope.date = new Date();
+        $scope.updateDate = function(date) {
+            $scope.date = date;
+        };
+        $scope.openDate = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.datePopup.opened = true;
+        };
+        $scope.dateOptions = {
+        	    dateDisabled: false,
+        	    formatYear: 'yy',
+        	    maxDate: new Date(2070, 5, 22),
+        	    minDate: new Date(),
+        	    startingDay: 1
+        	  };
+        $scope.datePopup = {
+            opened: false
+        };
+        
+        $scope.reason = null;
+        $scope.updateReason = function(reason) {
+            $scope.reason = reason;
+        };
+        $scope.revokeCertificate = function () {
+        	ServiceIdentityService.revokeCertificateForService($scope.service.id, $stateParams.certId, $scope.reason.reasonId, $scope.date,
+                    function(data) {
+        		        $scope.gotoServiceDetails(); 
+        		    },
+                    function(error) { 
+        		    	$scope.error = error.data;
+        		    }
+            );
+
+        	$scope.gotoServiceDetails = function () {
+                $location.path('/service-identities/' + $scope.service.id).replace();
             };
         };
     }])

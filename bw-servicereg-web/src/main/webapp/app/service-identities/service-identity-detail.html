@@ -1,31 +1,31 @@
 <div class="boxed-group table-responsive">
-    <h3>{{device.name}}
-        <a ng-if="isAdmin()" class="edit edit-gear" href="#/devices/{{device.id}}/edit" data-tooltip="Edit {{device.name}}" data-tooltip-placement="right">
+    <h3>{{service.name}}
+        <a ng-if="isAdmin()" class="edit edit-gear" href="#/service-identities/{{service.id}}/edit" data-tooltip="Edit {{service.name}}" data-tooltip-placement="right">
             <span class="fa fa-gear"></span>
         </a>
-        <a ng-if="isAdmin()" class="edit edit-gear" href='' ng-click="deleteDevice($event)" data-tooltip="Delete {{device.name}}" data-tooltip-placement="right">
+        <a ng-if="isAdmin()" class="edit edit-gear" href='' ng-click="deleteService($event)" data-tooltip="Delete {{service.name}}" data-tooltip-placement="right">
             <span class="fa fa-trash"></span>
         </a>
     </h3>
     <div class="boxed-group-inner">  
         <div class="text-left col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <img class="device-img" ng-src="{{device.imageUrl}}"/>
+            <img class="service-identity-img" ng-src="{{service.imageUrl}}"/>
         </div>
         <table class="table-condensed">
-            <tr> <th class="text-right">MRN : </th> <td>{{device.mrn}} </td> </tr>
-            <tr> <th class="text-right">Name : </th> <td>{{device.name}} </td> </tr>
+            <tr> <th class="text-right">MRN : </th> <td>{{service.mrn}} </td> </tr>
+            <tr> <th class="text-right">Name : </th> <td>{{service.name}} </td> </tr>
         </table>
     </div>
     
     <div class="boxed-group-action" >
-        <a ng-if="isAdmin()" class="btn btn-primary btn-sm" href="#/certificates/generate/device/{{device.id}}">+ New certificate</a>
+        <a ng-if="isAdmin()" class="btn btn-primary btn-sm" href="#/certificates/generate/service-identity/{{service.id}}">+ New certificate</a>
     </div>
-    <h3>Certificates for {{device.name}}</h3>
+    <h3>Certificates for {{service.name}}</h3>
     <div class="boxed-group-inner">
-        <div ng-if="!device.certificates.length">
+        <div ng-if="!service.certificates.length">
             <i>No active certificates</i>
         </div>
-        <table ng-if="device.certificates.length" class="table">
+        <table ng-if="service.certificates.length" class="table">
             <thead>
                 <tr>
                     <th class="col-xs-4">Certificate</th>
@@ -35,15 +35,15 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="certificate in device.certificates">
+                <tr ng-repeat="certificate in service.certificates">
                     <td class="vcenter">        
-    	                <span>Certificate for {{device.name}}</span>
+    	                <span>Certificate for {{service.name}}</span>
                     </td>
                     <td class="vcenter"><span>{{certificate.start | date:dateFormat}}</span></td>
                     <td class="vcenter">{{certificate.end | date:dateFormat}}</td>   
                     <td class="vcenter text-right no-right-padding">
                         <a ng-if="isAdmin()" class="btn btn-primary btn-sm" ng-click="zipAndDownloadCertificate(certificate)">Download certificate</a>
-                        <a ng-if="isAdmin()" class="btn btn-danger btn-sm" href="#/certificates/{{certificate.id}}/revoke/device/{{device.id}}">Revoke certificate</a>
+                        <a ng-if="isAdmin()" class="btn btn-danger btn-sm" href="#/certificates/{{certificate.id}}/revoke/service-identity/{{service.id}}">Revoke certificate</a>
                     </td> 
                 </tr>
             </tbody>

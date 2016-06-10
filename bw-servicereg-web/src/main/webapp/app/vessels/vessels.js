@@ -30,8 +30,8 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
         $scope.updateSearch();
     }])
       
-    .controller('VesselDetailController', ['$scope', '$location', '$window', '$stateParams', 'VesselService', 'confirmDialog', 'replaceSpacesFilter', 'Utils',
-        function ($scope, $location, $window, $stateParams, VesselService, confirmDialog, replaceSpacesFilter, Utils) {
+    .controller('VesselDetailController', ['$scope', '$location', '$window', '$stateParams', 'VesselService', 'confirmDialog', 'replaceSpacesFilter', 'replaceNewlinesFilter', 'Utils',
+        function ($scope, $location, $window, $stateParams, VesselService, confirmDialog, replaceSpacesFilter, replaceNewlinesFilter, Utils) {
             $scope.dateFormat = dateFormat;
       	    $scope.isAdmin = function () {
                 return true; // TODO role management
@@ -74,7 +74,8 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
             	// TODO maybe make generel as it's used at least in 3 different methods
             	var zip = new JSZip();
             	var vesselNameNoSpaces = replaceSpacesFilter($scope.vessel.name, '_');
-            	zip.file("Certificate_" + vesselNameNoSpaces + ".cer", certificate.certificate);
+            	certificate.certificate = replaceNewlinesFilter(certificate.certificate);
+            	zip.file("Certificate_" + vesselNameNoSpaces + ".pem", certificate.certificate);
             	
             	var content = zip.generate({type:"blob"});
             	// see FileSaver.js

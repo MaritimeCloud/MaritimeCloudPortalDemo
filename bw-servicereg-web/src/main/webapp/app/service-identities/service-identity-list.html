@@ -1,0 +1,18 @@
+<div class="boxed-group">
+    <div class="boxed-group-action" >
+        <div ng-if="isAdmin()" style="float: right;">
+            <a class="btn btn-primary btn-sm" href="#/service-identities/create">+ Register service</a>
+        </div>
+    </div>
+    <h3>Services</h3>
+    <div class="boxed-group-inner">
+        <div ng-if="!services.length">
+            <i>No services</i>
+        </div>
+        <div ng-if="services.length" class="row">
+            <div ng-repeat="service in services| filter:filter_query" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                <service-list-details service="service"></service-list-details>
+            </div>
+        </div>
+    </div>
+</div>

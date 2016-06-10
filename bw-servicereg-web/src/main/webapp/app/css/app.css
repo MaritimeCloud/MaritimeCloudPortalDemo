@@ -326,6 +326,40 @@ ul.nav.nav-tabs  {
     margin-bottom: 10px;
 }
 
+/* service identity list */
+.service-identity {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.service-identity a {
+    font-size: 10px;
+}
+
+.service-identity-name {
+    font-size: 14px;
+}
+
+.service-identity-name a {
+    font-size: 14px;
+}
+
+.service-identity img {
+    opacity: 1.0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.service-identity a:hover img {
+    opacity: 0.4;
+}
+
+.service-identity-img {
+	max-height: 180px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 /* Vessel list */
 
 .vessel {

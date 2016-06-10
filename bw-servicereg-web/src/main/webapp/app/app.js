@@ -18,6 +18,7 @@ var mcpApp = angular.module('mcpApp', [
  // 'mcp.mapservices',
   'mcp.models',
   'mcp.organizations',
+  'mcp.service-identities',
  // 'mcp.organizations.members',
  // 'mcp.organizations.service-instances',
   //'mcp.organizations.service-specifications',
@@ -105,7 +106,43 @@ mcpApp
               url: "/certificates/{certId}/revoke/device/{deviceId}",
               templateUrl: 'certificates/certificate-revoke-device.html',
               controller: 'CertificateRevokeDeviceController'
-          },     
+          },   
+          {
+              name: 'service-identities',
+              url: "/service-identities",
+              templateUrl: 'service-identities/service-identity-list.html',
+              controller: 'ServiceIdentityListController'
+            },
+            {
+                name: 'service-identityCreate',
+                url: "/service-identities/create",
+                templateUrl: 'service-identities/service-identity-create.html',
+                controller: 'ServiceIdentityCreateController'
+            },
+            {
+              name: 'service-identityDetails',
+              url: "/service-identities/{serviceId}",
+              templateUrl: 'service-identities/service-identity-detail.html',
+              controller: 'ServiceIdentityDetailController'
+            },
+            {
+                name: 'service-identityEdit',
+                url: "/service-identities/{serviceId}/edit",
+                templateUrl: 'service-identities/service-identity-edit.html',
+                controller: 'ServiceIdentityEditController'
+            },
+            { 
+                name: 'generateCertificateService-identity',
+                url: "/certificates/generate/service-identity/{serviceId}",
+                templateUrl: 'certificates/certificate-generate-service-identity.html',
+                controller: 'CertificateGenerateServiceIdentityController'
+            },
+            { 
+                name: 'revokeCertificateService-identity',
+                url: "/certificates/{certId}/revoke/service-identity/{serviceId}",
+                templateUrl: 'certificates/certificate-revoke-service-identity.html',
+                controller: 'CertificateRevokeServiceIdentityController'
+            },   
         {
             name: 'vessels',
             url: "/vessels",

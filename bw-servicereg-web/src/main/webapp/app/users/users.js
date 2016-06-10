@@ -18,7 +18,7 @@ angular.module('mcp.users', ['ui.bootstrap'])
         $scope.updateSearch();
     }])
 
-    .controller('UserDetailController', ['$scope', '$stateParams', '$window', '$location', 'UserService', 'confirmDialog', 'replaceSpacesFilter', function ($scope, $stateParams, $window, $location, UserService, confirmDialog, replaceSpacesFilter) {
+    .controller('UserDetailController', ['$scope', '$stateParams', '$window', '$location', 'UserService', 'confirmDialog', 'replaceSpacesFilter', 'replaceNewlinesFilter', function ($scope, $stateParams, $window, $location, UserService, confirmDialog, replaceSpacesFilter, replaceNewlinesFilter) {
         $scope.dateFormat = dateFormat;
     	$scope.isAdmin = function () {
             return true; // TODO role management
@@ -50,7 +50,8 @@ angular.module('mcp.users', ['ui.bootstrap'])
         	// TODO maybe make generel as it's used at least in 3 different methods
         	var zip = new JSZip();
         	var fullnameNoSpaces = replaceSpacesFilter($scope.fullname, '_');
-        	zip.file("Certificate_" + fullnameNoSpaces + ".cer", certificate.certificate);
+        	certificate.certificate = replaceNewlinesFilter(certificate.certificate);
+        	zip.file("Certificate_" + fullnameNoSpaces + ".pem", certificate.certificate);
         	
         	var content = zip.generate({type:"blob"});
         	// see FileSaver.js

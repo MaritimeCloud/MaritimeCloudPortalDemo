@@ -21,4 +21,13 @@ angular.module('mcp.filters', [])
         };
     })
     
+    .filter('replaceNewlines', function () {
+        return function (string) {
+        	var replaceString = "\n";
+        	if (navigator.appVersion.indexOf("Win")!=-1){
+        		replaceString = "\r\n";
+        	}
+            return (!string) ? '' : string.replace(/(\r\n|\n|\r)/gm, "").replace(/(\\n)/gm, replaceString);
+        };
+    })
     ;

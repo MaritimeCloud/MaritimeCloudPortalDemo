@@ -119,6 +119,13 @@
         </ul>
         
         <!----------------------------------------------------->
+        <!-- SERVICES -->
+        <!----------------------------------------------------->
+        <ul class="nav nav-list" ng-if="hasSiteRole(siteRoles.admin)">
+            <li><a ui-sref="restricted.service-identities"><i class="fa fa-database" aria-hidden="true" style=""></i>&nbsp;&nbsp;Services </a></li>
+        </ul>
+        
+        <!----------------------------------------------------->
         <!-- USERS -->
         <!----------------------------------------------------->
         <ul class="nav nav-list" ng-if="hasSiteRole(siteRoles.admin)">

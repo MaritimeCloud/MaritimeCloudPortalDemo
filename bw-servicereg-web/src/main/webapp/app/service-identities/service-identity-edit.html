@@ -1,0 +1,29 @@
+<div class="row" cg-busy="busyPromise">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6">
+        <h1>Edit service</h1>
+        <i class="help-block">
+            <label>MRN: </label> {{service.mrn}} <br/>
+        </i>
+        <!--MESSAGES-->
+        <div ng-show="alertMessages" class="alert alert-danger">
+            <span ng-repeat="msg in alertMessages">{{msg}}<br /></span>
+        </div>
+        <div ng-show="message" class="alert alert-info">{{message}}</div>
+        <hr>
+        
+        <!--FORMS-->
+        <form role="form" name="form">
+            <div class="form-group" ng-class="{ 'has-error' : form.name.$invalid && !form.name.$pristine }">
+                <label for="firstname" class="control-label">Name</label>
+                <input type="text" required class="form-control" id="name" name="name" placeholder="Enter the name" ng-model="service.name"
+                       autocomplete='off' spellcheck='false'>
+                <p ng-show="form.name.$invalid && !form.name.$pristine" class="help-block">Name is required.</p>
+            </div>
+            
+            <div>
+                <button type="submit" class="btn btn-success" ng-disabled="form.$invalid" ng-click="submit()">Update</button>
+                <button class="btn btn-default" ui-sref='restricted.service-identityDetails({serviceId: service.id})'>Cancel</button>
+            </div> 
+        </form> 
+    </div>
+</div>
