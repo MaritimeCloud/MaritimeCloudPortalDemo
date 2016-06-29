@@ -9,7 +9,7 @@ angular.module('mcp.devices', ['ui.bootstrap'])
             $scope.busyPromise = DeviceService.getDeviceList({}, function (result) {
             	angular.forEach(result, function(device, index){
             		// TODO get image url from somewhere
-            		device.imageUrl = '/app/img/no_device.png'; // TODO get image url from somewhere
+            		device.imageUrl = '/app/img/no_device.svg'; // TODO get image url from somewhere
             		/*
             		var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(device.name, '_'));
                 	var imageUrl = '/app/img/devices/' + fullnameNoSpaces + '.jpg';
@@ -36,7 +36,7 @@ angular.module('mcp.devices', ['ui.bootstrap'])
             return true; // TODO role management
         };
     	DeviceService.get({deviceId: $stateParams.deviceId}, function (device) {
-    		device.imageUrl = '/app/img/no_device.png'; // TODO get image url from somewhere
+    		device.imageUrl = '/app/img/no_device.svg'; // TODO get image url from somewhere
     		/*
     		var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(device.name, '_'));
         	var imageUrl = '/app/img/devices/' + fullnameNoSpaces + '.jpg';

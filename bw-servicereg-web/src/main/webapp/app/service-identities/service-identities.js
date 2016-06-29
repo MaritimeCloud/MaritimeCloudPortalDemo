@@ -9,7 +9,7 @@ angular.module('mcp.service-identities', ['ui.bootstrap'])
             $scope.busyPromise = ServiceIdentityService.getServiceList({}, function (result) {
             	angular.forEach(result, function(service, index){
             		// TODO get image url from somewhere
-            		service.imageUrl = '/app/img/no_service.png'; // TODO get image url from somewhere
+            		service.imageUrl = '/app/img/no_service.svg'; // TODO get image url from somewhere
             		/*
             		var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(service.name, '_'));
                 	var imageUrl = '/app/img/services/' + fullnameNoSpaces + '.jpg';
@@ -36,7 +36,7 @@ angular.module('mcp.service-identities', ['ui.bootstrap'])
             return true; // TODO role management
         };
     	ServiceIdentityService.get({serviceId: $stateParams.serviceId}, function (service) {
-    		service.imageUrl = '/app/img/no_service.png'; // TODO get image url from somewhere
+    		service.imageUrl = '/app/img/no_service.svg'; // TODO get image url from somewhere
     		/*
     		var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(service.name, '_'));
         	var imageUrl = '/app/img/services/' + fullnameNoSpaces + '.jpg';
