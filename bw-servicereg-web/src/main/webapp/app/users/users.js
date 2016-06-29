@@ -8,7 +8,7 @@ angular.module('mcp.users', ['ui.bootstrap'])
     	$scope.updateSearch = function () {
             $scope.busyPromise = UserService.getUserList({}, function (result) {
             	angular.forEach(result, function(user, index){
-            		user.imageUrl = '/app/img/profile.jpg'; // TODO get image url from somewhere
+            		user.imageUrl = '/app/img/no_user.jpg'; // TODO get image url from somewhere
             	});
                 $scope.users = result;
             });
@@ -24,7 +24,7 @@ angular.module('mcp.users', ['ui.bootstrap'])
             return true; // TODO role management
         };
     	UserService.get({userId: $stateParams.userId}, function (user) {
-    	    	user.imageUrl = '/app/img/profile.jpg'; // TODO get image url from somewhere
+    	    	user.imageUrl = '/app/img/no_user.jpg'; // TODO get image url from somewhere
                 $scope.user = user;
                 $window.localStorage['user'] = JSON.stringify(user);
                 $scope.fullname = user.firstName + ' ' + user.lastName;
@@ -65,7 +65,7 @@ angular.module('mcp.users', ['ui.bootstrap'])
         function ($scope, $http, $stateParams, $location, UserService) {
 
     	    UserService.get({userId: $stateParams.userId}, function (user) {
-    	    	user.imageUrl = '/app/img/profile.jpg'; // TODO get image url from somewhere
+    	    	user.imageUrl = '/app/img/no_user.jpg'; // TODO get image url from somewhere
                 $scope.user = user;
             });
     	    

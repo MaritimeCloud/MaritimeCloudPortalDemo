@@ -8,7 +8,7 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
             $scope.busyPromise = VesselService.getVesselList({}, function (result) {
             	angular.forEach(result, function(vessel, index){
 
-            		vessel.imageUrl = '/app/img/no_ship.ico'; // TODO get image url from somewhere
+            		vessel.imageUrl = '/app/img/no_ship.jpg'; // TODO get image url from somewhere
             		/*
                 	var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(vessel.name, '_'));
                 	var imageUrl = '/app/img/vessels/' + fullnameNoSpaces + '.jpg';
@@ -37,7 +37,7 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
                 return true; // TODO role management
             };
     	    VesselService.get({vesselId: $stateParams.vesselId}, function (vessel) {
-    	    	vessel.imageUrl = '/app/img/no_ship.ico'; // TODO get image url from somewhere
+    	    	vessel.imageUrl = '/app/img/no_ship.jpg'; // TODO get image url from somewhere
         		
     	    	/*
             	var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(vessel.name, '_'));
