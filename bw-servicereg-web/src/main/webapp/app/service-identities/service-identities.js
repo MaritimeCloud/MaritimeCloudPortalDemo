@@ -1,9 +1,9 @@
 'use strict';
 angular.module('mcp.service-identities', ['ui.bootstrap'])
 
-    .controller('ServiceIdentityListController', ['$scope', 'ServiceIdentityService', 'replaceSpacesFilter', 'Utils', function ($scope, ServiceIdentityService, replaceSpacesFilter, Utils) {
+    .controller('ServiceIdentityListController', ['$scope', 'ServiceIdentityService', 'replaceSpacesFilter', 'Utils', 'Auth', function ($scope, ServiceIdentityService, replaceSpacesFilter, Utils, Auth) {
     	$scope.isAdmin = function () {
-            return true; // TODO role management
+    		return auth.permissions.indexOf("MCADMIN") > -1; // TODO role management
         };
     	$scope.updateSearch = function () {
             $scope.busyPromise = ServiceIdentityService.getServiceList({}, function (result) {
@@ -30,10 +30,10 @@ angular.module('mcp.service-identities', ['ui.bootstrap'])
         $scope.updateSearch();
     }])
 
-    .controller('ServiceIdentityDetailController', ['$scope', '$stateParams', '$window', '$location', 'ServiceIdentityService', 'confirmDialog', 'replaceSpacesFilter', 'replaceNewlinesFilter', 'Utils', function ($scope, $stateParams, $window, $location, ServiceIdentityService, confirmDialog, replaceSpacesFilter, replaceNewlinesFilter, Utils) {
+    .controller('ServiceIdentityDetailController', ['$scope', '$stateParams', '$window', '$location', 'ServiceIdentityService', 'confirmDialog', 'replaceSpacesFilter', 'replaceNewlinesFilter', 'Utils', 'Auth', function ($scope, $stateParams, $window, $location, ServiceIdentityService, confirmDialog, replaceSpacesFilter, replaceNewlinesFilter, Utils, Auth) {
         $scope.dateFormat = dateFormat;
     	$scope.isAdmin = function () {
-            return true; // TODO role management
+    		return auth.permissions.indexOf("MCADMIN") > -1; // TODO role management
         };
     	ServiceIdentityService.get({serviceId: $stateParams.serviceId}, function (service) {
     		service.imageUrl = '/app/img/no_service.svg'; // TODO get image url from somewhere

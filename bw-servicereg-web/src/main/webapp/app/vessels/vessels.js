@@ -1,8 +1,8 @@
 'use strict';
 angular.module('mcp.vessels', ['ui.bootstrap'])
-    .controller('VesselListController', ['$scope', 'VesselService', 'replaceSpacesFilter', 'Utils', function ($scope, VesselService, replaceSpacesFilter, Utils) {
+    .controller('VesselListController', ['$scope', 'VesselService', 'replaceSpacesFilter', 'Utils', 'Auth', function ($scope, VesselService, replaceSpacesFilter, Utils, Auth) {
     	$scope.isAdmin = function () {
-            return true; // TODO role management
+    		return auth.permissions.indexOf("MCADMIN") > -1; // TODO role management
         };
     	$scope.updateSearch = function () {
             $scope.busyPromise = VesselService.getVesselList({}, function (result) {
@@ -30,11 +30,11 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
         $scope.updateSearch();
     }])
       
-    .controller('VesselDetailController', ['$scope', '$location', '$window', '$stateParams', 'VesselService', 'confirmDialog', 'replaceSpacesFilter', 'replaceNewlinesFilter', 'Utils',
-        function ($scope, $location, $window, $stateParams, VesselService, confirmDialog, replaceSpacesFilter, replaceNewlinesFilter, Utils) {
+    .controller('VesselDetailController', ['$scope', '$location', '$window', '$stateParams', 'VesselService', 'confirmDialog', 'replaceSpacesFilter', 'replaceNewlinesFilter', 'Utils', 'Auth',
+        function ($scope, $location, $window, $stateParams, VesselService, confirmDialog, replaceSpacesFilter, replaceNewlinesFilter, Utils, Auth) {
             $scope.dateFormat = dateFormat;
       	    $scope.isAdmin = function () {
-                return true; // TODO role management
+      	    	return auth.permissions.indexOf("MCADMIN") > -1; // TODO role management
             };
     	    VesselService.get({vesselId: $stateParams.vesselId}, function (vessel) {
     	    	vessel.imageUrl = '/app/img/no_ship.jpg'; // TODO get image url from somewhere

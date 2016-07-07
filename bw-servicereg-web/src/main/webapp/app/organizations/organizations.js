@@ -86,17 +86,17 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
             });
 
             $scope.isAdmin = function () {
-                return angular.equals($stateParams.shortName, auth.org);
+                return angular.equals($stateParams.shortName, auth.org) && auth.permissions.indexOf("MCADMIN") > -1;
             };
         }
     ])
 
 
-    .controller('OrganizationEditController', ['$scope', '$http', '$stateParams', '$location', 'OrganizationService',
-        function ($scope, $http, $stateParams, $location, OrganizationService) {
+    .controller('OrganizationEditController', ['$scope', '$http', '$stateParams', '$location', 'OrganizationService', 'Auth',
+        function ($scope, $http, $stateParams, $location, OrganizationService, Auth) {
 
             $scope.isAdmin = function () {
-                return angular.equals($stateParams.shortName, auth.org);
+                return angular.equals($stateParams.shortName, auth.org) && auth.permissions.indexOf("MCADMIN") > -1;
             };
             
             $scope.countries = countries;

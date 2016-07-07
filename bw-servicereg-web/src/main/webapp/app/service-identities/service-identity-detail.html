@@ -44,7 +44,7 @@
                     <td class="vcenter"><span>{{certificate.start | date:dateFormat}}</span></td>
                     <td class="vcenter">{{certificate.end | date:dateFormat}}</td>   
                     <td class="vcenter text-right no-right-padding">
-                        <a ng-if="isAdmin()" class="btn btn-primary btn-sm" ng-click="zipAndDownloadCertificate(certificate)">Download certificate</a>
+                        <a class="btn btn-primary btn-sm" ng-click="zipAndDownloadCertificate(certificate)">Download certificate</a>
                         <a ng-if="isAdmin()" class="btn btn-danger btn-sm" href="#/certificates/{{certificate.id}}/revoke/service-identity/{{service.id}}">Revoke certificate</a>
                     </td> 
                 </tr>

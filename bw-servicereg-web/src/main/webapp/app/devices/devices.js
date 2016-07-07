@@ -1,9 +1,9 @@
 'use strict';
 angular.module('mcp.devices', ['ui.bootstrap'])
 
-    .controller('DeviceListController', ['$scope', 'DeviceService', 'replaceSpacesFilter', 'Utils', function ($scope, DeviceService, replaceSpacesFilter, Utils) {
+    .controller('DeviceListController', ['$scope', 'DeviceService', 'replaceSpacesFilter', 'Utils', 'Auth', function ($scope, DeviceService, replaceSpacesFilter, Utils, Auth) {
     	$scope.isAdmin = function () {
-            return true; // TODO role management
+            return auth.permissions.indexOf("MCADMIN") > -1; // TODO role management
         };
     	$scope.updateSearch = function () {
             $scope.busyPromise = DeviceService.getDeviceList({}, function (result) {
@@ -30,10 +30,10 @@ angular.module('mcp.devices', ['ui.bootstrap'])
         $scope.updateSearch();
     }])
 
-    .controller('DeviceDetailController', ['$scope', '$stateParams', '$window', '$location', 'DeviceService', 'confirmDialog', 'replaceSpacesFilter', 'replaceNewlinesFilter', 'Utils', function ($scope, $stateParams, $window, $location, DeviceService, confirmDialog, replaceSpacesFilter, replaceNewlinesFilter, Utils) {
+    .controller('DeviceDetailController', ['$scope', '$stateParams', '$window', '$location', 'DeviceService', 'confirmDialog', 'replaceSpacesFilter', 'replaceNewlinesFilter', 'Utils', 'Auth', function ($scope, $stateParams, $window, $location, DeviceService, confirmDialog, replaceSpacesFilter, replaceNewlinesFilter, Utils, Auth) {
         $scope.dateFormat = dateFormat;
     	$scope.isAdmin = function () {
-            return true; // TODO role management
+            return auth.permissions.indexOf("MCADMIN") > -1; // TODO role management
         };
     	DeviceService.get({deviceId: $stateParams.deviceId}, function (device) {
     		device.imageUrl = '/app/img/no_device.svg'; // TODO get image url from somewhere

@@ -1,9 +1,9 @@
 'use strict';
 angular.module('mcp.users', ['ui.bootstrap'])
 
-    .controller('UserListController', ['$scope', 'UserService', function ($scope, UserService) {
+    .controller('UserListController', ['$scope', 'UserService', 'Auth', function ($scope, UserService, Auth) {
     	$scope.isAdmin = function () {
-            return true; // TODO role management
+    		return auth.permissions.indexOf("MCADMIN") > -1; // TODO role management
         };
     	$scope.updateSearch = function () {
             $scope.busyPromise = UserService.getUserList({}, function (result) {
@@ -18,10 +18,10 @@ angular.module('mcp.users', ['ui.bootstrap'])
         $scope.updateSearch();
     }])
 
-    .controller('UserDetailController', ['$scope', '$stateParams', '$window', '$location', 'UserService', 'confirmDialog', 'replaceSpacesFilter', 'replaceNewlinesFilter', function ($scope, $stateParams, $window, $location, UserService, confirmDialog, replaceSpacesFilter, replaceNewlinesFilter) {
+    .controller('UserDetailController', ['$scope', '$stateParams', '$window', '$location', 'UserService', 'confirmDialog', 'replaceSpacesFilter', 'replaceNewlinesFilter', 'Auth', function ($scope, $stateParams, $window, $location, UserService, confirmDialog, replaceSpacesFilter, replaceNewlinesFilter, Auth) {
         $scope.dateFormat = dateFormat;
     	$scope.isAdmin = function () {
-            return true; // TODO role management
+    		return auth.permissions.indexOf("MCADMIN") > -1; // TODO role management
         };
     	UserService.get({userId: $stateParams.userId}, function (user) {
     	    	user.imageUrl = '/app/img/no_user.jpg'; // TODO get image url from somewhere
