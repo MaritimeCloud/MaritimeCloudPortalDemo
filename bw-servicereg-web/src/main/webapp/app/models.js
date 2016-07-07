@@ -23,6 +23,20 @@ angular.module('mcp.models', [])
         };	
         return model;
     })
+    
+    /**
+     * Model for showing Access Types
+     */
+    .factory('AccessTypeViewModel', function () {
+        var model = {
+            accessTypes: [
+                { accessTypeId: 'confidential', accessTypeText: 'confidential'},
+                { accessTypeId: 'public', accessTypeText: 'public'},
+                { accessTypeId: 'bearer-only', accessTypeText: 'bearer-only'}
+            ]
+        };	
+        return model;
+    })
 
     ;
 

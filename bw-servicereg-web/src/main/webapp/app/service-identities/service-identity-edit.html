@@ -20,6 +20,18 @@
                 <p ng-show="form.name.$invalid && !form.name.$pristine" class="help-block">Name is required.</p>
             </div>
             
+            <div class="form-group">
+                <label for="redirecturi" class="control-label">OIDC Redirect URI</label>
+                <input type="text"  class="form-control" id="redirecturi" name="redirecturi" placeholder="Enter OICD redirect URI" ng-model="service.oidcRedirectUri"
+                       autocomplete='off' spellcheck='false'>
+                
+            </div>
+                        
+            
+            <div class="form-group">
+                <select name="type" ng-change="updateAccessType(accessType)" default-option="Choose access type..." class="form-control" ng-options="accessType as accessType.accessTypeText for accessType in accessTypes track by accessType.accessTypeId" ng-model="accessType"></select>
+            </div>
+            
             <div>
                 <button type="submit" class="btn btn-success" ng-disabled="form.$invalid" ng-click="submit()">Update</button>
                 <button class="btn btn-default" ui-sref='restricted.service-identityDetails({serviceId: service.id})'>Cancel</button>

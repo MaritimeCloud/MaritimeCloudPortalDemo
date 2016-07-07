@@ -81,14 +81,31 @@ angular.module('mcp.service-identities', ['ui.bootstrap'])
             $location.path('/service-identities').replace();
         };
     }])
-    .controller('ServiceIdentityEditController', ['$scope', '$http', '$stateParams', '$location', 'ServiceIdentityService',
-        function ($scope, $http, $stateParams, $location, ServiceIdentityService) {
+    .controller('ServiceIdentityEditController', ['$scope', '$http', '$stateParams', '$location', 'ServiceIdentityService', 'AccessTypeViewModel',
+        function ($scope, $http, $stateParams, $location, ServiceIdentityService, AccessTypeViewModel) {
 
+	        $scope.accessTypes = AccessTypeViewModel.accessTypes;
     	    ServiceIdentityService.get({serviceId: $stateParams.serviceId}, function (service) {
                 $scope.service = service;
+                $scope.accessType = null;
+                if (service.oidcAccessType){
+                	for(var i=0;i<$scope.accessTypes.length;i++) {
+                		var accessType = $scope.accessTypes[i];
+                		if (accessType.accessTypeId === service.oidcAccessType){
+                            $scope.accessType = accessType;
+                		}
+                	}                	
+                }
             });
     	    
+    	    $scope.updateAccessType = function(accessType) {
+    	    	$scope.accessType = accessType;
+            };
+    	    
             $scope.submit = function () {
+            	if($scope.accessType){
+            	    $scope.service.oidcAccessType = $scope.accessType.accessTypeId;
+            	}
                 $scope.alertMessages = null;
                 $scope.message = "Sending request to update service...";
 
@@ -109,12 +126,21 @@ angular.module('mcp.service-identities', ['ui.bootstrap'])
         }
     ])
     
-    .controller('ServiceIdentityCreateController', ['$scope', '$location', 'ServiceIdentityService', 'Auth',
-        function ($scope, $location, ServiceIdentityService, Auth) {
+    .controller('ServiceIdentityCreateController', ['$scope', '$location', 'ServiceIdentityService', 'Auth', 'AccessTypeViewModel',
+        function ($scope, $location, ServiceIdentityService, Auth, AccessTypeViewModel) {
+	        $scope.service = {};
+	        $scope.accessType = null;
+    	    $scope.accessTypes = AccessTypeViewModel.accessTypes;
+    	    $scope.updateAccessType = function(accessType) {
+    	    	$scope.accessType = accessType;
+            };
+            
     	    $scope.org = Auth.org;
-    	    $scope.service = {};
 
             $scope.submit = function () {
+            	if($scope.accessType){
+            	    $scope.service.oidcAccessType = $scope.accessType.accessTypeId;
+            	}
                 $scope.alertMessages = null;
                 $scope.message = "Sending request to create service...";
 
