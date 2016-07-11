@@ -102,7 +102,7 @@ angular.module('mcp.users', ['ui.bootstrap'])
                 $scope.gotoUserDetails = function () {
                     $location.path('/users/' + $scope.user.id).replace();
                 };
-                
+                $scope.user.userOrgId = angular.lowercase($scope.org) + "." + $scope.user.userOrgId;
                 $scope.busyPromise = UserService.create($scope.user,
                     function (data) {
                 	    $scope.user = data;
