@@ -23,8 +23,8 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
         };
     }])
     
-    .controller('OrganizationListController', ['$scope', '$stateParams', 'OrganizationService',
-        function ($scope, $stateParams, OrganizationService) {
+    .controller('OrganizationListController', ['$scope', '$stateParams', 'OrganizationService', 'Utils',
+        function ($scope, $stateParams, OrganizationService, Utils) {
 
             $scope.organizations = [];
             $scope.countries = [];
@@ -57,10 +57,15 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
                     $scope.countries = [];
 
                     $.each(result, function(index, org) {
-                    	if (org.logo == null || org.logo.length == 0) {
-                    		// TODO just for testpurpuse
-                		    org.logo = '/app/img/logos/' + angular.lowercase(org.shortName) + '.png';
-                    	}
+                    	org.logo = '/app/img/no_org.png';
+                    	
+                    	var logo =  '/app/img/logos/' + angular.lowercase(org.shortName) + '.png';
+                    	
+                    	Utils.isImage(logo).then(function(result) {
+                			if (result) {
+                				org.logo = logo;
+                			}
+                        });
                         var c = org.country;
                         if (c && c.length && $.inArray(c, $scope.countries) == -1) {
                             $scope.countries.push(c);
@@ -74,14 +79,17 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
         }])
 
 
-    .controller('OrganizationDetailsController', ['$scope', '$stateParams', 'OrganizationService', 'Auth',
-        function ($scope, $stateParams, OrganizationService, Auth) {
+    .controller('OrganizationDetailsController', ['$scope', '$stateParams', 'OrganizationService', 'Auth', 'Utils',
+        function ($scope, $stateParams, OrganizationService, Auth, Utils) {
 
             OrganizationService.get({shortName: $stateParams.shortName}, function (org) {
-            	if (org.logo == null || org.logo.length == 0) {
-            		// TODO just for testpurpuse
-        		    org.logo = '/app/img/logos/' + angular.lowercase(org.shortName) + '.png';
-            	}
+            	var logo =  '/app/img/logos/' + angular.lowercase(org.shortName) + '.png';
+            	
+            	Utils.isImage(logo).then(function(result) {
+        			if (result) {
+        				org.logo = logo;
+        			}
+                });
                 $scope.organization = org;
             });
 
@@ -92,8 +100,8 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
     ])
 
 
-    .controller('OrganizationEditController', ['$scope', '$http', '$stateParams', '$location', 'OrganizationService', 'Auth',
-        function ($scope, $http, $stateParams, $location, OrganizationService, Auth) {
+    .controller('OrganizationEditController', ['$scope', '$http', '$stateParams', '$location', 'OrganizationService', 'Auth', 'Utils',
+        function ($scope, $http, $stateParams, $location, OrganizationService, Auth, Utils) {
 
             $scope.isAdmin = function () {
                 return angular.equals($stateParams.shortName, auth.org) && auth.permissions.indexOf("MCADMIN") > -1;
@@ -102,10 +110,13 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
             $scope.countries = countries;
             
             OrganizationService.get({shortName: $stateParams.shortName}, function (org) {
-            	if (org.logo == null || org.logo.length == 0) {
-            		// TODO just for testpurpuse
-        		    org.logo = '/app/img/logos/' + angular.lowercase(org.shortName) + '.png';
-            	}
+            	var logo =  '/app/img/logos/' + angular.lowercase(org.shortName) + '.png';
+            	
+            	Utils.isImage(logo).then(function(result) {
+        			if (result) {
+        				org.logo = logo;
+        			}
+                });
                 $scope.organization = org;
             });
 
