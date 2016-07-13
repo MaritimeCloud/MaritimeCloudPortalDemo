@@ -22,12 +22,39 @@
         <tr> <td class="text-right">Country : </td> <td>{{organization.country}} </td> </tr>
         <tr> <td class="text-right">Email : </td> <td><div ng-if="organization.email"><a href="mailto:{{organization.email}}" target="_blank">{{organization.email}}</a></div></td> </tr>
     </table>
-    <hr ng-if="isAdmin()">
-    <ul ng-if="isAdmin()"  class="nav nav-list" >
-        <li><a ui-sref="restricted.devices"><i class="fa fa-laptop" style=""></i>&nbsp;&nbsp;Devices </a></li>
-        <li><a ui-sref="restricted.service-identities"><i class="fa fa-database" aria-hidden="true" style=""></i>&nbsp;&nbsp;Services </a></li>
-        <li><a ui-sref="restricted.users"><i class="fa fa-users" style=""></i>&nbsp;&nbsp;Users </a></li>
-        <li><a ui-sref="restricted.vessels"><i class="fa fa-ship" style=""></i>&nbsp;&nbsp;Vessels </a></li>
-    </ul>
+    
+<hr>
+
+        
+
+    <h3>Certificates for {{organization.shortName}} <a ng-if="isAdmin()" class="btn btn-primary btn-sm" href="#/certificates/generate/org/{{organization.shortName}}">+ New certificate</a></h3>
+    <div>
+        <div ng-if="!organization.certificates.length">
+            <i>No active certificates</i>
+        </div>
+        <table ng-if="organization.certificates.length" class="table">
+            <thead>
+                <tr>
+                    <th class="col-xs-4">Certificate</th>
+                    <th class="col-xs-2">Valid from</th>
+                    <th class="col-xs-2">Valid to</th>
+                    <th class="col-xs-4"> </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="certificate in organization.certificates">
+                    <td class="vcenter">        
+    	                <span>Certificate for {{organization.name}}</span>
+                    </td>
+                    <td class="vcenter"><span>{{certificate.start | date:dateFormat}}</span></td>
+                    <td class="vcenter">{{certificate.end | date:dateFormat}}</td>   
+                    <td class="vcenter text-right no-right-padding">
+                        <a class="btn btn-primary btn-sm" ng-click="zipAndDownloadCertificate(certificate)">Download certificate</a>
+                        <a ng-if="isAdmin()" class="btn btn-danger btn-sm" href="#/certificates/{{certificate.id}}/revoke/org/{{organization.shortName}}">Revoke certificate</a>
+                    </td> 
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 

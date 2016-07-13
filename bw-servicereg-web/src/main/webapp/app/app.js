@@ -221,6 +221,18 @@ mcpApp
             templateUrl: 'organizations/organization-detail.html',
             controller: 'OrganizationDetailsController'
           },
+          { 
+              name: 'generateCertificateOrganization',
+              url: "/certificates/generate/org/{shortName}",
+              templateUrl: 'certificates/certificate-generate-org.html',
+              controller: 'CertificateGenerateOrganizationController'
+          },
+          { 
+              name: 'revokeCertificateOrganization',
+              url: "/certificates/{certId}/revoke/org/{shortName}",
+              templateUrl: 'certificates/certificate-revoke-org.html',
+              controller: 'CertificateRevokeOrganizationController'
+          },   
         {
           name: 'searchOrganizations',
           url: "/orgs",

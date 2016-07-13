@@ -1,5 +1,39 @@
 'use strict';
 angular.module('mcp.certificates', ['ui.bootstrap'])
+    .controller('CertificateGenerateOrganizationController', ['$scope', '$window', 'OrganizationService', 'replaceSpacesFilter', 'replaceNewlinesFilter', function ($scope, $window, OrganizationService, replaceSpacesFilter, replaceNewlinesFilter) {
+    	$scope.org = JSON.parse($window.localStorage['organization'] || '{}');
+        $scope.viewState = 'generate-certificate';
+
+        $scope.generateCertificate = function () {
+        	OrganizationService.generateCertificateForOrganization(
+                    function(data) {
+		                $scope.certificate = data.certificate;
+		                $scope.privateKey = data.privateKey;
+		                $scope.publicKey = data.publicKey;
+        		        $scope.viewState = 'generate-success'; 
+        		    },
+                    function(error) { 
+        		    	$scope.viewState = 'error'; 
+        		    	$scope.error = error.data;
+        		    }
+            );
+        };
+        $scope.zipAndDownload = function () {
+        	// TODO maybe make generel as it's used at least in 3 different methods
+        	var zip = new JSZip();
+        	var fullnameNoSpaces = replaceSpacesFilter($scope.org.shortName, '_');
+        	$scope.certificate = replaceNewlinesFilter($scope.certificate);
+        	$scope.privateKey = replaceNewlinesFilter($scope.privateKey);
+        	$scope.publicKey = replaceNewlinesFilter($scope.publicKey);
+        	zip.file("Certificate_" + fullnameNoSpaces + ".pem", $scope.certificate);
+        	zip.file("PrivateKey_" + fullnameNoSpaces + ".pem", $scope.privateKey);
+        	zip.file("PublicKey_" + fullnameNoSpaces + ".pem", $scope.publicKey);
+        	
+        	var content = zip.generate({type:"blob"});
+        	// see FileSaver.js
+        	saveAs(content, "Certificate_" + fullnameNoSpaces + ".zip");
+        };
+    }])
     
     .controller('CertificateGenerateDeviceController', ['$scope', '$window', 'DeviceService', 'replaceSpacesFilter', 'replaceNewlinesFilter', function ($scope, $window, DeviceService, replaceSpacesFilter, replaceNewlinesFilter) {
     	$scope.device = JSON.parse($window.localStorage['device'] || '{}');
@@ -141,7 +175,50 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
         	saveAs(content, "Certificate_" + fullnameNoSpaces + ".zip");
         };
     }])
-    
+    .controller('CertificateRevokeOrganizationController', ['$scope', '$location', '$stateParams', '$window', 'OrganizationService', 'CertificateRevocationViewModel', function ($scope, $location, $stateParams, $window, OrganizationService, CertificateRevocationViewModel) {
+    	
+    	$scope.org = JSON.parse($window.localStorage['organization'] || '{}');
+        $scope.reasons = CertificateRevocationViewModel.reasons;
+             
+        $scope.date = new Date();
+        $scope.updateDate = function(date) {
+            $scope.date = date;
+        };
+        $scope.openDate = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.datePopup.opened = true;
+        };
+        $scope.dateOptions = {
+        	    dateDisabled: false,
+        	    formatYear: 'yy',
+        	    maxDate: new Date(2070, 5, 22),
+        	    minDate: new Date(),
+        	    startingDay: 1
+        	  };
+        $scope.datePopup = {
+            opened: false
+        };
+        
+        $scope.reason = null;
+        $scope.updateReason = function(reason) {
+            $scope.reason = reason;
+        };
+        $scope.revokeCertificate = function () {
+        	OrganizationService.revokeCertificateForOrganization($stateParams.certId, $scope.reason.reasonId, $scope.date,
+                    function(data) {
+        		        $scope.gotoOrganizationDetails(); 
+        		    },
+                    function(error) { 
+        		    	$scope.error = error.data;
+        		    }
+            );
+
+        	$scope.gotoOrganizationDetails = function () {
+                $location.path('/').replace();
+            };
+        };
+    }])
     .controller('CertificateRevokeDeviceController', ['$scope', '$location', '$stateParams', '$window', 'DeviceService', 'CertificateRevocationViewModel', function ($scope, $location, $stateParams, $window, DeviceService, CertificateRevocationViewModel) {
     	
     	$scope.device = JSON.parse($window.localStorage['device'] || '{}');

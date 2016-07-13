@@ -79,9 +79,9 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
         }])
 
 
-    .controller('OrganizationDetailsController', ['$scope', '$stateParams', 'OrganizationService', 'Auth', 'Utils',
-        function ($scope, $stateParams, OrganizationService, Auth, Utils) {
-
+    .controller('OrganizationDetailsController', ['$scope', '$stateParams', '$window', 'OrganizationService', 'Auth', 'Utils', 'replaceSpacesFilter', 'replaceNewlinesFilter',
+        function ($scope, $stateParams, $window, OrganizationService, Auth, Utils, replaceSpacesFilter, replaceNewlinesFilter) {
+    	    $scope.dateFormat = dateFormat;
             OrganizationService.get({shortName: $stateParams.shortName}, function (org) {
             	var logo =  '/app/img/logos/' + angular.lowercase(org.shortName) + '.png';
             	
@@ -91,8 +91,26 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
         			}
                 });
                 $scope.organization = org;
-            });
+                $window.localStorage['organization'] = JSON.stringify(org);
 
+                // TODO How should revoked certificates be handled?
+                if ($scope.organization.certificates){
+                   $scope.organization.certificates = $scope.organization.certificates.filter(function(certificate) {
+                       return !certificate.revoked;
+                   });
+                }
+            });
+            $scope.zipAndDownloadCertificate = function (certificate) {
+            	// TODO maybe make generel as it's used at least in 3 different methods
+            	var zip = new JSZip();
+            	var orgNameNoSpaces = replaceSpacesFilter($scope.organization.shortName, '_');
+            	certificate.certificate = replaceNewlinesFilter(certificate.certificate);
+            	zip.file("Certificate_" + orgNameNoSpaces + ".pem", certificate.certificate);
+            	
+            	var content = zip.generate({type:"blob"});
+            	// see FileSaver.js
+            	saveAs(content, "Certificate_" + orgNameNoSpaces + ".zip");
+            };
             $scope.isAdmin = function () {
                 return angular.equals($stateParams.shortName, auth.org) && auth.permissions.indexOf("MCADMIN") > -1;
             };
