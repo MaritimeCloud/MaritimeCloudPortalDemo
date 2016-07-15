@@ -79,8 +79,8 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
         }])
 
 
-    .controller('OrganizationDetailsController', ['$scope', '$stateParams', '$window', 'OrganizationService', 'Auth', 'Utils', 'replaceSpacesFilter', 'replaceNewlinesFilter',
-        function ($scope, $stateParams, $window, OrganizationService, Auth, Utils, replaceSpacesFilter, replaceNewlinesFilter) {
+    .controller('OrganizationDetailsController', ['$scope', '$stateParams', '$window', 'OrganizationService', 'RoleService', 'Auth', 'Utils', 'replaceSpacesFilter', 'replaceNewlinesFilter',
+        function ($scope, $stateParams, $window, OrganizationService, RoleService, Auth, Utils, replaceSpacesFilter, replaceNewlinesFilter) {
     	    $scope.dateFormat = dateFormat;
             OrganizationService.get({shortName: $stateParams.shortName}, function (org) {
             	var logo =  '/app/img/logos/' + angular.lowercase(org.shortName) + '.png';
@@ -99,6 +99,12 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
                        return !certificate.revoked;
                    });
                 }
+            });
+            RoleService.getMyRoles({}, function (result) {
+            	   var permission = result.content;
+            		if (permission.indexOf("ROLE_ORG_ADMIN") > -1){
+                        auth.permissions = "MCADMIN";            			
+            		}
             });
             $scope.zipAndDownloadCertificate = function (certificate) {
             	// TODO maybe make generel as it's used at least in 3 different methods

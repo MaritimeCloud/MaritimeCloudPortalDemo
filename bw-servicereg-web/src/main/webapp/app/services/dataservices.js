@@ -29,6 +29,21 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
         return protocol + "://" + host + ":" + port;
       }])
       
+    .factory('RoleService', ['$resource', 'serviceBaseUrlBackend', 'loginType', 'Auth', function ($resource, serviceBaseUrlBackend, loginType, Auth) {
+    	var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/role/:roleId', {}, {
+    		post: {method: 'POST', params: {}, isArray: false},
+            put: {method: 'PUT', params: {roleId: '@id'}, isArray: false},
+            deleteD: {method: 'DELETE', params: {deviceId: '@roleId'}, isArray: false},
+            getMyRoles: {
+            	method:'GET',
+            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/role/myroles',
+                transformResponse: function (data) {
+                    return {content: data}
+                }
+            }
+        });
+    	return resource;
+    }])
     
     .factory('DeviceService', ['$resource', 'serviceBaseUrlBackend', 'loginType', 'Auth', function ($resource, serviceBaseUrlBackend, loginType, Auth) {
     	var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/device/:deviceId', {}, {
@@ -205,6 +220,16 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
                 method: 'POST',
                 params: {},
                 url: serviceBaseUrlBackend + '/' + loginType + '/api/org/apply'
+            },
+            generateCertificate: {
+                method: 'GET',
+                params: {},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/generatecertificate'
+            },
+            revokeCertificate: {
+                method: 'POST',
+                params: {certId: '@certId'},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/certificates/:certId/revoke'
             }
         });
 
@@ -214,6 +239,12 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
 
         resource.apply = function (organization, succes, error) {
             return this.applyOrg(organization, succes, error);
+        };
+        resource.generateCertificateForOrganization = function (succes, error) {
+            return this.generateCertificate(succes, error);
+        };
+        resource.revokeCertificateForOrganization = function (certId, revokationReason, revokedAt, succes, error) {
+            return this.revokeCertificate({certId: certId, revokationReason: revokationReason, revokedAt: revokedAt}, succes, error);
         };
 
         return resource;
