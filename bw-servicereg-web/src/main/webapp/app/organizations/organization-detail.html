@@ -16,6 +16,11 @@
     </ul>
 </div>
 <hr>
+<!--MESSAGES-->
+        <div ng-show="alertMessages" class="alert alert-danger">
+            <span ng-repeat="msg in alertMessages">{{msg}}<br /></span>
+        </div>
+        <div ng-show="message" class="alert alert-info">{{message}}</div>
 <div class="table-responsive">
     <table class="table-condensed">
         <tr> <td class="text-right">Address : </td> <td>{{organization.address}} </td> </tr>
@@ -24,8 +29,34 @@
     </table>
     
 <hr>
+<h3>Roles for {{organization.shortName}} <button ng-if="!adding" class="btn btn-primary btn-sm" ng-click="addNewRole()">+ New role</button></h3>
 
-        
+        <table class="table-condensed">
+            <tr ng-repeat="role in roles">
+                <th><button ng-click="removeRole($index)"><i class="fa fa-minus-square" style="color:red"></i></button></th><td>{{role.permission}} : </td> <td>{{role.roleNameText}}</td> <td> </td>  
+            </tr>
+        </table>
+
+    <div ng-if="adding">
+    
+    <form role="form" name="form" class="form-horizontal">
+            <div class="form-group">
+                <div class="col-xs-3 col-md-3">
+                    <input type="text" required class="form-control" id="permission" name="permission" placeholder="Enter the permission name" ng-model="role.permission"
+                       autocomplete='off' spellcheck='false'>
+                    <p ng-show="form.permission.$invalid && !form.permission.$pristine" class="help-block">Permission is required.</p>
+                </div> 
+        <div class="col-xs-3 col-md-3">
+            <select name="roleN" ng-change="updateRoleName(roleName)" class="form-control" ng-options="roleName as roleName.roleNameText for roleName in rolesModels track by roleName.roleNameId" ng-model="roleName"></select>
+        </div> 
+            </div>
+            <div>
+                <button type="submit" class="btn btn-success" ng-disabled="form.$invalid" ng-click="submit()">Update</button>
+                <button class="btn btn-default" ng-click='cancelRole()'>Cancel</button>
+            </div> 
+        </form> 
+    </div>
+ <hr>       
 
     <h3>Certificates for {{organization.shortName}} <a ng-if="isAdmin()" class="btn btn-primary btn-sm" href="#/certificates/generate/org/{{organization.shortName}}">+ New certificate</a></h3>
     <div>

@@ -79,9 +79,10 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
         }])
 
 
-    .controller('OrganizationDetailsController', ['$scope', '$stateParams', '$window', 'OrganizationService', 'RoleService', 'Auth', 'Utils', 'replaceSpacesFilter', 'replaceNewlinesFilter',
-        function ($scope, $stateParams, $window, OrganizationService, RoleService, Auth, Utils, replaceSpacesFilter, replaceNewlinesFilter) {
+    .controller('OrganizationDetailsController', ['$scope', '$stateParams', '$window', 'OrganizationService', 'RoleService', 'RoleNameViewModel', 'Auth', 'Utils', 'replaceSpacesFilter', 'replaceNewlinesFilter',
+        function ($scope, $stateParams, $window, OrganizationService, RoleService, RoleNameViewModel, Auth, Utils, replaceSpacesFilter, replaceNewlinesFilter) {
     	    $scope.dateFormat = dateFormat;
+	        $scope.rolesModels = RoleNameViewModel.roleNames;
             OrganizationService.get({shortName: $stateParams.shortName}, function (org) {
             	var logo =  '/app/img/logos/' + angular.lowercase(org.shortName) + '.png';
             	
@@ -101,10 +102,23 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
                 }
             });
             RoleService.getMyRoles({}, function (result) {
-            	   var permission = result.content;
-            		if (permission.indexOf("ROLE_ORG_ADMIN") > -1){
-                        auth.permissions = "MCADMIN";            			
-            		}
+         	   var permission = result.content;
+         		if (permission.indexOf("ROLE_ORG_ADMIN") > -1){
+                     auth.permissions = "MCADMIN";            			
+         		}
+            });
+            RoleService.getRoles({}, function (result) {
+            	angular.forEach(result, function(role, index){
+
+                	for(var i=0;i<$scope.rolesModels.length;i++) {
+                		var roleModel = $scope.rolesModels[i];
+                		if (roleModel.roleNameId === role.roleName){
+                            role.roleNameText = roleModel.roleNameText;
+                		}
+                	}
+        	    	
+            	});
+         	   $scope.roles = result;
             });
             $scope.zipAndDownloadCertificate = function (certificate) {
             	// TODO maybe make generel as it's used at least in 3 different methods
@@ -119,6 +133,51 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
             };
             $scope.isAdmin = function () {
                 return angular.equals($stateParams.shortName, auth.org) && auth.permissions.indexOf("MCADMIN") > -1;
+            };
+
+	        $scope.adding = false;
+
+    	    $scope.updateRoleName = function(roleName) {
+    	    	$scope.roleName = roleName;
+            };
+            
+            $scope.addNewRole = function() {
+    	        $scope.adding = true;
+            	$scope.role = {};
+            	$scope.roleName = $scope.rolesModels[0];
+            };
+            
+            $scope.cancelRole = function() {
+    	        $scope.adding = false;
+            };
+                
+            $scope.removeRole = function(index) {
+            	$scope.alertMessages = null;
+    	        $scope.adding = false;
+    	        RoleService.deleteRole($scope.roles[index].id,
+                        function(data) {
+                    $scope.roles.splice(index, 1);
+            		    },
+                        function(error) { 
+                            $scope.message = null;
+                            $scope.alertMessages = ["Error on the serverside: ", error.statusText, error.data.message];
+            		    }
+                );
+            };
+
+            $scope.submit = function () {
+                $scope.alertMessages = null;
+    	        $scope.role.roleName = $scope.roleName.roleNameId;
+    	        RoleService.create($scope.role,
+                        function(data) {
+        	        $scope.adding = false;
+    	        	$window.location.reload(); 
+            		    },
+                        function(error) { 
+                            $scope.message = null;
+                            $scope.alertMessages = ["Error on the serverside: ", error.statusText, error.data.message];
+            		    }
+                );
             };
         }
     ])

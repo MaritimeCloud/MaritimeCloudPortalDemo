@@ -33,7 +33,12 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
     	var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/role/:roleId', {}, {
     		post: {method: 'POST', params: {}, isArray: false},
             put: {method: 'PUT', params: {roleId: '@id'}, isArray: false},
-            deleteD: {method: 'DELETE', params: {deviceId: '@roleId'}, isArray: false},
+            deleteR: {method: 'DELETE', params: {roleId: '@roleId'}, isArray: false},
+            getRoles: {
+            	method: 'GET', 
+            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/roles', 
+            	isArray: true
+            },
             getMyRoles: {
             	method:'GET',
             	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/role/myroles',
@@ -42,6 +47,15 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
                 }
             }
         });
+    	resource.update = function (role, succes, error) {
+            return this.put(role, succes, error);
+        };
+        resource.create = function (role, succes, error) {
+            return this.post(role, succes, error);
+        };
+        resource.deleteRole = function (roleId, succes, error) {
+            return this.deleteR({roleId: roleId}, succes, error);
+        };
     	return resource;
     }])
     

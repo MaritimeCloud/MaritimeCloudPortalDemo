@@ -37,6 +37,19 @@ angular.module('mcp.models', [])
         };	
         return model;
     })
+    
+    /**
+     * Model for showing Role names
+     */
+    .factory('RoleNameViewModel', function () {
+        var model = {
+            roleNames: [
+                { roleNameId: 'ROLE_USER', roleNameText: 'User'},
+                { roleNameId: 'ROLE_ORG_ADMIN', roleNameText: 'Administrator'}
+            ]
+        };	
+        return model;
+    })
 
     ;
 
