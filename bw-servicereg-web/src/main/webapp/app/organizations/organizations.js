@@ -11,7 +11,7 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
             $scope.registered = false;
             $scope.busyPromise = OrganizationService.apply($scope.organization,
                 function (data) {
-                    $scope.message = "Organization registered";
+                    $scope.message = "Organization registered. A confirmation email will be send to " + $scope.organization.email;
                     $scope.registered = true;
                 },
                 function (error) {
@@ -101,12 +101,7 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
                    });
                 }
             });
-            RoleService.getMyRoles({}, function (result) {
-         	   var permission = result.content;
-         		if (permission.indexOf("ROLE_ORG_ADMIN") > -1){
-                     auth.permissions = "MCADMIN";            			
-         		}
-            });
+            
             RoleService.getRoles({}, function (result) {
             	angular.forEach(result, function(role, index){
 

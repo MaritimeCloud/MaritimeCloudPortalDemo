@@ -41,10 +41,8 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
             },
             getMyRoles: {
             	method:'GET',
-            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/role/myroles',
-                transformResponse: function (data) {
-                    return {content: data}
-                }
+            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/role/myroles', 
+            	isArray: true
             }
         });
     	resource.update = function (role, succes, error) {
