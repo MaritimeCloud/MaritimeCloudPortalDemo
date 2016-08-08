@@ -129,6 +129,9 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
             $scope.isAdmin = function () {
                 return angular.equals($stateParams.shortName, auth.org) && auth.permissions.indexOf("MCADMIN") > -1;
             };
+            $scope.isMyOrg = function () {
+                return angular.equals($stateParams.shortName, auth.org);
+            };
 
 	        $scope.adding = false;
 
