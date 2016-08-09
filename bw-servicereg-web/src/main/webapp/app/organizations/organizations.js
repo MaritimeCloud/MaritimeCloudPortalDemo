@@ -13,6 +13,12 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
                 function (data) {
                     $scope.message = "Organization registered. A confirmation email will be send to " + $scope.organization.email;
                     $scope.registered = true;
+                    
+                    // Check if there is a logo uploaded
+                    var logo = $scope.logo();
+                    if (logo) {
+                        $scope.uploadLogo(logo);
+                    } 
                 },
                 function (error) {
                     $scope.message = null;
@@ -20,6 +26,23 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
                     $scope.alertMessages = ["Error on the serverside: ", error.statusText, error.data.message];
                 }
             );
+            $scope.logo = function () {
+                var logoFiles = $('#orgLogo')[0].files;
+                return logoFiles.length > 0 ? logoFiles[0] : null;
+            };
+            $scope.uploadLogo = function (logo) {
+                var fd = new FormData();
+                fd.append('logo', logo);
+                OrganizationService.uploadLogo($scope.organization.shortName+'ddddd', fd,
+                    function (data) {
+                	    $scope.gotoOrgDetails()
+                    },
+                    function (error) {
+                        $scope.message = "Organization registered. A confirmation email will be send to " + $scope.organization.email ;
+                        $scope.alertMessages = ["However there was an error uploading the Logo. This can be retried once access is granted."];
+                    }
+                );
+            };
         };
     }])
     
@@ -57,15 +80,15 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
                     $scope.countries = [];
 
                     $.each(result, function(index, org) {
-                    	org.logo = '/app/img/no_org.png';
-                    	
-                    	var logo =  '/app/img/logos/' + angular.lowercase(org.shortName) + '.png';
-                    	
+                    	var logo = OrganizationService.getLogo(org.shortName);           	
                     	Utils.isImage(logo).then(function(result) {
                 			if (result) {
                 				org.logo = logo;
+                			} else {
+                            	org.logo = '/app/img/no_org.png';        				
                 			}
                         });
+                    	
                         var c = org.country;
                         if (c && c.length && $.inArray(c, $scope.countries) == -1) {
                             $scope.countries.push(c);
@@ -84,11 +107,12 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
     	    $scope.dateFormat = dateFormat;
 	        $scope.rolesModels = RoleNameViewModel.roleNames;
             OrganizationService.get({shortName: $stateParams.shortName}, function (org) {
-            	var logo =  '/app/img/logos/' + angular.lowercase(org.shortName) + '.png';
-            	
+            	var logo = OrganizationService.getLogo(org.shortName);           	
             	Utils.isImage(logo).then(function(result) {
         			if (result) {
         				org.logo = logo;
+        			} else {
+                    	org.logo = '/app/img/no_org.png';        				
         			}
                 });
                 $scope.organization = org;
@@ -191,19 +215,22 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
             $scope.countries = countries;
             
             OrganizationService.get({shortName: $stateParams.shortName}, function (org) {
-            	var logo =  '/app/img/logos/' + angular.lowercase(org.shortName) + '.png';
-            	
+            	var logo = OrganizationService.getLogo(org.shortName);           	
             	Utils.isImage(logo).then(function(result) {
         			if (result) {
         				org.logo = logo;
+        			} else {
+                    	org.logo = '/app/img/no_org.png';        				
         			}
                 });
-                $scope.organization = org;
+            	$scope.organization = org;
+                                
             });
 
             $scope.gotoOrgDetails = function () {
                 $location.path('/orgs/' + $scope.organization.shortName).replace();
             };
+
 
             $scope.submit = function () {
                 $scope.alertMessages = null;
@@ -211,13 +238,12 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
                 $scope.busyPromise = OrganizationService.update($scope.organization,
                     function (data) {
                         // Check if there is a logo uploaded
-//                        var logo = $scope.logo();
-//                        if (logo) {
-//                            $scope.uploadLogo(logo, $scope.gotoOrgDetails, $scope.gotoOrgDetails);
-//                        } else {
-//                            $scope.gotoOrgDetails();
-//                        }
-                        $scope.gotoOrgDetails();
+                        var logo = $scope.logo();
+                        if (logo) {
+                            $scope.uploadLogo(logo);
+                        } else {
+                            $scope.gotoOrgDetails();
+                        }
                     },
                     function (error) {
                         $scope.message = null;
@@ -231,16 +257,18 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
                 return logoFiles.length > 0 ? logoFiles[0] : null;
             };
 
-            $scope.uploadLogo = function (logo, success, error) {
+            $scope.uploadLogo = function (logo) {
                 var fd = new FormData();
-                fd.append('attachment', logo);
-
-                $http.post('/rest/api/org/' + $scope.organization.organizationId + '/logo', fd, {
-                        headers: {'Content-Type': undefined},
-                        transformRequest: angular.identity
-                    })
-                    .success(success)
-                    .error(error);
+                fd.append('logo', logo);
+                OrganizationService.uploadLogo($scope.organization.shortName, fd,
+                    function (data) {
+                	    $scope.gotoOrgDetails()
+                    },
+                    function (error) {
+                        $scope.message = null;
+                        $scope.alertMessages = ["Error on the serverside: ", error.statusText, error.data.message];
+                    }
+                );
             };
 
         }])

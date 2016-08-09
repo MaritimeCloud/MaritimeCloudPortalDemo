@@ -29,6 +29,7 @@ var mcpApp = angular.module('mcpApp', [
 ]);
 
 var dateFormat = 'yyyy-MM-dd';
+var logoTimestamp = (new Date()).getTime();
 
 angular.element(document).ready(function () {
 	bootstrapKeycloak('mcpApp', 'check-sso');
@@ -321,13 +322,15 @@ mcpApp
     // PAGE TRANSITION: 
     // Register a "Restricting Route Access" listener
     .run(function($rootScope, $state, $location, AuthServ, Auth, RoleService) {
-        RoleService.getMyRoles({}, function (result) {
-        	$.each(result, function(index, role) {
-        		if (role.indexOf("ROLE_ORG_ADMIN") > -1){
-                    auth.permissions = "MCADMIN";            			
-        		}
+    	if (Auth.loggedIn){
+            RoleService.getMyRoles({}, function (result) {
+        	    $.each(result, function(index, role) {
+        		    if (role.indexOf("ROLE_ORG_ADMIN") > -1){
+                        auth.permissions = "MCADMIN";            			
+        	    	}
+                });
             });
-        });
+    	}
         $rootScope.$on('$stateChangeStart', function(event, next, params) {
 
             if($rootScope.stateChangeBypass) {

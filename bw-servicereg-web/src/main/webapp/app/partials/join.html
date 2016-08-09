@@ -24,11 +24,11 @@ To sign up - Send an email to Tomas Christensen at <a href="mailto:tgc@dma.dk" t
         <i><b>Note</b> that the approval is currently a manual process. There will be send an email upon the approval.</i>
         </p>
         
+        <div ng-show="message" class="alert alert-info">{{message}}</div>
+        <hr>
         <div ng-show="alertMessages" class="alert alert-danger">
             <span ng-repeat="msg in alertMessages">{{msg}}<br /></span>
         </div>
-        <div ng-show="message" class="alert alert-info">{{message}}</div>
-        <hr>
         
         <form ng-show="!registered" role="form" name="form">
             <div class="form-group" ng-class="{ 'has-error' : form.name.$invalid && !form.name.$pristine }">
@@ -68,6 +68,11 @@ To sign up - Send an email to Tomas Christensen at <a href="mailto:tgc@dma.dk" t
                 <input type="email" required class="form-control" id="email" name="email" placeholder="Enter the email of the organization" ng-model="organization.email"
                        autocomplete='off' spellcheck='false'>
                 <p ng-show="form.email.$invalid && !form.email.$pristine" class="help-block">Email not valid.</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="orgLogo">Logo</label>
+                <input type="file" id="orgLogo" name="orgLogo">
             </div>
             
             I hereby accept, that I have the legal rights to act on behalf of the Organization provided above.

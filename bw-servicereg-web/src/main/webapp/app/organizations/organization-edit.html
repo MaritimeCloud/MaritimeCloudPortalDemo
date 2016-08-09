@@ -2,7 +2,7 @@
     <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6">
         <h1>
             Edit {{organization.shortName}}
-            <img ng-src="{{organization.logo}}" class="pull-right" width="200"/>
+            <img ng-src="{{organization.logo}}" class="pull-right" width="200"/> 
         </h1>
         
         <!--MESSAGES-->
@@ -47,6 +47,10 @@
                 <input type="email" class="form-control" id="email" name="email" placeholder="Enter the email of the organization" ng-model="organization.email"
                        autocomplete='off' spellcheck='false'>
                 <p ng-show="form.email.$invalid && !form.email.$pristine" class="help-block">Email not valid.</p>
+            </div>
+            <div class="form-group">
+                <label for="orgLogo">Logo</label>
+                <input type="file" id="orgLogo" name="orgLogo">
             </div>
             
             <div>
