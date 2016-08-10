@@ -28,16 +28,19 @@ angular.module('mcp.auth', ['ui.bootstrap', 'ngStorage'])
     /**
      * Interceptor that adds a Keycloak access token to the requests as an authorization header.
      */
-    .factory('authHttpInterceptor', function($q, Auth) {
+    .factory('authHttpInterceptor', function($q, Auth, $location) {
+    	var failedRefresh = false;
         return {
             'request': function(config) {
                 var deferred = $q.defer();
+            	failedRefresh = false;
                 if (Auth.keycloak.token) {
                     Auth.keycloak.updateToken(60).success(function() {
                         config.headers = config.headers || {};
                         config.headers.Authorization = 'Bearer ' + Auth.keycloak.token;
                         deferred.resolve(config);
                     }).error(function() {
+                    	failedRefresh = true;
                         deferred.reject('Failed to refresh token');
                     });
                 } else {
@@ -60,6 +63,10 @@ angular.module('mcp.auth', ['ui.bootstrap', 'ngStorage'])
                     } else {
                         console.error("An unexpected server error has occurred " + response.status);
                     }
+                }
+                if(failedRefresh) {
+                    Auth.keycloak.logout();
+                    $location.path("/");
                 }
                 return $q.reject(response);
             }
