@@ -13,6 +13,7 @@
         </div>
         <table class="table-condensed">
             <tr> <th class="text-right">MRN : </th> <td>{{vessel.mrn}} </td> </tr>
+            <tr> <th class="text-right">Vessel ID : </th> <td>{{vessel.vesselOrgId}} </td> </tr>
             <tr> <th class="text-right">Name : </th> <td>{{vessel.name}} </td> </tr>
             <tr ng-repeat="attribute in vessel.attributes">
                 <th class="text-right">{{attribute.attributeName}} : </th> <td>{{attribute.attributeValue}}</td>   

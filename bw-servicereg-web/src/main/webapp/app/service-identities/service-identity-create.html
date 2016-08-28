@@ -13,6 +13,12 @@
         
         <!--FORMS-->
         <form role="form" name="form">
+            <div class="form-group" ng-class="{ 'has-error' : form.serviceOrgId.$invalid && !form.serviceOrgId.$pristine }">
+                <label for="serviceOrgId" class="control-label">Service ID</label>
+                <input type="text" required class="form-control" id="serviceOrgId" name="serviceOrgId" placeholder="Enter the Service ID" ng-model="service.serviceOrgId"
+                       autocomplete='off' spellcheck='false'>
+                <p ng-show="form.serviceOrgId.$invalid && !form.serviceOrgId.$pristine" class="help-block">Service ID is required.</p>
+            </div>
             <div class="form-group" ng-class="{ 'has-error' : form.name.$invalid && !form.name.$pristine }">
                 <label for="name" class="control-label">Name</label>
                 <input type="text" required class="form-control" id="name" name="name" placeholder="Enter the name" ng-model="service.name"
