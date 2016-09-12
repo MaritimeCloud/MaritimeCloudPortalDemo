@@ -17,7 +17,7 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
                     // Check if there is a logo uploaded
                     var logo = $scope.logo();
                     if (logo) {
-                        $scope.uploadLogo(logo);
+//                        $scope.uploadLogo(logo);
                     } 
                 },
                 function (error) {
@@ -33,7 +33,7 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
             $scope.uploadLogo = function (logo) {
                 var fd = new FormData();
                 fd.append('logo', logo);
-                OrganizationService.uploadLogo($scope.organization.shortName+'ddddd', fd,
+                OrganizationService.uploadLogo($scope.organization.shortName, fd,
                     function (data) {
                 	    $scope.gotoOrgDetails()
                     },
