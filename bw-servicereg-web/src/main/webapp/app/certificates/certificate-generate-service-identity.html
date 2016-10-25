@@ -6,7 +6,7 @@
         </i>
     </p>
     <panel-button btn-type="primary" ng-click="generateCertificate()"> <i class="fa fa-plus"></i> Generate </panel-button>
-    <panel-button btn-type="default" ui-sref="restricted.service-identityDetails({serviceId: service.id})"> Cancel <i class="fa fa-ban"></i> </panel-button>
+    <panel-button btn-type="default" ui-sref="restricted.service-identityDetails({mrn: service.mrn})"> Cancel <i class="fa fa-ban"></i> </panel-button>
 </panel>
 
 <panel ng-show="viewState === 'generate-success'" category="primary" icon="plus" title="Certificate generated" offset="3">
@@ -52,7 +52,7 @@
     -->
     
     <panel-button btn-type="primary" ng-click="zipAndDownload()"> Zip &amp; download </panel-button>
-    <panel-button btn-type="default" ui-sref="restricted.service-identityDetails({serviceId: service.id})"> Ok </panel-button>
+    <panel-button btn-type="default" ui-sref="restricted.service-identityDetails({mrn: service.mrn})"> Ok </panel-button>
 </panel>
 
 <panel ng-show="viewState === 'error'" category="danger" icon="user" title="Error" offset="3">
@@ -64,5 +64,5 @@
             {{error}}
         </i>
     </p>
-    <panel-button btn-type="default" ui-sref="restricted.service-identityDetails({serviceId: service.id})">OK</panel-button>
+    <panel-button btn-type="default" ui-sref="restricted.service-identityDetails({mrn: service.mrn})">OK</panel-button>
 </panel>

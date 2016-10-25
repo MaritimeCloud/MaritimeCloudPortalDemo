@@ -86,25 +86,25 @@ mcpApp
           },
           {
             name: 'deviceDetails',
-            url: "/devices/{deviceId}",
+            url: "/devices/{mrn}",
             templateUrl: 'devices/device-detail.html',
             controller: 'DeviceDetailController'
           },
           {
               name: 'deviceEdit',
-              url: "/devices/{deviceId}/edit",
+              url: "/devices/{mrn}/edit",
               templateUrl: 'devices/device-edit.html',
               controller: 'DeviceEditController'
           },
           { 
               name: 'generateCertificateDevice',
-              url: "/certificates/generate/device/{deviceId}",
+              url: "/certificates/generate/device/{mrn}",
               templateUrl: 'certificates/certificate-generate-device.html',
               controller: 'CertificateGenerateDeviceController'
           },
           { 
               name: 'revokeCertificateDevice',
-              url: "/certificates/{certId}/revoke/device/{deviceId}",
+              url: "/certificates/{certId}/revoke/device/{mrn}",
               templateUrl: 'certificates/certificate-revoke-device.html',
               controller: 'CertificateRevokeDeviceController'
           },   
@@ -122,25 +122,25 @@ mcpApp
             },
             {
               name: 'service-identityDetails',
-              url: "/service-identities/{serviceId}",
+              url: "/service-identities/{mrn}",
               templateUrl: 'service-identities/service-identity-detail.html',
               controller: 'ServiceIdentityDetailController'
             },
             {
                 name: 'service-identityEdit',
-                url: "/service-identities/{serviceId}/edit",
+                url: "/service-identities/{mrn}/edit",
                 templateUrl: 'service-identities/service-identity-edit.html',
                 controller: 'ServiceIdentityEditController'
             },
             { 
                 name: 'generateCertificateService-identity',
-                url: "/certificates/generate/service-identity/{serviceId}",
+                url: "/certificates/generate/service-identity/{mrn}",
                 templateUrl: 'certificates/certificate-generate-service-identity.html',
                 controller: 'CertificateGenerateServiceIdentityController'
             },
             { 
                 name: 'revokeCertificateService-identity',
-                url: "/certificates/{certId}/revoke/service-identity/{serviceId}",
+                url: "/certificates/{certId}/revoke/service-identity/{mrn}",
                 templateUrl: 'certificates/certificate-revoke-service-identity.html',
                 controller: 'CertificateRevokeServiceIdentityController'
             },   
@@ -158,25 +158,25 @@ mcpApp
         },
         {
             name: 'vesselDetails',
-            url: "/vessels/{vesselId}",
+            url: "/vessels/{mrn}",
             templateUrl: 'vessels/vessel-detail.html',
             controller: 'VesselDetailController'
         },
         {
             name: 'vesselEdit',
-            url: "/vessels/{vesselId}/edit",
+            url: "/vessels/{mrn}/edit",
             templateUrl: 'vessels/vessel-edit.html',
             controller: 'VesselEditController'
         },
         { 
             name: 'generateCertificateVessel',
-            url: "/certificates/generate/vessel/{vesselId}",
+            url: "/certificates/generate/vessel/{mrn}",
             templateUrl: 'certificates/certificate-generate-vessel.html',
             controller: 'CertificateGenerateVesselController'
         },
         { 
             name: 'revokeCertificateVessel',
-            url: "/certificates/{certId}/revoke/vessel/{vesselId}",
+            url: "/certificates/{certId}/revoke/vessel/{mrn}",
             templateUrl: 'certificates/certificate-revoke-vessel.html',
             controller: 'CertificateRevokeVesselController'
         },
@@ -194,25 +194,25 @@ mcpApp
         },
         {
           name: 'userDetails',
-          url: "/users/{userId}",
+          url: "/users/{mrn}",
           templateUrl: 'users/user-detail.html',
           controller: 'UserDetailController'
         },
         {
             name: 'userEdit',
-            url: "/users/{userId}/edit",
+            url: "/users/{mrn}/edit",
             templateUrl: 'users/user-edit.html',
             controller: 'UserEditController'
         },
         { 
             name: 'generateCertificateUser',
-            url: "/certificates/generate/user/{userId}",
+            url: "/certificates/generate/user/{mrn}",
             templateUrl: 'certificates/certificate-generate-user.html',
             controller: 'CertificateGenerateUserController'
         },
         { 
             name: 'revokeCertificateUser',
-            url: "/certificates/{certId}/revoke/user/{userId}",
+            url: "/certificates/{certId}/revoke/user/{mrn}",
             templateUrl: 'certificates/certificate-revoke-user.html',
             controller: 'CertificateRevokeUserController'
         },
@@ -224,13 +224,13 @@ mcpApp
           },
           { 
               name: 'generateCertificateOrganization',
-              url: "/certificates/generate/org/{shortName}",
+              url: "/certificates/generate/org/{mrn}",
               templateUrl: 'certificates/certificate-generate-org.html',
               controller: 'CertificateGenerateOrganizationController'
           },
           { 
               name: 'revokeCertificateOrganization',
-              url: "/certificates/{certId}/revoke/org/{shortName}",
+              url: "/certificates/{certId}/revoke/org/{mrn}",
               templateUrl: 'certificates/certificate-revoke-org.html',
               controller: 'CertificateRevokeOrganizationController'
           },   
@@ -242,65 +242,65 @@ mcpApp
         },
         {
           name: 'organizationDetails',
-          url: "/orgs/{shortName}",
+          url: "/orgs/{mrn}",
           templateUrl: 'organizations/organization-detail.html',
           controller: 'OrganizationDetailsController'
         },
         {
           name: 'organizationEdit',
-          url: "/orgs/{shortName}/edit",
+          url: "/orgs/{mrn}/edit",
           templateUrl: 'organizations/organization-edit.html',
           controller: 'OrganizationEditController'
         },
         {
           name: 'organizationMembers',
-          url: "/orgs/{shortName}/members",
+          url: "/orgs/{mrn}/members",
           templateUrl: 'organizations/members/member-list.html',
           controller: 'OrganizationMembersController'
         },
         {
           name: 'organizationMembersInvite',
-          url: "/orgs/{shortName}/members/invite",
+          url: "/orgs/{mrn}/members/invite",
           templateUrl: 'organizations/members/membership.html',
           controller: 'OrganizationInviteMemberController'
         },
         {
           name: 'organizationMembersJoin',
-          url: "/orgs/{shortName}/members/join",
+          url: "/orgs/{mrn}/members/join",
           templateUrl: 'organizations/members/membership.html',
           controller: 'UserJoinOrganizationController'
         },
         {
           name: 'serviceInstanceCreate',
-          url: "/orgs/{shortName}/si/create",
+          url: "/orgs/{mrn}/si/create",
           templateUrl: 'organizations/service-instances/service-instance-create.html',
           controller: 'CreateServiceInstanceController',
           data: {createState: true}
         },
         {
           name: 'serviceInstanceEdit',
-          url: "/orgs/{shortName}/si/{serviceInstanceId}/edit",
+          url: "/orgs/{mrn}/si/{serviceInstanceId}/edit",
           templateUrl: 'organizations/service-instances/service-instance-edit.html',
           controller: 'EditServiceInstanceController',
           data: {editState: true}
         },
         {
           name: 'serviceInstanceMembers',
-          url: "/orgs/{shortName}/si/{serviceInstanceId}/members",
+          url: "/orgs/{mrn}/si/{serviceInstanceId}/members",
           templateUrl: 'organizations/service-instances/service-instance-members.html',
           controller: 'ServiceInstanceMembersController',
           data: {editState: true}
         },
         {
           name: 'serviceSpecificationCreate',
-          url: "/orgs/{shortName}/ss/create",
+          url: "/orgs/{mrn}/ss/create",
           templateUrl: 'organizations/service-specifications/service-specification-create.html',
           controller: 'CreateServiceSpecificationController',
           data: {createState: true}
         },
         {
           name: 'serviceSpecificationEdit',
-          url: "/orgs/{shortName}/ss/{serviceSpecificationId}/edit",
+          url: "/orgs/{mrn}/ss/{serviceSpecificationId}/edit",
           templateUrl: 'organizations/service-specifications/service-specification-edit.html',
           controller: 'EditServiceSpecificationController',
           data: {editState: true}

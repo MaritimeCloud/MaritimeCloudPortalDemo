@@ -35,7 +35,7 @@ angular.module('mcp.devices', ['ui.bootstrap'])
     	$scope.isAdmin = function () {
             return auth.permissions.indexOf("MCADMIN") > -1; // TODO role management
         };
-    	DeviceService.get({deviceId: $stateParams.deviceId}, function (device) {
+    	DeviceService.get({mrn: $stateParams.mrn}, function (device) {
     		device.imageUrl = '/app/img/no_device.svg'; // TODO get image url from somewhere
     		/*
     		var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(device.name, '_'));
@@ -56,7 +56,7 @@ angular.module('mcp.devices', ['ui.bootstrap'])
         });
     	$scope.deleteDevice = function () {
 	    	confirmDialog('Are you sure you want to delete the device?').then(function () {
-	    		DeviceService.deleteDevice($scope.device.id,
+	    		DeviceService.deleteDevice($scope.device.mrn,
                         function(data) {
                     		$scope.gotoDeviceList();
             		    },
@@ -84,7 +84,7 @@ angular.module('mcp.devices', ['ui.bootstrap'])
     .controller('DeviceEditController', ['$scope', '$http', '$stateParams', '$location', 'DeviceService',
         function ($scope, $http, $stateParams, $location, DeviceService) {
 
-    	    DeviceService.get({deviceId: $stateParams.deviceId}, function (device) {
+    	    DeviceService.get({mrn: $stateParams.mrn}, function (device) {
                 $scope.device = device;
             });
     	    
@@ -93,7 +93,7 @@ angular.module('mcp.devices', ['ui.bootstrap'])
                 $scope.message = "Sending request to update device...";
 
                 $scope.gotoDeviceDetails = function () {
-                    $location.path('/devices/' + $scope.device.id).replace();
+                    $location.path('/devices/' + $scope.device.mrn).replace();
                 };
                 
                 $scope.busyPromise = DeviceService.update($scope.device,
@@ -119,7 +119,7 @@ angular.module('mcp.devices', ['ui.bootstrap'])
                 $scope.message = "Sending request to create device...";
 
                 $scope.gotoDeviceDetails = function () {
-                    $location.path('/devices/' + $scope.device.id).replace();
+                    $location.path('/devices/' + $scope.device.mrn).replace();
                 };
                 
                 $scope.busyPromise = DeviceService.create($scope.device,

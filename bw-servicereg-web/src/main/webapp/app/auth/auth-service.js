@@ -94,8 +94,7 @@ angular.module('mcp.auth', ['ui.bootstrap', 'ngStorage'])
             auth.keycloak = keycloak;
             auth.permissions = "MCUSER";
             if (keycloak.tokenParsed && keycloak.tokenParsed.org) {
-                auth.org = keycloak.tokenParsed.org;
-                
+                auth.org = keycloak.tokenParsed.org;                
             } else {
             	// TODO error handling
             	auth.org = 'NO_ORG';

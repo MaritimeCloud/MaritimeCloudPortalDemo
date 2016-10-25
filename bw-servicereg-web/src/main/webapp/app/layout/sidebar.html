@@ -64,7 +64,7 @@
                         <ui-select-match placeholder="provider">{{$select.selected.name}}</ui-select-match>
                         <ui-select-choices repeat="provider in organizations | filter: $select.search ">
                             <span ng-bind-html="provider.name | highlight: $select.search"></span>
-                            <small>(</small><small ng-bind-html="provider.shortName | highlight: $select.search"></small><small>)</small>
+                            <small>(</small><small ng-bind-html="provider.name | highlight: $select.search"></small><small>)</small>
                         </ui-select-choices>
                     </ui-select>
 

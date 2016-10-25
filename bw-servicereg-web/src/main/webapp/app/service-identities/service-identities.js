@@ -35,7 +35,7 @@ angular.module('mcp.service-identities', ['ui.bootstrap'])
     	$scope.isAdmin = function () {
     		return auth.permissions.indexOf("MCADMIN") > -1; // TODO role management
         };
-    	ServiceIdentityService.get({serviceId: $stateParams.serviceId}, function (service) {
+    	ServiceIdentityService.get({mrn: $stateParams.mrn}, function (service) {
     		service.imageUrl = '/app/img/no_service.svg'; // TODO get image url from somewhere
     		/*
     		var fullnameNoSpaces = angular.lowercase(replaceSpacesFilter(service.name, '_'));
@@ -56,7 +56,7 @@ angular.module('mcp.service-identities', ['ui.bootstrap'])
         });
     	$scope.deleteService = function () {
 	    	confirmDialog('Are you sure you want to delete the service?').then(function () {
-	    		ServiceIdentityService.deleteService($scope.service.id,
+	    		ServiceIdentityService.deleteService($scope.service.mrn,
                         function(data) {
                     		$scope.gotoServiceList();
             		    },
@@ -85,7 +85,7 @@ angular.module('mcp.service-identities', ['ui.bootstrap'])
         function ($scope, $http, $stateParams, $location, ServiceIdentityService, AccessTypeViewModel) {
 
 	        $scope.accessTypes = AccessTypeViewModel.accessTypes;
-    	    ServiceIdentityService.get({serviceId: $stateParams.serviceId}, function (service) {
+    	    ServiceIdentityService.get({mrn: $stateParams.mrn}, function (service) {
                 $scope.service = service;
                 $scope.accessType = null;
                 if (service.oidcAccessType){
@@ -110,7 +110,7 @@ angular.module('mcp.service-identities', ['ui.bootstrap'])
                 $scope.message = "Sending request to update service...";
 
                 $scope.gotoServiceDetails = function () {
-                    $location.path('/service-identities/' + $scope.service.id).replace();
+                    $location.path('/service-identities/' + $scope.service.mrn).replace();
                 };
                 
                 $scope.busyPromise = ServiceIdentityService.update($scope.service,
@@ -145,7 +145,7 @@ angular.module('mcp.service-identities', ['ui.bootstrap'])
                 $scope.message = "Sending request to create service...";
 
                 $scope.gotoServiceDetails = function () {
-                    $location.path('/service-identities/' + $scope.service.id).replace();
+                    $location.path('/service-identities/' + $scope.service.mrn).replace();
                 };
                 
                 $scope.busyPromise = ServiceIdentityService.create($scope.service,

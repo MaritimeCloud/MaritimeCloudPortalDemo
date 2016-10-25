@@ -36,7 +36,7 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
       	    $scope.isAdmin = function () {
       	    	return auth.permissions.indexOf("MCADMIN") > -1; // TODO role management
             };
-    	    VesselService.get({vesselId: $stateParams.vesselId}, function (vessel) {
+    	    VesselService.get({mrn: $stateParams.mrn}, function (vessel) {
     	    	vessel.imageUrl = '/app/img/no_ship.jpg'; // TODO get image url from somewhere
         		
     	    	/*
@@ -60,7 +60,7 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
             });
     	    $scope.deleteVessel = function () {
     	    	confirmDialog('Are you sure you want to delete the vessel?').then(function () {
-    	    		VesselService.deleteVessel($scope.vessel.id,
+    	    		VesselService.deleteVessel($scope.vessel.mrn,
                             function(data) {
                         		$scope.gotoVesselList();
                 		    },
@@ -89,7 +89,7 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
     .controller('VesselEditController', ['$scope', '$http', '$stateParams', '$location', 'VesselService', 'replaceSpacesFilter',
         function ($scope, $http, $stateParams, $location, VesselService, replaceSpacesFilter) {
 
-            VesselService.get({vesselId: $stateParams.vesselId}, function (vessel) {
+            VesselService.get({mrn: $stateParams.mrn}, function (vessel) {
                 $scope.vessel = vessel;
             });
             
@@ -113,7 +113,7 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
                 $scope.message = "Sending request to update vessel...";
 
                 $scope.gotoVesselDetails = function () {
-                    $location.path('/vessels/' + $scope.vessel.id).replace();
+                    $location.path('/vessels/' + $scope.vessel.mrn).replace();
                 };
                 
                 $scope.busyPromise = VesselService.update($scope.vessel,
@@ -156,7 +156,7 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
                 $scope.message = "Sending request to create vessel...";
 
                 $scope.gotoVesselDetails = function () {
-                    $location.path('/vessels/' + $scope.vessel.id).replace();
+                    $location.path('/vessels/' + $scope.vessel.mrn).replace();
                 };
                 
                 $scope.busyPromise = VesselService.create($scope.vessel,

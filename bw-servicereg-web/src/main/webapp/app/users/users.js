@@ -23,7 +23,7 @@ angular.module('mcp.users', ['ui.bootstrap'])
     	$scope.isAdmin = function () {
     		return auth.permissions.indexOf("MCADMIN") > -1; // TODO role management
         };
-    	UserService.get({userId: $stateParams.userId}, function (user) {
+    	UserService.get({mrn: $stateParams.mrn}, function (user) {
     	    	user.imageUrl = '/app/img/no_user.jpg'; // TODO get image url from somewhere
                 $scope.user = user;
                 $window.localStorage['user'] = JSON.stringify(user);
@@ -36,7 +36,7 @@ angular.module('mcp.users', ['ui.bootstrap'])
         });
     	$scope.deleteUser = function () {
 	    	confirmDialog('Are you sure you want to delete the user?').then(function () {
-	    		UserService.deleteUser($scope.user.id,
+	    		UserService.deleteUser($scope.user.mrn,
                         function(data) {
                     		$scope.gotoUserList();
             		    },
@@ -64,7 +64,7 @@ angular.module('mcp.users', ['ui.bootstrap'])
     .controller('UserEditController', ['$scope', '$http', '$stateParams', '$location', 'UserService',
         function ($scope, $http, $stateParams, $location, UserService) {
 
-    	    UserService.get({userId: $stateParams.userId}, function (user) {
+    	    UserService.get({mrn: $stateParams.mrn}, function (user) {
     	    	user.imageUrl = '/app/img/no_user.jpg'; // TODO get image url from somewhere
                 $scope.user = user;
             });
@@ -74,7 +74,7 @@ angular.module('mcp.users', ['ui.bootstrap'])
                 $scope.message = "Sending request to update user...";
 
                 $scope.gotoUserDetails = function () {
-                    $location.path('/users/' + $scope.user.id).replace();
+                    $location.path('/users/' + $scope.user.mrn).replace();
                 };
                 
                 $scope.busyPromise = UserService.update($scope.user,
@@ -100,7 +100,7 @@ angular.module('mcp.users', ['ui.bootstrap'])
                 $scope.message = "Sending request to create user...";
 
                 $scope.gotoUserDetails = function () {
-                    $location.path('/users/' + $scope.user.id).replace();
+                    $location.path('/users/' + $scope.user.mrn).replace();
                 };
                 $scope.user.userOrgId = angular.lowercase($scope.org) + "." + $scope.user.userOrgId;
                 $scope.busyPromise = UserService.create($scope.user,

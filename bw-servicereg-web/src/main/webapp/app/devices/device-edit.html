@@ -12,13 +12,7 @@
         <hr>
         
         <!--FORMS-->
-        <form role="form" name="form">
-            <div class="form-group" ng-class="{ 'has-error' : form.deviceOrgId.$invalid && !form.deviceOrgId.$pristine }">
-                <label for="deviceOrgId" class="control-label">Device ID</label>
-                <input type="text" required class="form-control" id="deviceOrgId" name="deviceOrgId" placeholder="Enter the Device ID" ng-model="device.deviceOrgId"
-                       autocomplete='off' spellcheck='false'>
-                <p ng-show="form.deviceOrgId.$invalid && !form.deviceOrgId.$pristine" class="help-block">Device ID is required.</p>
-            </div>  
+        <form role="form" name="form"> 
             <div class="form-group" ng-class="{ 'has-error' : form.name.$invalid && !form.name.$pristine }">
                 <label for="firstname" class="control-label">Name</label>
                 <input type="text" required class="form-control" id="name" name="name" placeholder="Enter the name" ng-model="device.name"
@@ -28,7 +22,7 @@
             
             <div>
                 <button type="submit" class="btn btn-success" ng-disabled="form.$invalid" ng-click="submit()">Update</button>
-                <button class="btn btn-default" ui-sref='restricted.deviceDetails({deviceId: device.id})'>Cancel</button>
+                <button class="btn btn-default" ui-sref='restricted.deviceDetails({mrn: device.mrn})'>Cancel</button>
             </div> 
         </form> 
     </div>

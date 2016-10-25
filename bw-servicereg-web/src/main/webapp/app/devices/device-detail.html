@@ -1,6 +1,6 @@
 <div class="boxed-group table-responsive">
     <h3>{{device.name}}
-        <a ng-if="isAdmin()" class="edit edit-gear" href="#/devices/{{device.id}}/edit" data-tooltip="Edit {{device.name}}" data-tooltip-placement="right">
+        <a ng-if="isAdmin()" class="edit edit-gear" href="#/devices/{{device.mrn}}/edit" data-tooltip="Edit {{device.name}}" data-tooltip-placement="right">
             <span class="fa fa-gear"></span>
         </a>
         <a ng-if="isAdmin()" class="edit edit-gear" href='' ng-click="deleteDevice($event)" data-tooltip="Delete {{device.name}}" data-tooltip-placement="right">
@@ -13,13 +13,12 @@
         </div>
         <table class="table-condensed">
             <tr> <th class="text-right">MRN : </th> <td>{{device.mrn}} </td> </tr>
-            <tr> <th class="text-right">Device ID : </th> <td>{{device.deviceOrgId}} </td> </tr>
             <tr> <th class="text-right">Name : </th> <td>{{device.name}} </td> </tr>
         </table>
     </div>
     
     <div class="boxed-group-action" >
-        <a ng-if="isAdmin()" class="btn btn-primary btn-sm" href="#/certificates/generate/device/{{device.id}}">+ New certificate</a>
+        <a ng-if="isAdmin()" class="btn btn-primary btn-sm" href="#/certificates/generate/device/{{device.mrn}}">+ New certificate</a>
     </div>
     <h3>Certificates for {{device.name}}</h3>
     <div class="boxed-group-inner">
@@ -44,7 +43,7 @@
                     <td class="vcenter">{{certificate.end | date:dateFormat}}</td>   
                     <td class="vcenter text-right no-right-padding">
                         <a class="btn btn-primary btn-sm" ng-click="zipAndDownloadCertificate(certificate)">Download certificate</a>
-                        <a ng-if="isAdmin()" class="btn btn-danger btn-sm" href="#/certificates/{{certificate.id}}/revoke/device/{{device.id}}">Revoke certificate</a>
+                        <a ng-if="isAdmin()" class="btn btn-danger btn-sm" href="#/certificates/{{certificate.id}}/revoke/device/{{device.mrn}}">Revoke certificate</a>
                     </td> 
                 </tr>
             </tbody>

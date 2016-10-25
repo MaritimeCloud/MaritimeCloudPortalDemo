@@ -1,6 +1,6 @@
 
 <div class="panel panel-default user">
-    <div><a href="#/users/{{user.id}}"><img class="img-circle" ng-src="{{user.imageUrl}}" height="80"/></a></div>
+    <div><a href="#/users/{{user.mrn}}"><img class="img-circle" ng-src="{{user.imageUrl}}" height="80"/></a></div>
     <div class="user-name">{{user.firstName}} {{user.lastName}}</div>
     <div ng-if="user.email"><a href="mailto:{{user.email}}" target="_blank"><span class="fa fa-envelope-o"></span> {{user.email}}</a></div>
     <div ng-transclude></div>

@@ -1,7 +1,7 @@
 <div class="row" cg-busy="busyPromise">
     <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6">
         <h1>
-            Edit {{organization.shortName}}
+            Edit {{organization.name}}
             <img ng-src="{{organization.logo}}" class="pull-right" width="200"/> 
         </h1>
         
@@ -55,7 +55,7 @@
             
             <div>
                 <button type="submit" class="btn btn-success" ng-disabled="form.$invalid" ng-click="submit()">Update</button>
-                <button class="btn btn-default" ui-sref='restricted.organizationDetails({shortName: organization.shortName})'>Cancel</button>
+                <button class="btn btn-default" ui-sref='restricted.organizationDetails({mrn: organization.mrn})'>Cancel</button>
             </div> 
         </form> 
     </div>

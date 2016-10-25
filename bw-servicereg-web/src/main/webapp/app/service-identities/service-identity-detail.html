@@ -1,6 +1,6 @@
 <div class="boxed-group table-responsive">
     <h3>{{service.name}}
-        <a ng-if="isAdmin()" class="edit edit-gear" href="#/service-identities/{{service.id}}/edit" data-tooltip="Edit {{service.name}}" data-tooltip-placement="right">
+        <a ng-if="isAdmin()" class="edit edit-gear" href="#/service-identities/{{service.mrn}}/edit" data-tooltip="Edit {{service.name}}" data-tooltip-placement="right">
             <span class="fa fa-gear"></span>
         </a>
         <a ng-if="isAdmin()" class="edit edit-gear" href='' ng-click="deleteService($event)" data-tooltip="Delete {{service.name}}" data-tooltip-placement="right">
@@ -23,7 +23,7 @@
     </div>
     
     <div class="boxed-group-action" >
-        <a ng-if="isAdmin()" class="btn btn-primary btn-sm" href="#/certificates/generate/service-identity/{{service.id}}">+ New certificate</a>
+        <a ng-if="isAdmin()" class="btn btn-primary btn-sm" href="#/certificates/generate/service-identity/{{service.mrn}}">+ New certificate</a>
     </div>
     <h3>Certificates for {{service.name}}</h3>
     <div class="boxed-group-inner">
@@ -48,7 +48,7 @@
                     <td class="vcenter">{{certificate.end | date:dateFormat}}</td>   
                     <td class="vcenter text-right no-right-padding">
                         <a class="btn btn-primary btn-sm" ng-click="zipAndDownloadCertificate(certificate)">Download certificate</a>
-                        <a ng-if="isAdmin()" class="btn btn-danger btn-sm" href="#/certificates/{{certificate.id}}/revoke/service-identity/{{service.id}}">Revoke certificate</a>
+                        <a ng-if="isAdmin()" class="btn btn-danger btn-sm" href="#/certificates/{{certificate.id}}/revoke/service-identity/{{service.mrn}}">Revoke certificate</a>
                     </td> 
                 </tr>
             </tbody>

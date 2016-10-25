@@ -33,7 +33,7 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
             $scope.uploadLogo = function (logo) {
                 var fd = new FormData();
                 fd.append('logo', logo);
-                OrganizationService.uploadLogo($scope.organization.shortName, fd,
+                OrganizationService.uploadLogo($scope.organization.mrn, fd,
                     function (data) {
                 	    $scope.gotoOrgDetails()
                     },
@@ -71,7 +71,7 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
                 if ($scope.filter.country.length > 0 && $scope.filter.country != org.country) {
                     return false;
                 }
-                return match(org.name, $scope.filter.query) || match(org.id, $scope.filter.query);
+                return match(org.name, $scope.filter.query) || match(org.mrn, $scope.filter.query);
             };
 
             $scope.loadOrganizations = function () {
@@ -80,7 +80,7 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
                     $scope.countries = [];
 
                     $.each(result, function(index, org) {
-                    	var logo = OrganizationService.getLogo(org.shortName);           	
+                    	var logo = OrganizationService.getLogo(org.mrn);           	
                     	Utils.isImage(logo).then(function(result) {
                 			if (result) {
                 				org.logo = logo;
@@ -106,8 +106,8 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
         function ($scope, $stateParams, $window, OrganizationService, RoleService, RoleNameViewModel, Auth, Utils, replaceSpacesFilter, replaceNewlinesFilter) {
     	    $scope.dateFormat = dateFormat;
 	        $scope.rolesModels = RoleNameViewModel.roleNames;
-            OrganizationService.get({shortName: $stateParams.shortName}, function (org) {
-            	var logo = OrganizationService.getLogo(org.shortName);           	
+            OrganizationService.get({mrn: $stateParams.mrn}, function (org) {
+            	var logo = OrganizationService.getLogo(org.mrn);           	
             	Utils.isImage(logo).then(function(result) {
         			if (result) {
         				org.logo = logo;
@@ -125,7 +125,6 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
                    });
                 }
             });
-            
             RoleService.getRoles({}, function (result) {
             	angular.forEach(result, function(role, index){
 
@@ -142,7 +141,7 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
             $scope.zipAndDownloadCertificate = function (certificate) {
             	// TODO maybe make generel as it's used at least in 3 different methods
             	var zip = new JSZip();
-            	var orgNameNoSpaces = replaceSpacesFilter($scope.organization.shortName, '_');
+            	var orgNameNoSpaces = replaceSpacesFilter($scope.organization.name, '_');
             	certificate.certificate = replaceNewlinesFilter(certificate.certificate);
             	zip.file("Certificate_" + orgNameNoSpaces + ".pem", certificate.certificate);
             	
@@ -151,10 +150,10 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
             	saveAs(content, "Certificate_" + orgNameNoSpaces + ".zip");
             };
             $scope.isAdmin = function () {
-                return angular.equals($stateParams.shortName, auth.org) && auth.permissions.indexOf("MCADMIN") > -1;
+                return angular.equals($stateParams.mrn, auth.org) && auth.permissions.indexOf("MCADMIN") > -1;
             };
             $scope.isMyOrg = function () {
-                return angular.equals($stateParams.shortName, auth.org);
+                return angular.equals($stateParams.mrn, auth.org);
             };
 
 	        $scope.adding = false;
@@ -209,13 +208,13 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
         function ($scope, $http, $stateParams, $location, OrganizationService, Auth, Utils) {
 
             $scope.isAdmin = function () {
-                return angular.equals($stateParams.shortName, auth.org) && auth.permissions.indexOf("MCADMIN") > -1;
+                return angular.equals($stateParams.mrn, auth.org) && auth.permissions.indexOf("MCADMIN") > -1;
             };
             
             $scope.countries = countries;
             
-            OrganizationService.get({shortName: $stateParams.shortName}, function (org) {
-            	var logo = OrganizationService.getLogo(org.shortName);           	
+            OrganizationService.get({mrn: $stateParams.mrn}, function (org) {
+            	var logo = OrganizationService.getLogo(org.mrn);           	
             	Utils.isImage(logo).then(function(result) {
         			if (result) {
         				org.logo = logo;
@@ -228,7 +227,7 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
             });
 
             $scope.gotoOrgDetails = function () {
-                $location.path('/orgs/' + $scope.organization.shortName).replace();
+                $location.path('/orgs/' + $scope.organization.mrn).replace();
             };
 
 
@@ -260,7 +259,7 @@ angular.module('mcp.organizations', ['ui.bootstrap'])
             $scope.uploadLogo = function (logo) {
                 var fd = new FormData();
                 fd.append('logo', logo);
-                OrganizationService.uploadLogo($scope.organization.shortName, fd,
+                OrganizationService.uploadLogo($scope.organization.mrn, fd,
                     function (data) {
                 	    $scope.gotoOrgDetails()
                     },

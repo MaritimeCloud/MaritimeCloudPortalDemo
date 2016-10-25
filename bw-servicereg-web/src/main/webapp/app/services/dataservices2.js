@@ -7,7 +7,7 @@
 var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
 
     .constant("servicePort", /*"8080"*/ null)
-//    .constant("servicePortBackend", "8443")
+    .constant("servicePortBackend", "8443")
     .constant("servicePortBackend", "443")
     .constant("loginType", "oidc")
     
@@ -21,27 +21,27 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
       
     .factory('serviceBaseUrlBackend', ['$location', 'servicePortBackend',
       function ($location, servicePortBackend) {
-//        var protocol = 'http';
-//        var host = 'localhost';
-        var protocol = 'https';
-        var host = 'api.maritimecloud.net';
+        var protocol = 'http';
+        var host = 'localhost';
+//        var protocol = 'https';
+//        var host = 'api.maritimecloud.net';
         var port = servicePortBackend ? servicePortBackend : $location.port();
         return protocol + "://" + host + ":" + port;
       }])
       
     .factory('RoleService', ['$resource', 'serviceBaseUrlBackend', 'loginType', 'Auth', function ($resource, serviceBaseUrlBackend, loginType, Auth) {
-    	var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/role/:roleId', {}, {
+    	var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.keycloak.tokenParsed.org + '/role/:roleId', {}, {
     		post: {method: 'POST', params: {}, isArray: false},
             put: {method: 'PUT', params: {roleId: '@id'}, isArray: false},
             deleteR: {method: 'DELETE', params: {roleId: '@roleId'}, isArray: false},
             getRoles: {
             	method: 'GET', 
-            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/roles', 
+            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/roles', 
             	isArray: true
             },
             getMyRoles: {
             	method:'GET',
-            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/role/myroles', 
+            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/role/myroles', 
             	isArray: true
             }
         });
@@ -58,24 +58,24 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
     }])
     
     .factory('DeviceService', ['$resource', 'serviceBaseUrlBackend', 'loginType', 'Auth', function ($resource, serviceBaseUrlBackend, loginType, Auth) {
-    	var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/device/:mrn', {}, {
+    	var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/device/:deviceId', {}, {
     		post: {method: 'POST', params: {}, isArray: false},
-            put: {method: 'PUT', params: {mrn: '@mrn'}, isArray: false},
-            deleteD: {method: 'DELETE', params: {mrn: '@mrn'}, isArray: false},
+            put: {method: 'PUT', params: {deviceId: '@id'}, isArray: false},
+            deleteD: {method: 'DELETE', params: {deviceId: '@deviceId'}, isArray: false},
             getDeviceList: {
             	method: 'GET', 
-            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/devices', 
+            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/devices', 
             	isArray: true
             },
             generateCertificate: {
                 method: 'GET',
-                params: {mrn: '@mrn'},
-                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/device/:mrn/certificate/issue-new'
+                params: {deviceId: '@deviceId'},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/device/:deviceId/generatecertificate'
             },
             revokeCertificate: {
                 method: 'POST',
-                params: {mrn: '@mrn', certId: '@certId'},
-                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/device/:mrn/certificate/:certId/revoke'
+                params: {deviceId: '@deviceId', certId: '@certId'},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/device/:deviceId/certificates/:certId/revoke'
             }
         });
 
@@ -85,37 +85,37 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
         resource.create = function (device, succes, error) {
             return this.post(device, succes, error);
         };
-        resource.deleteDevice = function (mrn, succes, error) {
-            return this.deleteD({mrn: mrn}, succes, error);
+        resource.deleteDevice = function (deviceId, succes, error) {
+            return this.deleteD({deviceId: deviceId}, succes, error);
         };        
-        resource.generateCertificateForDevice = function (mrn, succes, error) {
-            return this.generateCertificate({mrn: mrn}, succes, error);
+        resource.generateCertificateForDevice = function (deviceId, succes, error) {
+            return this.generateCertificate({deviceId: deviceId}, succes, error);
         };
-        resource.revokeCertificateForDevice = function (mrn, certId, revokationReason, revokedAt, succes, error) {
-            return this.revokeCertificate({mrn: mrn, certId: certId, revokationReason: revokationReason, revokedAt: revokedAt}, succes, error);
+        resource.revokeCertificateForDevice = function (deviceId, certId, revokationReason, revokedAt, succes, error) {
+            return this.revokeCertificate({deviceId: deviceId, certId: certId, revokationReason: revokationReason, revokedAt: revokedAt}, succes, error);
         };
     	return resource;
     }])
     
     .factory('ServiceIdentityService', ['$resource', 'serviceBaseUrlBackend', 'loginType', 'Auth', function ($resource, serviceBaseUrlBackend, loginType, Auth) {
-        var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/service/:mrn', {}, {
+        var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/service/:serviceId', {}, {
             post: {method: 'POST', params: {}, isArray: false},
-            put: {method: 'PUT', params: {mrn: '@mrn'}, isArray: false},
-            deleteS: {method: 'DELETE', params: {mrn: '@mrn'}, isArray: false},
+            put: {method: 'PUT', params: {serviceId: '@id'}, isArray: false},
+            deleteS: {method: 'DELETE', params: {serviceId: '@serviceId'}, isArray: false},
             getServiceList: {
             	method: 'GET', 
-            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/services', 
+            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/services', 
             	isArray: true
             },
             generateCertificate: {
                 method: 'GET',
-                params: {mrn: '@mrn'},
-                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/service/:mrn/certificate/issue-new'
+                params: {serviceId: '@serviceId'},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/service/:serviceId/generatecertificate'
             },
             revokeCertificate: {
                 method: 'POST',
-                params: {mrn: '@mrn', certId: '@certId'},
-                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/service/:mrn/certificate/:certId/revoke'
+                params: {serviceId: '@serviceId', certId: '@certId'},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/service/:serviceId/certificates/:certId/revoke'
             }
         });
 
@@ -125,38 +125,38 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
         resource.create = function (service, succes, error) {
             return this.post(service, succes, error);
         };
-        resource.deleteService = function (mrn, succes, error) {
-            return this.deleteS({mrn: mrn}, succes, error);
+        resource.deleteService = function (serviceId, succes, error) {
+            return this.deleteS({serviceId: serviceId}, succes, error);
         };        
-        resource.generateCertificateForService = function (mrn, succes, error) {
-            return this.generateCertificate({mrn: mrn}, succes, error);
+        resource.generateCertificateForService = function (serviceId, succes, error) {
+            return this.generateCertificate({serviceId: serviceId}, succes, error);
         };
-        resource.revokeCertificateForService = function (mrn, certId, revokationReason, revokedAt, succes, error) {
-            return this.revokeCertificate({mrn: mrn, certId: certId, revokationReason: revokationReason, revokedAt: revokedAt}, succes, error);
+        resource.revokeCertificateForService = function (serviceId, certId, revokationReason, revokedAt, succes, error) {
+            return this.revokeCertificate({serviceId: serviceId, certId: certId, revokationReason: revokationReason, revokedAt: revokedAt}, succes, error);
         };
         
         return resource;
       }])
 
     .factory('VesselService', ['$resource', 'serviceBaseUrlBackend', 'loginType', 'Auth', function ($resource, serviceBaseUrlBackend, loginType, Auth) {
-        var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/vessel/:mrn', {}, {
+        var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/vessel/:vesselId', {}, {
             post: {method: 'POST', params: {}, isArray: false},
-            put: {method: 'PUT', params: {mrn: '@mrn'}, isArray: false},
-            deleteV: {method: 'DELETE', params: {mrn: '@mrn'}, isArray: false},
+            put: {method: 'PUT', params: {vesselId: '@id'}, isArray: false},
+            deleteV: {method: 'DELETE', params: {vesselId: '@vesselId'}, isArray: false},
             getVesselList: {
             	method: 'GET', 
-            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/vessels', 
+            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/vessels', 
             	isArray: true
             },
             generateCertificate: {
                 method: 'GET',
-                params: {mrn: '@mrn'},
-                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/vessel/:mrn/certificate/issue-new'
+                params: {vesselId: '@vesselId'},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/vessel/:vesselId/generatecertificate'
             },
             revokeCertificate: {
                 method: 'POST',
-                params: {mrn: '@mrn', certId: '@certId'},
-                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/vessel/:mrn/certificate/:certId/revoke'
+                params: {vesselId: '@vesselId', certId: '@certId'},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/vessel/:vesselId/certificates/:certId/revoke'
             }
         });
 
@@ -166,38 +166,38 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
         resource.create = function (vessel, succes, error) {
             return this.post(vessel, succes, error);
         };
-        resource.deleteVessel = function (mrn, succes, error) {
-            return this.deleteV({mrn: mrn}, succes, error);
+        resource.deleteVessel = function (vesselId, succes, error) {
+            return this.deleteV({vesselId: vesselId}, succes, error);
         };        
-        resource.generateCertificateForVessel = function (mrn, succes, error) {
-            return this.generateCertificate({mrn: mrn}, succes, error);
+        resource.generateCertificateForVessel = function (vesselId, succes, error) {
+            return this.generateCertificate({vesselId: vesselId}, succes, error);
         };
-        resource.revokeCertificateForVessel = function (mrn, certId, revokationReason, revokedAt, succes, error) {
-            return this.revokeCertificate({mrn: mrn, certId: certId, revokationReason: revokationReason, revokedAt: revokedAt}, succes, error);
+        resource.revokeCertificateForVessel = function (vesselId, certId, revokationReason, revokedAt, succes, error) {
+            return this.revokeCertificate({vesselId: vesselId, certId: certId, revokationReason: revokationReason, revokedAt: revokedAt}, succes, error);
         };
         
         return resource;
       }])
 
     .factory('UserService', ['$resource', 'serviceBaseUrlBackend', 'loginType', 'Auth', function ($resource, serviceBaseUrlBackend, loginType, Auth) {
-    	var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/user/:mrn', {}, {
+    	var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/user/:userId', {}, {
     		post: {method: 'POST', params: {}, isArray: false},
-            put: {method: 'PUT', params: {mrn: '@mrn'}, isArray: false},
-            deleteU: {method: 'DELETE', params: {mrn: '@mrn'}, isArray: false},
+            put: {method: 'PUT', params: {userId: '@id'}, isArray: false},
+            deleteU: {method: 'DELETE', params: {userId: '@userId'}, isArray: false},
             getUserList: {
             	method: 'GET', 
-            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/users', 
+            	url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/users', 
             	isArray: true
             },
             generateCertificate: {
                 method: 'GET',
-                params: {mrn: '@mrn'},
-                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/user/:mrn/certificate/issue-new'
+                params: {userId: '@userId'},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/user/:userId/generatecertificate'
             },
             revokeCertificate: {
                 method: 'POST',
-                params: {mrn: '@mrn', certId: '@certId'},
-                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/user/:mrn/certificate/:certId/revoke'
+                params: {userId: '@userId', certId: '@certId'},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/user/:userId/certificates/:certId/revoke'
             }
         });
 
@@ -207,22 +207,22 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
         resource.create = function (user, succes, error) {
             return this.post(user, succes, error);
         };
-        resource.deleteUser = function (mrn, succes, error) {
-            return this.deleteU({mrn: mrn}, succes, error);
+        resource.deleteUser = function (userId, succes, error) {
+            return this.deleteU({userId: userId}, succes, error);
         };        
-        resource.generateCertificateForUser = function (mrn, succes, error) {
-            return this.generateCertificate({mrn: mrn}, succes, error);
+        resource.generateCertificateForUser = function (userId, succes, error) {
+            return this.generateCertificate({userId: userId}, succes, error);
         };
-        resource.revokeCertificateForUser = function (mrn, certId, revokationReason, revokedAt, succes, error) {
-            return this.revokeCertificate({mrn: mrn, certId: certId, revokationReason: revokationReason, revokedAt: revokedAt}, succes, error);
+        resource.revokeCertificateForUser = function (userId, certId, revokationReason, revokedAt, succes, error) {
+            return this.revokeCertificate({userId: userId, certId: certId, revokationReason: revokationReason, revokedAt: revokedAt}, succes, error);
         };
     	return resource;
     }])
     
     .factory('OrganizationService', ['$resource', 'serviceBaseUrlBackend', 'loginType', 'Auth', function ($resource, serviceBaseUrlBackend, loginType, Auth) {
-        var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/:mrn', {}, {
-            put: {method: 'PUT', params: {mrn: '@mrn'}},
-            applyOrg: {method: 'POST', params: {mrn: '@mrn'}},
+        var resource = $resource(serviceBaseUrlBackend + '/' + loginType + '/api/org/:shortName', {}, {
+            put: {method: 'PUT', params: {shortName: '@shortName'}},
+            applyOrg: {method: 'POST', params: {shortName: '@shortName'}},
             getOrganizationList: {
             	method: 'GET', 
             	url: serviceBaseUrlBackend + '/' + loginType + '/api/orgs', 
@@ -236,17 +236,17 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
             generateCertificate: {
                 method: 'GET',
                 params: {},
-                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/certificate/issue-new'
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/generatecertificate'
             },
             revokeCertificate: {
                 method: 'POST',
                 params: {certId: '@certId'},
-                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + encodeURIComponent(auth.org) + '/certificate/:certId/revoke'
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/' + auth.org + '/certificates/:certId/revoke'
             },
             uploadLog: {
                 method: 'POST',
-                params: {mrn: '@mrn'},
-                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/:mrn/logo',
+                params: {shortName: '@shortName'},
+                url: serviceBaseUrlBackend + '/' + loginType + '/api/org/:shortName/logo',
                 headers: {'Content-Type': undefined},
                 transformRequest: angular.identity
             }
@@ -260,12 +260,12 @@ var mcpServices = angular.module('mcp.dataservices', ['ngResource'])
             return this.applyOrg(organization, succes, error);
         };
 
-        resource.uploadLogo = function (mrn, FormData, succes, error) {
+        resource.uploadLogo = function (shortName, FormData, succes, error) {
         	logoTimestamp = (new Date()).getTime();
-            return this.uploadLog({mrn: mrn},FormData, succes, error);
+            return this.uploadLog({shortName: shortName},FormData, succes, error);
         };
-        resource.getLogo = function (mrn) {
-            return serviceBaseUrlBackend + '/' + loginType + '/api/org/' + mrn + '/logo?t=' + logoTimestamp + '&Authorization=Bearer ' + Auth.keycloak.token;
+        resource.getLogo = function (shortName) {
+            return serviceBaseUrlBackend + '/' + loginType + '/api/org/' + shortName + '/logo?t=' + logoTimestamp + '&Authorization=Bearer ' + Auth.keycloak.token;
         };
         
         resource.generateCertificateForOrganization = function (succes, error) {

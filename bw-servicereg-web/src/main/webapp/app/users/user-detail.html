@@ -1,6 +1,6 @@
 <div class="boxed-group table-responsive">
     <h3>{{fullname}}
-        <a ng-if="isAdmin()" class="edit edit-gear" href="#/users/{{user.id}}/edit" data-tooltip="Edit {{fullname}}" data-tooltip-placement="right">
+        <a ng-if="isAdmin()" class="edit edit-gear" href="#/users/{{user.mrn}}/edit" data-tooltip="Edit {{fullname}}" data-tooltip-placement="right">
             <span class="fa fa-gear"></span>
         </a>
         <a ng-if="isAdmin()" class="edit edit-gear" href='' ng-click="deleteUser($event)" data-tooltip="Delete {{fullname}}" data-tooltip-placement="right">
@@ -22,7 +22,7 @@
     </div>
     
     <div class="boxed-group-action" >
-        <a ng-if="isAdmin()" class="btn btn-primary btn-sm" href="#/certificates/generate/user/{{user.id}}">+ New certificate</a>
+        <a ng-if="isAdmin()" class="btn btn-primary btn-sm" href="#/certificates/generate/user/{{user.mrn}}">+ New certificate</a>
     </div>
     <h3>Certificates for {{fullname}}</h3>
     <div class="boxed-group-inner">
@@ -47,7 +47,7 @@
                     <td class="vcenter">{{certificate.end | date:dateFormat}}</td>   
                     <td class="vcenter text-right no-right-padding">
                         <a class="btn btn-primary btn-sm" ng-click="zipAndDownloadCertificate(certificate)">Download certificate</a>
-                        <a ng-if="isAdmin()" class="btn btn-danger btn-sm" href="#/certificates/{{certificate.id}}/revoke/user/{{user.id}}">Revoke certificate</a>
+                        <a ng-if="isAdmin()" class="btn btn-danger btn-sm" href="#/certificates/{{certificate.id}}/revoke/user/{{user.mrn}}">Revoke certificate</a>
                     </td> 
                 </tr>
             </tbody>

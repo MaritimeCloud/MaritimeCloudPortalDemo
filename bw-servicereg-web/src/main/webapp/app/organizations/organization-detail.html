@@ -1,8 +1,8 @@
 
 <div class="org-header">
     <h1>
-        <span>{{organization.shortName}}</span>
-        <a ng-if="isAdmin()" class="edit-org" href="#/orgs/{{organization.shortName}}/edit" data-tooltip="Edit {{organization.name}}" data-tooltip-placement="right">
+        <span>{{organization.name}}</span>
+        <a ng-if="isAdmin()" class="edit-org" href="#/orgs/{{organization.mrn}}/edit" data-tooltip="Edit {{organization.name}}" data-tooltip-placement="right">
             <span class="fa fa-gear"></span>
         </a>
         <img ng-src="{{organization.logo}}" class="pull-right" width="200"/>
@@ -30,7 +30,7 @@
     
 <hr>
 <div ng-if="isMyOrg()">
-<h3>Roles for {{organization.shortName}} <button ng-if="!adding && isAdmin()" class="btn btn-primary btn-sm" ng-click="addNewRole()">+ New role</button></h3>
+<h3>Roles for {{organization.name}} <button ng-if="!adding && isAdmin()" class="btn btn-primary btn-sm" ng-click="addNewRole()">+ New role</button></h3>
 
         <table class="table-condensed">
             <tr ng-repeat="role in roles">
@@ -59,7 +59,7 @@
     </div>
  <hr>       
 
-    <h3>Certificates for {{organization.shortName}} <a ng-if="isAdmin()" class="btn btn-primary btn-sm" href="#/certificates/generate/org/{{organization.shortName}}">+ New certificate</a></h3>
+    <h3>Certificates for {{organization.name}} <a ng-if="isAdmin()" class="btn btn-primary btn-sm" href="#/certificates/generate/org/{{organization.mrn}}">+ New certificate</a></h3>
     <div>
         <div ng-if="!organization.certificates.length">
             <i>No active certificates</i>
@@ -82,7 +82,7 @@
                     <td class="vcenter">{{certificate.end | date:dateFormat}}</td>   
                     <td class="vcenter text-right no-right-padding">
                         <a class="btn btn-primary btn-sm" ng-click="zipAndDownloadCertificate(certificate)">Download certificate</a>
-                        <a ng-if="isAdmin()" class="btn btn-danger btn-sm" href="#/certificates/{{certificate.id}}/revoke/org/{{organization.shortName}}">Revoke certificate</a>
+                        <a ng-if="isAdmin()" class="btn btn-danger btn-sm" href="#/certificates/{{certificate.id}}/revoke/org/{{organization.mrn}}">Revoke certificate</a>
                     </td> 
                 </tr>
             </tbody>

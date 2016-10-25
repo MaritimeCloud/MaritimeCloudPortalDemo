@@ -6,7 +6,7 @@
         </i>
     </p>
     <panel-button btn-type="primary" ng-click="generateCertificate()"> <i class="fa fa-plus"></i> Generate </panel-button>
-    <panel-button btn-type="default" ui-sref="restricted.userDetails({userId: user.id})"> Cancel <i class="fa fa-ban"></i> </panel-button>
+    <panel-button btn-type="default" ui-sref="restricted.userDetails({mrn: user.mrn})"> Cancel <i class="fa fa-ban"></i> </panel-button>
 </panel>
 
 <panel ng-show="viewState === 'generate-success'" category="primary" icon="plus" title="Certificate generated" offset="3">
@@ -50,7 +50,7 @@
     </div>
     -->
     <panel-button btn-type="primary" ng-click="zipAndDownload()"> Zip &amp; download </panel-button>
-    <panel-button btn-type="default" ui-sref="restricted.userDetails({userId: user.id})"> Ok </panel-button>
+    <panel-button btn-type="default" ui-sref="restricted.userDetails({mrn: user.mrn})"> Ok </panel-button>
 </panel>
 
 <panel ng-show="viewState === 'error'" category="danger" icon="user" title="Error" offset="3">
@@ -62,5 +62,5 @@
             {{error}}
         </i>
     </p>
-    <panel-button btn-type="default" ui-sref="restricted.userDetails({userId: user.id})">OK</panel-button>
+    <panel-button btn-type="default" ui-sref="restricted.userDetails({mrn: user.mrn})">OK</panel-button>
 </panel>

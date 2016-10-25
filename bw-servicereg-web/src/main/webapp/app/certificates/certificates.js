@@ -21,7 +21,7 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
         $scope.zipAndDownload = function () {
         	// TODO maybe make generel as it's used at least in 3 different methods
         	var zip = new JSZip();
-        	var fullnameNoSpaces = replaceSpacesFilter($scope.org.shortName, '_');
+        	var fullnameNoSpaces = replaceSpacesFilter($scope.org.name, '_');
         	$scope.certificate = replaceNewlinesFilter($scope.certificate);
         	$scope.privateKey = replaceNewlinesFilter($scope.privateKey);
         	$scope.publicKey = replaceNewlinesFilter($scope.publicKey);
@@ -40,7 +40,7 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
         $scope.viewState = 'generate-certificate';
 
         $scope.generateCertificate = function () {
-        	DeviceService.generateCertificateForDevice($scope.device.id,
+        	DeviceService.generateCertificateForDevice($scope.device.mrn,
                     function(data) {
 		                $scope.certificate = data.certificate;
 		                $scope.privateKey = data.privateKey;
@@ -75,7 +75,7 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
         $scope.viewState = 'generate-certificate';
 
         $scope.generateCertificate = function () {
-        	ServiceIdentityService.generateCertificateForService($scope.service.id,
+        	ServiceIdentityService.generateCertificateForService($scope.service.mrn,
                     function(data) {
 		                $scope.certificate = data.certificate;
 		                $scope.privateKey = data.privateKey;
@@ -110,7 +110,7 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
         $scope.viewState = 'generate-certificate';
 
         $scope.generateCertificate = function () {
-        	VesselService.generateCertificateForVessel($scope.vessel.id,
+        	VesselService.generateCertificateForVessel($scope.vessel.mrn,
                     function(data) {
 		                $scope.certificate = data.certificate;
 		                $scope.privateKey = data.privateKey;
@@ -146,7 +146,7 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
         $scope.viewState = 'generate-certificate';
 
         $scope.generateCertificate = function () {
-        	UserService.generateCertificateForUser($scope.user.id,
+        	UserService.generateCertificateForUser($scope.user.mrn,
                     function(data) {
 		                $scope.certificate = data.certificate;
 		                $scope.privateKey = data.privateKey;
@@ -249,7 +249,7 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
             $scope.reason = reason;
         };
         $scope.revokeCertificate = function () {
-        	DeviceService.revokeCertificateForDevice($scope.device.id, $stateParams.certId, $scope.reason.reasonId, $scope.date,
+        	DeviceService.revokeCertificateForDevice($scope.device.mrn, $stateParams.certId, $scope.reason.reasonId, $scope.date,
                     function(data) {
         		        $scope.gotoDeviceDetails(); 
         		    },
@@ -259,7 +259,7 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
             );
 
         	$scope.gotoDeviceDetails = function () {
-                $location.path('/devices/' + $scope.device.id).replace();
+                $location.path('/devices/' + $scope.device.mrn).replace();
             };
         };
     }])
@@ -294,7 +294,7 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
             $scope.reason = reason;
         };
         $scope.revokeCertificate = function () {
-        	ServiceIdentityService.revokeCertificateForService($scope.service.id, $stateParams.certId, $scope.reason.reasonId, $scope.date,
+        	ServiceIdentityService.revokeCertificateForService($scope.service.mrn, $stateParams.certId, $scope.reason.reasonId, $scope.date,
                     function(data) {
         		        $scope.gotoServiceDetails(); 
         		    },
@@ -304,7 +304,7 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
             );
 
         	$scope.gotoServiceDetails = function () {
-                $location.path('/service-identities/' + $scope.service.id).replace();
+                $location.path('/service-identities/' + $scope.service.mrn).replace();
             };
         };
     }])
@@ -340,7 +340,7 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
             $scope.reason = reason;
         };
         $scope.revokeCertificate = function () {
-        	UserService.revokeCertificateForUser($scope.user.id, $stateParams.certId, $scope.reason.reasonId, $scope.date,
+        	UserService.revokeCertificateForUser($scope.user.mrn, $stateParams.certId, $scope.reason.reasonId, $scope.date,
                     function(data) {
         		        $scope.gotoUserDetails(); 
         		    },
@@ -350,7 +350,7 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
             );
 
         	$scope.gotoUserDetails = function () {
-                $location.path('/users/' + $scope.user.id).replace();
+                $location.path('/users/' + $scope.user.mrn).replace();
             };
         };
     }])
@@ -385,7 +385,7 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
             $scope.reason = reason;
         };
         $scope.revokeCertificate = function () {
-        	VesselService.revokeCertificateForVessel($scope.vessel.id, $stateParams.certId, $scope.reason.reasonId, $scope.date,
+        	VesselService.revokeCertificateForVessel($scope.vessel.mrn, $stateParams.certId, $scope.reason.reasonId, $scope.date,
                     function(data) {
         		        $scope.gotoVesselDetails(); 
         		    },
@@ -395,7 +395,7 @@ angular.module('mcp.certificates', ['ui.bootstrap'])
             );
 
         	$scope.gotoVesselDetails = function () {
-                $location.path('/vessels/' + $scope.vessel.id).replace();
+                $location.path('/vessels/' + $scope.vessel.mrn).replace();
             };
         };
     }])
