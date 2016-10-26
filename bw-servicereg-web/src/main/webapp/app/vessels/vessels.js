@@ -134,7 +134,20 @@ angular.module('mcp.vessels', ['ui.bootstrap'])
     	    $scope.org = Auth.org;
     	    $scope.vessel = {};
             $scope.attributes = [];
-
+            
+            var orgSplit = $scope.org.split(':');
+    	    var orgShortname = orgSplit[orgSplit.length-1];    	  
+    	    $scope.mrnId = '';
+    	    var originalMrn = 'urn:mrn:mcl:vessel:' + orgShortname + ':';
+    	    $scope.vessel.mrn = originalMrn;
+    	    $scope.updateMrn = function () {
+    	    	var mrnId = $scope.mrnId;
+    	    	if(!mrnId) {
+    	    		mrnId = '';
+    	    	}
+        	    $scope.vessel.mrn = originalMrn + mrnId;
+            };
+            
             $scope.isAttributeValueValid = function(attribute) {
                 return attribute.attributeValue && attribute.attributeValue.length > 0;
             };

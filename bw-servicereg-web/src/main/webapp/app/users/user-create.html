@@ -13,10 +13,13 @@
         
         <!--FORMS-->
         <form role="form" name="form">
+        	<i class="help-block">
+            	<label>MRN: </label> {{user.mrn}} <br/>
+       		</i>
             <div class="form-group" ng-class="{ 'has-error' : form.userOrgId.$invalid && !form.userOrgId.$pristine }">
                 <label for="userOrgId" class="control-label">User ID</label>
-                <input type="text" required class="form-control" id="userOrgId" name="userOrgId" placeholder="Enter the User ID" ng-model="user.userOrgId"
-                       autocomplete='off' spellcheck='false'>
+                <input type="text" required class="form-control" id="userOrgId" name="userOrgId" placeholder="Enter the User ID" ng-model="mrnId"
+                       autocomplete='off' spellcheck='false' ng-change="updateMrn()">
                 <p ng-show="form.userOrgId.$invalid && !form.userOrgId.$pristine" class="help-block">User ID is required.</p>
             </div>
             

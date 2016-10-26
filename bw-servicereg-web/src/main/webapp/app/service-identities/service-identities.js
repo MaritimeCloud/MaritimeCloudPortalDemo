@@ -136,6 +136,19 @@ angular.module('mcp.service-identities', ['ui.bootstrap'])
             };
             
     	    $scope.org = Auth.org;
+    	    
+    	    var orgSplit = $scope.org.split(':');
+    	    var orgShortname = orgSplit[orgSplit.length-1];    	  
+    	    $scope.mrnId = '';
+    	    var originalMrn = 'urn:mrn:mcl:service:instance:' + orgShortname + ':';
+    	    $scope.service.mrn = originalMrn;
+    	    $scope.updateMrn = function () {
+    	    	var mrnId = $scope.mrnId;
+    	    	if(!mrnId) {
+    	    		mrnId = '';
+    	    	}
+        	    $scope.service.mrn = originalMrn + mrnId;
+            };
 
             $scope.submit = function () {
             	if($scope.accessType){

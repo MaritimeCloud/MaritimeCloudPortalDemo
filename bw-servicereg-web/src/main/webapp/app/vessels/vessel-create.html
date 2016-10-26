@@ -13,11 +13,14 @@
         
         <!--FORMS-->
         <form role="form" name="form" class="form-horizontal">
+        	<i class="help-block">
+            	<label>MRN: </label> {{vessel.mrn}} <br/>
+       		</i>
             <div class="form-group" ng-class="{ 'has-error' : form.vesselOrgId.$invalid && !form.vesselOrgId.$pristine }">
                 <label for="vesselOrgId" class="control-label  col-xs-1 col-md-1">ID</label>
                 <div class="col-xs-11 col-md-11">
-                    <input type="text" required class="form-control" id="vesselOrgId" name="vesselOrgId" placeholder="Enter the Vessel ID" ng-model="vessel.vesselOrgId"
-                         autocomplete='off' spellcheck='false'>
+                    <input type="text" required class="form-control" id="vesselOrgId" name="vesselOrgId" placeholder="Enter the Vessel ID" ng-model="mrnId"
+                         autocomplete='off' spellcheck='false' ng-change="updateMrn()">
                     <p ng-show="form.vesselOrgId.$invalid && !form.vesselOrgId.$pristine" class="help-block">Vessel ID is required.</p>
                 </div>
             </div>

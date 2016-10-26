@@ -13,10 +13,13 @@
         
         <!--FORMS-->
         <form role="form" name="form">
+        	<i class="help-block">
+            	<label>MRN: </label> {{service.mrn}} <br/>
+       		</i>
             <div class="form-group" ng-class="{ 'has-error' : form.serviceOrgId.$invalid && !form.serviceOrgId.$pristine }">
                 <label for="serviceOrgId" class="control-label">Service ID</label>
-                <input type="text" required class="form-control" id="serviceOrgId" name="serviceOrgId" placeholder="Enter the Service ID" ng-model="service.serviceOrgId"
-                       autocomplete='off' spellcheck='false'>
+                <input type="text" required class="form-control" id="serviceOrgId" name="serviceOrgId" placeholder="Enter the Service ID" ng-model="mrnId"
+                       autocomplete='off' spellcheck='false'ng-change="updateMrn()">
                 <p ng-show="form.serviceOrgId.$invalid && !form.serviceOrgId.$pristine" class="help-block">Service ID is required.</p>
             </div>
             <div class="form-group" ng-class="{ 'has-error' : form.name.$invalid && !form.name.$pristine }">
@@ -24,6 +27,13 @@
                 <input type="text" required class="form-control" id="name" name="name" placeholder="Enter the name" ng-model="service.name"
                        autocomplete='off' spellcheck='false'>
                 <p ng-show="form.name.$invalid && !form.name.$pristine" class="help-block">Name is required.</p>
+            </div>
+            
+            <div class="form-group" ng-class="{ 'has-error' : form.cert.$invalid && !form.cert.$pristine }">
+                <label for="cert" class="control-label">Certificate domain name</label>
+                <input type="text" required class="form-control" id="cert" name="cert" placeholder="Enter the certificate domain name" ng-model="service.certDomainName"
+                       autocomplete='off' spellcheck='false'>
+                <p ng-show="form.cert.$invalid && !form.cert.$pristine" class="help-block">Certificate domain name is required.</p>
             </div>
             
             <div class="form-group">

@@ -113,6 +113,19 @@ angular.module('mcp.devices', ['ui.bootstrap'])
         function ($scope, $location, DeviceService, Auth) {
     	    $scope.org = Auth.org;
     	    $scope.device = {};
+    	    
+    	    var orgSplit = $scope.org.split(':');
+    	    var orgShortname = orgSplit[orgSplit.length-1];    	  
+    	    $scope.mrnId = '';
+    	    var originalMrn = 'urn:mrn:mcl:device:' + orgShortname + ':';
+    	    $scope.device.mrn = originalMrn;
+    	    $scope.updateMrn = function () {
+    	    	var mrnId = $scope.mrnId;
+    	    	if(!mrnId) {
+    	    		mrnId = '';
+    	    	}
+        	    $scope.device.mrn = originalMrn + mrnId;
+            };
 
             $scope.submit = function () {
                 $scope.alertMessages = null;

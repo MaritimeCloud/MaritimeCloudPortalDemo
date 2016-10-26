@@ -94,6 +94,19 @@ angular.module('mcp.users', ['ui.bootstrap'])
         function ($scope, $location, UserService, Auth) {
     	    $scope.org = Auth.org;
     	    $scope.user = {};
+    	    
+    	    var orgSplit = $scope.org.split(':');
+    	    var orgShortname = orgSplit[orgSplit.length-1];    	  
+    	    $scope.mrnId = '';
+    	    var originalMrn = 'urn:mrn:mcl:user:' + orgShortname + ':';
+    	    $scope.user.mrn = originalMrn;
+    	    $scope.updateMrn = function () {
+    	    	var mrnId = $scope.mrnId;
+    	    	if(!mrnId) {
+    	    		mrnId = '';
+    	    	}
+        	    $scope.user.mrn = originalMrn + mrnId;
+            };
 
             $scope.submit = function () {
                 $scope.alertMessages = null;

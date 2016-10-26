@@ -13,6 +13,15 @@
         
         <!--FORMS-->
         <form role="form" name="form">
+        	<i class="help-block">
+            	<label>MRN: </label> {{device.mrn}} <br/>
+       		</i>
+            <div class="form-group" ng-class="{ 'has-error' : form.deviceOrgId.$invalid && !form.deviceOrgId.$pristine }">
+                <label for="deviceOrgId" class="control-label">Device ID</label>
+                <input type="text" required class="form-control" id="deviceOrgId" name="deviceOrgId" placeholder="Enter the Device ID" ng-model="mrnId"
+                       autocomplete='off' spellcheck='false' ng-change="updateMrn()">
+                <p ng-show="form.deviceOrgId.$invalid && !form.deviceOrgId.$pristine" class="help-block">Device ID is required.</p>
+            </div>
             <div class="form-group" ng-class="{ 'has-error' : form.name.$invalid && !form.name.$pristine }">
                 <label for="name" class="control-label">Name</label>
                 <input type="text" required class="form-control" id="name" name="name" placeholder="Enter the name" ng-model="device.name"
