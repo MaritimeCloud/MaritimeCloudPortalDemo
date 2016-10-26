@@ -1,9 +1,7 @@
 'use strict';
 
-var fitToPaths = function fitToPaths(mapId, leafletData, mapService) {
-    leafletData.getMap(mapId).then(function (map) {
-        mapService.fitToGeomitryLayers(map);
-    });
+var fitToPaths = function fitToPaths(mapId, mapService) {
+    
 };
 
 // FIXME move to a service or config or something
@@ -427,8 +425,8 @@ angular.module('mcp.organizations.service-instances', [])
         }])
 
 
-    .controller('CoverageEditorController', ['$scope', 'leafletData', 'mapService', 'coverage', 'mapOptions',
-        function ($scope, leafletData, mapService, coverage, mapOptions) {
+    .controller('CoverageEditorController', ['$scope', 'mapService', 'coverage', 'mapOptions',
+        function ($scope, mapService, coverage, mapOptions) {
 
             var options = mapService.createDrawingOptions(),
                 drawControl = new L.Control.Draw(options),
@@ -450,22 +448,7 @@ angular.module('mcp.organizations.service-instances', [])
             });
 
             // add layers to map and add a draw-listener
-            leafletData.getMap("coverageEditorMap").then(function (map) {
-                map.addLayer(serviceLayer);
-                serviceLayer.setStyle(mapService.Styles.STATIC);
-
-                if (coverage.length) {
-                    mapService.fitToGeomitryLayers(map);
-                } else if (mapOptions.bounds) {
-                    map.fitBounds(mapOptions.bounds);
-                }
-
-                map.on('draw:created', function (e) {
-                    var layer = e.layer;
-                    serviceLayer.addLayer(layer);
-                });
-            });
-
+           
             $scope.formIsSubmitable = function () {
                 return (serviceLayer.getLayers().length);
             };

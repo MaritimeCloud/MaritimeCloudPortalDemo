@@ -2,8 +2,8 @@
 
 angular.module('mcp.search.services', [])
 
-    .controller('SearchServiceMapController', ['$scope', '$filter', 'mapService', 'leafletData', 'ServiceSpecificationService', 'OrganizationOldService', 'ServiceInstanceService', 'searchServiceFilterModel',
-      function ($scope, $filter, mapService, leafletData, ServiceSpecificationService, OrganizationOldService, ServiceInstanceService, searchServiceFilterModel) {
+    .controller('SearchServiceMapController', ['$scope', '$filter', 'mapService', 'ServiceSpecificationService', 'OrganizationOldService', 'ServiceInstanceService', 'searchServiceFilterModel',
+      function ($scope, $filter, mapService, ServiceSpecificationService, OrganizationOldService, ServiceInstanceService, searchServiceFilterModel) {
 
         var SEARCHMAP_ID = 'searchmap';
 
@@ -199,10 +199,7 @@ angular.module('mcp.search.services', [])
           $scope.$apply();
         }
 
-        $scope.$on('leafletDirectiveMap.click', function (event, args) {
-          //console.log("Map clicked: ", event, args);
-          $scope.moveFilterLocation(args.leafletEvent.latlng);
-        });
+        
 
         function mouseMoveEventHandler(e) {
           // update mouse location
@@ -219,12 +216,7 @@ angular.module('mcp.search.services', [])
         }
 
         function fitToLayer(layer) {
-          leafletData.getMap(SEARCHMAP_ID).then(function (map) {
-            if (layer) {
-              //console.log('fit map to services', layer.getBounds());
-              map.fitBounds(layer.getBounds(), {paddingBottomRight: [$scope.selectedService ? $scope.element.offsetWidth : 0, 0]});
-            }
-          });
+          
         }
 
         // TODO: move to some more common place, eg. a service
@@ -288,11 +280,7 @@ angular.module('mcp.search.services', [])
           filterChanged();
         }, true);
 
-        leafletData.getMap(SEARCHMAP_ID).then(function (map) {
-          map.addLayer($scope.servicesLayer);
-          map.on('mousemove', mouseMoveEventHandler);
-        });
-
+        
       }])
 
     // Search Filter Object

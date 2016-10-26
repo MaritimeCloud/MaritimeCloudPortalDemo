@@ -24,8 +24,7 @@ var mcpApp = angular.module('mcpApp', [
   //'mcp.organizations.service-specifications',
   //'mcp.search.services',
   'mcp.users',
-  'mcp.vessels',
-  'leaflet-directive'
+  'mcp.vessels'
 ]);
 
 var dateFormat = 'yyyy-MM-dd';
