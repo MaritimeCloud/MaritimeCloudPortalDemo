@@ -14,9 +14,6 @@
     "angular-bootstrap": "0.11.2",
     "angular-ui-router": "0.2.10",
     "angular-busy": "4.1.0",
-    "angular-leaflet-directive": "0.7.8",
-    "leaflet": "~0.7.3",
-    "leaflet.draw": "*",
     "open-sans-fontface": "~1.1.0",
     "components-font-awesome": "~4.5.0",
     "angular-ui-select": "~0.8.1",
@@ -28,7 +25,7 @@
     "chai": "*",
     "mocha": "*"
   },
-  "homepage": "https://github.com/EfficienSea2/BalticWebIdReg",
+  "homepage": "https://github.com/MaritimeCloud/MaritimeCloudPortalDemo",
   "resolutions": {
     "angular": "1.2.26"
   }
