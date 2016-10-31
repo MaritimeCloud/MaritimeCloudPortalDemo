@@ -244,7 +244,7 @@ var CertificateIssueNewComponent = (function () {
         this.generateLabelValues();
     };
     CertificateIssueNewComponent.prototype.zipAndDownload = function () {
-        this.notificationService.generateNotification('Not Implemented', 'Download comming soon', mc_notifications_service_1.MCNotificationType.Info);
+        this.notificationService.generateNotification('Not Implemented', 'Download coming soon', mc_notifications_service_1.MCNotificationType.Info);
     };
     CertificateIssueNewComponent.prototype.issueNew = function () {
         var _this = this;
@@ -356,10 +356,10 @@ var CertificatesTableComponent = (function () {
         return this.authService.authState.isAdmin();
     };
     CertificatesTableComponent.prototype.revoke = function (certificate) {
-        this.notificationService.generateNotification('Not Implemented', 'Revoke comming soon', mc_notifications_service_1.MCNotificationType.Info);
+        this.notificationService.generateNotification('Not Implemented', 'Revoke coming soon', mc_notifications_service_1.MCNotificationType.Info);
     };
     CertificatesTableComponent.prototype.download = function (certificate) {
-        this.notificationService.generateNotification('Not Implemented', 'Download comming soon', mc_notifications_service_1.MCNotificationType.Info);
+        this.notificationService.generateNotification('Not Implemented', 'Download coming soon', mc_notifications_service_1.MCNotificationType.Info);
     };
     CertificatesTableComponent.prototype.onWindowResize = function () {
         this.calculateTableClass();
