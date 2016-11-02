@@ -32,6 +32,536 @@ webpackJsonpac__name_([1],{
 
 /***/ },
 
+/***/ "./src/app/pages/org-identity-registry/devices/components/device-details/device-details.component.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var DeviceDetailsComponent = (function () {
+    function DeviceDetailsComponent() {
+    }
+    DeviceDetailsComponent.prototype.ngOnInit = function () {
+        // TODO change
+        this.title = "Device Details";
+    };
+    DeviceDetailsComponent = __decorate([
+        core_1.Component({
+            selector: 'device-details',
+            encapsulation: core_1.ViewEncapsulation.None,
+            template: __webpack_require__("./src/app/pages/org-identity-registry/devices/components/device-details/device-details.html"),
+            styles: []
+        }), 
+        __metadata('design:paramtypes', [])
+    ], DeviceDetailsComponent);
+    return DeviceDetailsComponent;
+}());
+exports.DeviceDetailsComponent = DeviceDetailsComponent;
+
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/devices/components/device-details/device-details.html":
+/***/ function(module, exports) {
+
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{title}}\" baCardClass=\"with-scroll table-panel\">\r\n      Details\r\n    </ba-card>\r\n  </div>\r\n</div>\r\n"
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/devices/components/device-list/device-list.component.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifications.service.ts");
+var organizations_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/organizations.service.ts");
+var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
+var devices_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/devices.service.ts");
+var DeviceListComponent = (function () {
+    function DeviceListComponent(router, route, devicesService, orgService, notifications) {
+        this.router = router;
+        this.route = route;
+        this.devicesService = devicesService;
+        this.orgService = orgService;
+        this.notifications = notifications;
+        this.organization = {};
+    }
+    DeviceListComponent.prototype.ngOnInit = function () {
+        this.isLoading = true;
+        this.loadMyOrganization();
+        this.loadDevices();
+    };
+    DeviceListComponent.prototype.loadMyOrganization = function () {
+        var _this = this;
+        this.orgService.getMyOrganization().subscribe(function (organization) {
+            _this.organization = organization;
+        }, function (err) {
+            _this.notifications.generateNotification('Error', 'Error when trying to get organization', mc_notifications_service_1.MCNotificationType.Error, err);
+        });
+    };
+    DeviceListComponent.prototype.loadDevices = function () {
+        var _this = this;
+        this.devicesService.getDevices().subscribe(function (devices) {
+            _this.devices = devices;
+            _this.isLoading = false;
+            _this.generateEntityImageList();
+        }, function (err) {
+            _this.isLoading = false;
+            _this.notifications.generateNotification('Error', 'Error when trying to get devices', mc_notifications_service_1.MCNotificationType.Error, err);
+        });
+    };
+    DeviceListComponent.prototype.gotoDetails = function (entityModel) {
+        this.router.navigate([entityModel.entityId], { relativeTo: this.route });
+    };
+    DeviceListComponent.prototype.generateEntityImageList = function () {
+        var _this = this;
+        this.entityImageList = undefined;
+        if (this.devices) {
+            this.entityImageList = [];
+            var imageSrc_1 = 'assets/img/no_device.svg';
+            this.devices.forEach(function (device) {
+                _this.entityImageList.push({ imageSource: imageSrc_1, entityId: device.mrn, title: device.name });
+            });
+        }
+    };
+    DeviceListComponent = __decorate([
+        core_1.Component({
+            selector: 'device-list',
+            encapsulation: core_1.ViewEncapsulation.None,
+            template: __webpack_require__("./src/app/pages/org-identity-registry/devices/components/device-list/device-list.html"),
+            styles: []
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _a) || Object, (typeof (_b = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _b) || Object, (typeof (_c = typeof devices_service_1.DevicesService !== 'undefined' && devices_service_1.DevicesService) === 'function' && _c) || Object, (typeof (_d = typeof organizations_service_1.OrganizationsService !== 'undefined' && organizations_service_1.OrganizationsService) === 'function' && _d) || Object, (typeof (_e = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _e) || Object])
+    ], DeviceListComponent);
+    return DeviceListComponent;
+    var _a, _b, _c, _d, _e;
+}());
+exports.DeviceListComponent = DeviceListComponent;
+
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/devices/components/device-list/device-list.html":
+/***/ function(module, exports) {
+
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"Devices for {{organization.name}}\" baCardClass=\"with-scroll table-panel\">\r\n      <mc-entity-image-list [isLoading]=\"isLoading\" [entityImageList]=\"entityImageList\" (onClick)=\"gotoDetails($event)\"></mc-entity-image-list>\r\n    </ba-card>\r\n  </div>\r\n</div>\r\n"
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/devices/devices.component.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var DevicesComponent = (function () {
+    function DevicesComponent() {
+    }
+    DevicesComponent = __decorate([
+        core_1.Component({
+            selector: 'devices',
+            template: "<router-outlet></router-outlet>"
+        }), 
+        __metadata('design:paramtypes', [])
+    ], DevicesComponent);
+    return DevicesComponent;
+}());
+exports.DevicesComponent = DevicesComponent;
+
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/devices/devices.module.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var common_1 = __webpack_require__("./node_modules/@angular/common/index.js");
+var devices_routing_1 = __webpack_require__("./src/app/pages/org-identity-registry/devices/devices.routing.ts");
+var devices_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/devices/devices.component.ts");
+var device_list_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/devices/components/device-list/device-list.component.ts");
+var device_details_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/devices/components/device-details/device-details.component.ts");
+var nga_module_1 = __webpack_require__("./src/app/theme/nga.module.ts");
+var shared_module_1 = __webpack_require__("./src/app/pages/shared/shared.module.ts");
+var DevicesModule = (function () {
+    function DevicesModule() {
+    }
+    DevicesModule = __decorate([
+        core_1.NgModule({
+            imports: [
+                common_1.CommonModule,
+                nga_module_1.NgaModule,
+                shared_module_1.SharedModule,
+                devices_routing_1.routing
+            ],
+            declarations: [
+                devices_component_1.DevicesComponent,
+                device_details_component_1.DeviceDetailsComponent,
+                device_list_component_1.DeviceListComponent
+            ]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], DevicesModule);
+    return DevicesModule;
+}());
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = DevicesModule;
+
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/devices/devices.routing.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
+var devices_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/devices/devices.component.ts");
+var device_list_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/devices/components/device-list/device-list.component.ts");
+var device_details_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/devices/components/device-details/device-details.component.ts");
+// noinspection TypeScriptValidateTypes
+var routes = [
+    {
+        path: 'devices',
+        component: devices_component_1.DevicesComponent,
+        data: { breadcrumb: 'Devices' },
+        children: [
+            {
+                path: '',
+                component: device_list_component_1.DeviceListComponent
+            },
+            {
+                path: ':id',
+                component: device_details_component_1.DeviceDetailsComponent,
+                data: { breadcrumb: 'Details' }
+            }
+        ]
+    }
+];
+exports.routing = router_1.RouterModule.forChild(routes);
+
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/org-identity-registry.component.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var OrgIdentityRegistryComponent = (function () {
+    function OrgIdentityRegistryComponent() {
+    }
+    OrgIdentityRegistryComponent = __decorate([
+        core_1.Component({
+            selector: 'org-identity-registry',
+            template: "<router-outlet></router-outlet>"
+        }), 
+        __metadata('design:paramtypes', [])
+    ], OrgIdentityRegistryComponent);
+    return OrgIdentityRegistryComponent;
+}());
+exports.OrgIdentityRegistryComponent = OrgIdentityRegistryComponent;
+
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/org-identity-registry.module.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var common_1 = __webpack_require__("./node_modules/@angular/common/index.js");
+var nga_module_1 = __webpack_require__("./src/app/theme/nga.module.ts");
+var org_identity_registry_routing_1 = __webpack_require__("./src/app/pages/org-identity-registry/org-identity-registry.routing.ts");
+var org_identity_registry_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/org-identity-registry.component.ts");
+var vessels_module_1 = __webpack_require__("./src/app/pages/org-identity-registry/vessels/vessels.module.ts");
+var devices_module_1 = __webpack_require__("./src/app/pages/org-identity-registry/devices/devices.module.ts");
+var OrgIdentityRegistryModule = (function () {
+    function OrgIdentityRegistryModule() {
+    }
+    OrgIdentityRegistryModule = __decorate([
+        core_1.NgModule({
+            imports: [
+                common_1.CommonModule,
+                nga_module_1.NgaModule,
+                vessels_module_1.default,
+                devices_module_1.default,
+                org_identity_registry_routing_1.routing
+            ],
+            declarations: [
+                org_identity_registry_component_1.OrgIdentityRegistryComponent
+            ]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], OrgIdentityRegistryModule);
+    return OrgIdentityRegistryModule;
+}());
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = OrgIdentityRegistryModule;
+
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/org-identity-registry.routing.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
+var org_identity_registry_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/org-identity-registry.component.ts");
+var vessels_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/vessels/vessels.component.ts");
+var devices_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/devices/devices.component.ts");
+// noinspection TypeScriptValidateTypes
+var routes = [
+    {
+        path: '',
+        component: org_identity_registry_component_1.OrgIdentityRegistryComponent,
+        children: [
+            { path: 'devices', component: devices_component_1.DevicesComponent },
+            { path: 'vessels', component: vessels_component_1.VesselsComponent }
+        ]
+    }
+];
+exports.routing = router_1.RouterModule.forChild(routes);
+
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/vessels/components/vessel-details/vessel-details.component.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifications.service.ts");
+var vessels_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/vessels.service.ts");
+var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
+var VesselDetailsComponent = (function () {
+    function VesselDetailsComponent(route, vesselsService, notifications) {
+        this.route = route;
+        this.vesselsService = vesselsService;
+        this.notifications = notifications;
+    }
+    VesselDetailsComponent.prototype.ngOnInit = function () {
+        this.loadVessel();
+    };
+    VesselDetailsComponent.prototype.loadVessel = function () {
+        var _this = this;
+        var mrn = this.route.snapshot.params['id'];
+        this.vesselsService.getVessel(mrn).subscribe(function (vessel) {
+            _this.vessel = vessel;
+            _this.title = vessel.name;
+            _this.isLoading = false;
+        }, function (err) {
+            _this.isLoading = false;
+            _this.notifications.generateNotification('Error', 'Error when trying to get the vessel', mc_notifications_service_1.MCNotificationType.Error, err);
+        });
+    };
+    VesselDetailsComponent = __decorate([
+        core_1.Component({
+            selector: 'vessel-details',
+            encapsulation: core_1.ViewEncapsulation.None,
+            template: __webpack_require__("./src/app/pages/org-identity-registry/vessels/components/vessel-details/vessel-details.html"),
+            styles: []
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _a) || Object, (typeof (_b = typeof vessels_service_1.VesselsService !== 'undefined' && vessels_service_1.VesselsService) === 'function' && _b) || Object, (typeof (_c = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _c) || Object])
+    ], VesselDetailsComponent);
+    return VesselDetailsComponent;
+    var _a, _b, _c;
+}());
+exports.VesselDetailsComponent = VesselDetailsComponent;
+
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/vessels/components/vessel-details/vessel-details.html":
+/***/ function(module, exports) {
+
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{title}}\" baCardClass=\"with-scroll table-panel\">\r\n      Details\r\n    </ba-card>\r\n  </div>\r\n</div>\r\n"
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/vessels/components/vessel-list/vessel-list.component.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifications.service.ts");
+var organizations_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/organizations.service.ts");
+var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
+var vessels_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/vessels.service.ts");
+var VesselListComponent = (function () {
+    function VesselListComponent(router, route, vesselsService, orgService, notifications) {
+        this.router = router;
+        this.route = route;
+        this.vesselsService = vesselsService;
+        this.orgService = orgService;
+        this.notifications = notifications;
+        this.organization = {};
+    }
+    VesselListComponent.prototype.ngOnInit = function () {
+        this.isLoading = true;
+        this.loadMyOrganization();
+        this.loadVessels();
+    };
+    VesselListComponent.prototype.loadMyOrganization = function () {
+        var _this = this;
+        this.orgService.getMyOrganization().subscribe(function (organization) {
+            _this.organization = organization;
+        }, function (err) {
+            _this.notifications.generateNotification('Error', 'Error when trying to get organization', mc_notifications_service_1.MCNotificationType.Error, err);
+        });
+    };
+    VesselListComponent.prototype.loadVessels = function () {
+        var _this = this;
+        this.vesselsService.getVessels().subscribe(function (vessels) {
+            _this.vessels = vessels;
+            _this.isLoading = false;
+            _this.generateEntityImageList();
+        }, function (err) {
+            _this.isLoading = false;
+            _this.notifications.generateNotification('Error', 'Error when trying to get vessels', mc_notifications_service_1.MCNotificationType.Error, err);
+        });
+    };
+    VesselListComponent.prototype.gotoDetails = function (entityModel) {
+        this.router.navigate([entityModel.entityId], { relativeTo: this.route });
+    };
+    VesselListComponent.prototype.generateEntityImageList = function () {
+        var _this = this;
+        this.entityImageList = undefined;
+        if (this.vessels) {
+            this.entityImageList = [];
+            var imageSrc_1 = 'assets/img/no_ship.png';
+            this.vessels.forEach(function (vessel) {
+                _this.entityImageList.push({ imageSource: imageSrc_1, entityId: vessel.mrn, title: vessel.name });
+            });
+        }
+    };
+    VesselListComponent = __decorate([
+        core_1.Component({
+            selector: 'vessel-list',
+            encapsulation: core_1.ViewEncapsulation.None,
+            template: __webpack_require__("./src/app/pages/org-identity-registry/vessels/components/vessel-list/vessel-list.html"),
+            styles: []
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _a) || Object, (typeof (_b = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _b) || Object, (typeof (_c = typeof vessels_service_1.VesselsService !== 'undefined' && vessels_service_1.VesselsService) === 'function' && _c) || Object, (typeof (_d = typeof organizations_service_1.OrganizationsService !== 'undefined' && organizations_service_1.OrganizationsService) === 'function' && _d) || Object, (typeof (_e = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _e) || Object])
+    ], VesselListComponent);
+    return VesselListComponent;
+    var _a, _b, _c, _d, _e;
+}());
+exports.VesselListComponent = VesselListComponent;
+
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/vessels/components/vessel-list/vessel-list.html":
+/***/ function(module, exports) {
+
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"Vessels for {{organization.name}}\" baCardClass=\"with-scroll table-panel\">\r\n      <mc-entity-image-list [isLoading]=\"isLoading\" [entityImageList]=\"entityImageList\" (onClick)=\"gotoDetails($event)\"></mc-entity-image-list>\r\n    </ba-card>\r\n  </div>\r\n</div>\r\n"
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/vessels/vessels.component.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var VesselsComponent = (function () {
+    function VesselsComponent() {
+    }
+    VesselsComponent = __decorate([
+        core_1.Component({
+            selector: 'vessels',
+            template: "<router-outlet></router-outlet>"
+        }), 
+        __metadata('design:paramtypes', [])
+    ], VesselsComponent);
+    return VesselsComponent;
+}());
+exports.VesselsComponent = VesselsComponent;
+
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/vessels/vessels.module.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var common_1 = __webpack_require__("./node_modules/@angular/common/index.js");
+var vessels_routing_1 = __webpack_require__("./src/app/pages/org-identity-registry/vessels/vessels.routing.ts");
+var vessels_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/vessels/vessels.component.ts");
+var vessel_list_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/vessels/components/vessel-list/vessel-list.component.ts");
+var vessel_details_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/vessels/components/vessel-details/vessel-details.component.ts");
+var nga_module_1 = __webpack_require__("./src/app/theme/nga.module.ts");
+var shared_module_1 = __webpack_require__("./src/app/pages/shared/shared.module.ts");
+var VesselsModule = (function () {
+    function VesselsModule() {
+    }
+    VesselsModule = __decorate([
+        core_1.NgModule({
+            imports: [
+                common_1.CommonModule,
+                nga_module_1.NgaModule,
+                shared_module_1.SharedModule,
+                vessels_routing_1.routing
+            ],
+            declarations: [
+                vessels_component_1.VesselsComponent,
+                vessel_details_component_1.VesselDetailsComponent,
+                vessel_list_component_1.VesselListComponent
+            ]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], VesselsModule);
+    return VesselsModule;
+}());
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = VesselsModule;
+
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/vessels/vessels.routing.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
+var vessels_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/vessels/vessels.component.ts");
+var vessel_list_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/vessels/components/vessel-list/vessel-list.component.ts");
+var vessel_details_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/vessels/components/vessel-details/vessel-details.component.ts");
+// noinspection TypeScriptValidateTypes
+var routes = [
+    {
+        path: 'vessels',
+        component: vessels_component_1.VesselsComponent,
+        data: { breadcrumb: 'Vessels' },
+        children: [
+            {
+                path: '',
+                component: vessel_list_component_1.VesselListComponent
+            },
+            {
+                path: ':id',
+                component: vessel_details_component_1.VesselDetailsComponent,
+                data: { breadcrumb: 'Details' }
+            }
+        ]
+    }
+];
+exports.routing = router_1.RouterModule.forChild(routes);
+
+
+/***/ },
+
 /***/ "./src/app/pages/org-service-registry/shared/services/sr-view-model.service.ts":
 /***/ function(module, exports, __webpack_require__) {
 
@@ -91,127 +621,6 @@ exports.SrViewModelService = SrViewModelService;
 
 /***/ },
 
-/***/ "./src/app/pages/organizations/components/my-organization/my-organization.component.ts":
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-"use strict";
-var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifications.service.ts");
-var organizations_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/organizations.service.ts");
-var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth.service.ts");
-var certificate_helper_service_1 = __webpack_require__("./src/app/pages/shared/services/certificate-helper.service.ts");
-var MyOrganization = (function () {
-    function MyOrganization(notifications, orgService, authService) {
-        this.notifications = notifications;
-        this.orgService = orgService;
-        this.authService = authService;
-        this.isLoading = true;
-        this.entityType = certificate_helper_service_1.CertificateEntityType.Organization;
-    }
-    MyOrganization.prototype.ngOnInit = function () {
-        var _this = this;
-        this.isLoading = true;
-        this.orgService.getMyOrganization().subscribe(function (organization) {
-            _this.organization = organization;
-            _this.titleName = organization.name;
-            _this.certificateTitle = organization.name;
-            _this.isLoading = false;
-        }, function (err) {
-            _this.isLoading = false;
-            _this.notifications.generateNotification('Error', 'Error when trying to get organization', mc_notifications_service_1.MCNotificationType.Error);
-        });
-    };
-    MyOrganization = __decorate([
-        core_1.Component({
-            selector: 'my-organization',
-            encapsulation: core_1.ViewEncapsulation.None,
-            styles: [],
-            template: __webpack_require__("./src/app/pages/organizations/components/my-organization/my-organization.html")
-        }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _a) || Object, (typeof (_b = typeof organizations_service_1.OrganizationsService !== 'undefined' && organizations_service_1.OrganizationsService) === 'function' && _b) || Object, (typeof (_c = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _c) || Object])
-    ], MyOrganization);
-    return MyOrganization;
-    var _a, _b, _c;
-}());
-exports.MyOrganization = MyOrganization;
-
-
-/***/ },
-
-/***/ "./src/app/pages/organizations/components/my-organization/my-organization.html":
-/***/ function(module, exports) {
-
-module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{titleName}}\" baCardClass=\"with-scroll table-panel\">\r\n      <organization-details-table [isLoading]=\"isLoading\" [organization]=\"organization\"></organization-details-table>\r\n    </ba-card>\r\n\r\n    <div *ngIf=\"organization\">\r\n      <ba-card title=\"Certificates for {{organization.name}}\" baCardClass=\"with-scroll table-panel\">\r\n        <certificates-table [entityMrn]=\"organization.mrn\" [isLoading]=\"isLoading\" [certificateTitle]=\"certificateTitle\" [certificateEntityType]=\"entityType\" [certificates]=\"organization.certificates\"></certificates-table>\r\n      </ba-card>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
-
-/***/ },
-
-/***/ "./src/app/pages/organizations/components/my-organization/my-organization.module.ts":
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-"use strict";
-var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var common_1 = __webpack_require__("./node_modules/@angular/common/index.js");
-var forms_1 = __webpack_require__("./node_modules/@angular/forms/index.js");
-var my_organization_routing_1 = __webpack_require__("./src/app/pages/organizations/components/my-organization/my-organization.routing.ts");
-var nga_module_1 = __webpack_require__("./src/app/theme/nga.module.ts");
-var shared_module_1 = __webpack_require__("./src/app/pages/shared/shared.module.ts");
-var my_organization_component_1 = __webpack_require__("./src/app/pages/organizations/components/my-organization/my-organization.component.ts");
-var MyOrganizationModule = (function () {
-    function MyOrganizationModule() {
-    }
-    MyOrganizationModule = __decorate([
-        core_1.NgModule({
-            imports: [
-                common_1.CommonModule,
-                shared_module_1.SharedModule,
-                forms_1.FormsModule,
-                nga_module_1.NgaModule,
-                my_organization_routing_1.routing
-            ],
-            declarations: [
-                my_organization_component_1.MyOrganization
-            ]
-        }), 
-        __metadata('design:paramtypes', [])
-    ], MyOrganizationModule);
-    return MyOrganizationModule;
-}());
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = MyOrganizationModule;
-
-
-/***/ },
-
-/***/ "./src/app/pages/organizations/components/my-organization/my-organization.routing.ts":
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-"use strict";
-var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
-var my_organization_component_1 = __webpack_require__("./src/app/pages/organizations/components/my-organization/my-organization.component.ts");
-var certificate_issue_new_component_1 = __webpack_require__("./src/app/pages/shared/components/certificate-issue-new/certificate-issue-new.component.ts");
-// noinspection TypeScriptValidateTypes
-var routes = [
-    {
-        path: '',
-        component: my_organization_component_1.MyOrganization,
-        data: { breadcrumb: 'My Organization' },
-        children: []
-    },
-    {
-        path: 'issuecert',
-        component: certificate_issue_new_component_1.CertificateIssueNewComponent,
-        data: { breadcrumb: 'New Certificate' },
-        children: []
-    }
-];
-exports.routing = router_1.RouterModule.forChild(routes);
-
-
-/***/ },
-
 /***/ "./src/app/pages/shared/components/certificate-issue-new/certificate-issue-new.component.ts":
 /***/ function(module, exports, __webpack_require__) {
 
@@ -222,8 +631,10 @@ var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifi
 var navigation_helper_service_1 = __webpack_require__("./src/app/shared/navigation-helper.service.ts");
 var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
 var certificates_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/certificates.service.ts");
+var file_helper_service_1 = __webpack_require__("./src/app/shared/file-helper.service.ts");
 var CertificateIssueNewComponent = (function () {
-    function CertificateIssueNewComponent(certificateService, route, navigationHelper, notificationService) {
+    function CertificateIssueNewComponent(fileHelper, certificateService, route, navigationHelper, notificationService) {
+        this.fileHelper = fileHelper;
         this.certificateService = certificateService;
         this.route = route;
         this.navigationHelper = navigationHelper;
@@ -244,7 +655,7 @@ var CertificateIssueNewComponent = (function () {
         this.generateLabelValues();
     };
     CertificateIssueNewComponent.prototype.zipAndDownload = function () {
-        this.notificationService.generateNotification('Not Implemented', 'Download coming soon', mc_notifications_service_1.MCNotificationType.Info);
+        this.fileHelper.downloadPemCertificate(this.pemCertificate, this.entityTitle);
     };
     CertificateIssueNewComponent.prototype.issueNew = function () {
         var _this = this;
@@ -272,10 +683,10 @@ var CertificateIssueNewComponent = (function () {
             template: __webpack_require__("./src/app/pages/shared/components/certificate-issue-new/certificate-issue-new.html"),
             styles: []
         }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof certificates_service_1.CertificatesService !== 'undefined' && certificates_service_1.CertificatesService) === 'function' && _a) || Object, (typeof (_b = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _b) || Object, (typeof (_c = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _c) || Object, (typeof (_d = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _d) || Object])
+        __metadata('design:paramtypes', [(typeof (_a = typeof file_helper_service_1.FileHelperService !== 'undefined' && file_helper_service_1.FileHelperService) === 'function' && _a) || Object, (typeof (_b = typeof certificates_service_1.CertificatesService !== 'undefined' && certificates_service_1.CertificatesService) === 'function' && _b) || Object, (typeof (_c = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _c) || Object, (typeof (_d = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _d) || Object, (typeof (_e = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _e) || Object])
     ], CertificateIssueNewComponent);
     return CertificateIssueNewComponent;
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e;
 }());
 exports.CertificateIssueNewComponent = CertificateIssueNewComponent;
 
@@ -300,8 +711,10 @@ var theme_constants_1 = __webpack_require__("./src/app/theme/theme.constants.ts"
 var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth.service.ts");
 var navigation_helper_service_1 = __webpack_require__("./src/app/shared/navigation-helper.service.ts");
 var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifications.service.ts");
+var file_helper_service_1 = __webpack_require__("./src/app/shared/file-helper.service.ts");
 var CertificatesTableComponent = (function () {
-    function CertificatesTableComponent(navigationHelper, authService, certificateHelperService, notificationService) {
+    function CertificatesTableComponent(fileHelper, navigationHelper, authService, certificateHelperService, notificationService) {
+        this.fileHelper = fileHelper;
         this.navigationHelper = navigationHelper;
         this.authService = authService;
         this.certificateHelperService = certificateHelperService;
@@ -314,10 +727,11 @@ var CertificatesTableComponent = (function () {
     CertificatesTableComponent.prototype.ngOnChanges = function () {
         if (this.certificates) {
             this.certificateViewModels = this.certificateHelperService.convertCertificatesToViewModels(this.certificates);
-            console.log("before ", this.certificateViewModels);
             this.sortCertificates();
-            console.log("after ", this.certificateViewModels);
         }
+    };
+    CertificatesTableComponent.prototype.hasData = function () {
+        return this.certificateViewModels && this.certificateViewModels.length > 0;
     };
     CertificatesTableComponent.prototype.sortCertificates = function () {
         // We are sorting with longest due date on top
@@ -359,7 +773,8 @@ var CertificatesTableComponent = (function () {
         this.notificationService.generateNotification('Not Implemented', 'Revoke coming soon', mc_notifications_service_1.MCNotificationType.Info);
     };
     CertificatesTableComponent.prototype.download = function (certificate) {
-        this.notificationService.generateNotification('Not Implemented', 'Download coming soon', mc_notifications_service_1.MCNotificationType.Info);
+        var pemCertificate = { certificate: certificate.certificate };
+        this.fileHelper.downloadPemCertificate(pemCertificate, this.certificateTitle);
     };
     CertificatesTableComponent.prototype.onWindowResize = function () {
         this.calculateTableClass();
@@ -403,10 +818,10 @@ var CertificatesTableComponent = (function () {
             template: __webpack_require__("./src/app/pages/shared/components/certificates-table/certificates-table.html"),
             styles: [__webpack_require__("./src/app/pages/shared/components/certificates-table/certificates-table.scss")]
         }), 
-        __metadata('design:paramtypes', [(typeof (_b = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _b) || Object, (typeof (_c = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _c) || Object, (typeof (_d = typeof certificate_helper_service_1.CertificateHelperService !== 'undefined' && certificate_helper_service_1.CertificateHelperService) === 'function' && _d) || Object, (typeof (_e = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _e) || Object])
+        __metadata('design:paramtypes', [(typeof (_b = typeof file_helper_service_1.FileHelperService !== 'undefined' && file_helper_service_1.FileHelperService) === 'function' && _b) || Object, (typeof (_c = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _c) || Object, (typeof (_d = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _d) || Object, (typeof (_e = typeof certificate_helper_service_1.CertificateHelperService !== 'undefined' && certificate_helper_service_1.CertificateHelperService) === 'function' && _e) || Object, (typeof (_f = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _f) || Object])
     ], CertificatesTableComponent);
     return CertificatesTableComponent;
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d, _e, _f;
 }());
 exports.CertificatesTableComponent = CertificatesTableComponent;
 
@@ -416,7 +831,7 @@ exports.CertificatesTableComponent = CertificatesTableComponent;
 /***/ "./src/app/pages/shared/components/certificates-table/certificates-table.html":
 /***/ function(module, exports) {
 
-module.exports = "<div *ngIf=\"!isLoading && certificateViewModels\">\r\n  <table class=\"table table-bordered {{tableClass}}\">\r\n    <thead>\r\n      <tr class=\"black-muted-bg\">\r\n        <th class=\"\">Certificate</th>\r\n        <th class=\"nowrap\">Valid from</th>\r\n        <th class=\"nowrap\">Valid to</th>\r\n        <th class=\"table-buttons\"></th>\r\n      </tr>\r\n    </thead>\r\n    <tbody>\r\n      <tr *ngFor=\"let certificate of certificateViewModels; let i = index\">\r\n        <td class=\"\">{{'Certificate for ' + certificateTitle | truncate:50}}</td>\r\n        <td class=\"nowrap\">{{certificate.start | date:dateFormat}}</td>\r\n        <td class=\"nowrap\">{{certificate.end | date:dateFormat}}</td>\r\n        <td *ngIf=\"!certificate.revoked\" class=\"table-buttons\">\r\n          <button type=\"button\" class=\"btn btn-primary btn-raised btn-sm\" (click)=\"download(certificate)\">Download certificate</button>\r\n          <button type=\"button\" *ngIf=\"isAdmin()\" class=\"btn btn-danger btn-raised btn-sm\" (click)=\"revoke(certificate)\">Revoke certificate</button>\r\n        </td>\r\n        <td *ngIf=\"certificate.revoked\" class=\"table-buttons\">\r\n          <span class=\"red-text\">Revoked ({{certificate.revokeReasonText}})</span>\r\n        </td>\r\n      </tr>\r\n    </tbody>\r\n  </table>\r\n</div>\r\n<sk-fading-circle [isRunning]=\"isLoading\" ></sk-fading-circle>\r\n<div class=\"no-data\" *ngIf=\"!certificateViewModels && !isLoading\">No data</div>\r\n<div *ngIf=\"!isLoading\">\r\n  <mc-create-button [title]=\"newCertificateTitle\" [onClick]=\"onIssueCertificate\"></mc-create-button>\r\n</div>\r\n"
+module.exports = "<div *ngIf=\"!isLoading && hasData()\">\r\n  <table class=\"table table-bordered {{tableClass}}\">\r\n    <thead>\r\n      <tr class=\"black-muted-bg\">\r\n        <th class=\"\">Certificate</th>\r\n        <th class=\"nowrap\">Valid from</th>\r\n        <th class=\"nowrap\">Valid to</th>\r\n        <th class=\"table-buttons\"></th>\r\n      </tr>\r\n    </thead>\r\n    <tbody>\r\n      <tr *ngFor=\"let certificate of certificateViewModels; let i = index\">\r\n        <td class=\"\">{{'Certificate for ' + certificateTitle | truncate:50}}</td>\r\n        <td class=\"nowrap\">{{certificate.start | date:dateFormat}}</td>\r\n        <td class=\"nowrap\">{{certificate.end | date:dateFormat}}</td>\r\n        <td *ngIf=\"!certificate.revoked\" class=\"table-buttons\">\r\n          <button type=\"button\" class=\"btn btn-primary btn-raised btn-sm\" (click)=\"download(certificate)\">Download certificate</button>\r\n          <button type=\"button\" *ngIf=\"isAdmin()\" class=\"btn btn-danger btn-raised btn-sm\" (click)=\"revoke(certificate)\">Revoke certificate</button>\r\n        </td>\r\n        <td *ngIf=\"certificate.revoked\" class=\"table-buttons\">\r\n          <span class=\"red-text\">Revoked ({{certificate.revokeReasonText}})</span>\r\n        </td>\r\n      </tr>\r\n    </tbody>\r\n  </table>\r\n</div>\r\n<sk-fading-circle [isRunning]=\"isLoading\" ></sk-fading-circle>\r\n<div class=\"no-data\" *ngIf=\"!hasData() && !isLoading\">No data</div>\r\n<div *ngIf=\"!isLoading\">\r\n  <mc-create-button [title]=\"newCertificateTitle\" [onClick]=\"onIssueCertificate\"></mc-create-button>\r\n</div>\r\n"
 
 /***/ },
 

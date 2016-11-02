@@ -91,30 +91,62 @@ exports.SrViewModelService = SrViewModelService;
 
 /***/ },
 
-/***/ "./src/app/pages/organizations/organizations.component.ts":
+/***/ "./src/app/pages/organizations/components/my-organization/my-organization.component.ts":
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 "use strict";
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var OrganizationsComponent = (function () {
-    function OrganizationsComponent() {
+var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifications.service.ts");
+var organizations_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/organizations.service.ts");
+var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth.service.ts");
+var certificate_helper_service_1 = __webpack_require__("./src/app/pages/shared/services/certificate-helper.service.ts");
+var MyOrganization = (function () {
+    function MyOrganization(notifications, orgService, authService) {
+        this.notifications = notifications;
+        this.orgService = orgService;
+        this.authService = authService;
+        this.isLoading = true;
+        this.entityType = certificate_helper_service_1.CertificateEntityType.Organization;
     }
-    OrganizationsComponent = __decorate([
+    MyOrganization.prototype.ngOnInit = function () {
+        var _this = this;
+        this.isLoading = true;
+        this.orgService.getMyOrganization().subscribe(function (organization) {
+            _this.organization = organization;
+            _this.titleName = organization.name;
+            _this.certificateTitle = organization.name;
+            _this.isLoading = false;
+        }, function (err) {
+            _this.isLoading = false;
+            _this.notifications.generateNotification('Error', 'Error when trying to get organization', mc_notifications_service_1.MCNotificationType.Error, err);
+        });
+    };
+    MyOrganization = __decorate([
         core_1.Component({
-            selector: 'organizations',
-            template: '<router-outlet></router-outlet>'
+            selector: 'my-organization',
+            encapsulation: core_1.ViewEncapsulation.None,
+            styles: [],
+            template: __webpack_require__("./src/app/pages/organizations/components/my-organization/my-organization.html")
         }), 
-        __metadata('design:paramtypes', [])
-    ], OrganizationsComponent);
-    return OrganizationsComponent;
+        __metadata('design:paramtypes', [(typeof (_a = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _a) || Object, (typeof (_b = typeof organizations_service_1.OrganizationsService !== 'undefined' && organizations_service_1.OrganizationsService) === 'function' && _b) || Object, (typeof (_c = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _c) || Object])
+    ], MyOrganization);
+    return MyOrganization;
+    var _a, _b, _c;
 }());
-exports.OrganizationsComponent = OrganizationsComponent;
+exports.MyOrganization = MyOrganization;
 
 
 /***/ },
 
-/***/ "./src/app/pages/organizations/organizations.module.ts":
+/***/ "./src/app/pages/organizations/components/my-organization/my-organization.html":
+/***/ function(module, exports) {
+
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{titleName}}\" baCardClass=\"with-scroll table-panel\">\r\n      <organization-details-table [isLoading]=\"isLoading\" [organization]=\"organization\"></organization-details-table>\r\n    </ba-card>\r\n\r\n    <div *ngIf=\"organization\">\r\n      <ba-card title=\"Certificates for {{organization.name}}\" baCardClass=\"with-scroll table-panel\">\r\n        <certificates-table [entityMrn]=\"organization.mrn\" [isLoading]=\"isLoading\" [certificateTitle]=\"certificateTitle\" [certificateEntityType]=\"entityType\" [certificates]=\"organization.certificates\"></certificates-table>\r\n      </ba-card>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+
+/***/ },
+
+/***/ "./src/app/pages/organizations/components/my-organization/my-organization.module.ts":
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -122,49 +154,56 @@ exports.OrganizationsComponent = OrganizationsComponent;
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
 var common_1 = __webpack_require__("./node_modules/@angular/common/index.js");
 var forms_1 = __webpack_require__("./node_modules/@angular/forms/index.js");
+var my_organization_routing_1 = __webpack_require__("./src/app/pages/organizations/components/my-organization/my-organization.routing.ts");
 var nga_module_1 = __webpack_require__("./src/app/theme/nga.module.ts");
-var organizations_component_1 = __webpack_require__("./src/app/pages/organizations/organizations.component.ts");
-var organizations_routing_1 = __webpack_require__("./src/app/pages/organizations/organizations.routing.ts");
 var shared_module_1 = __webpack_require__("./src/app/pages/shared/shared.module.ts");
-var OrganizationsModule = (function () {
-    function OrganizationsModule() {
+var my_organization_component_1 = __webpack_require__("./src/app/pages/organizations/components/my-organization/my-organization.component.ts");
+var MyOrganizationModule = (function () {
+    function MyOrganizationModule() {
     }
-    OrganizationsModule = __decorate([
+    MyOrganizationModule = __decorate([
         core_1.NgModule({
             imports: [
                 common_1.CommonModule,
                 shared_module_1.SharedModule,
                 forms_1.FormsModule,
                 nga_module_1.NgaModule,
-                organizations_routing_1.routing
+                my_organization_routing_1.routing
             ],
             declarations: [
-                organizations_component_1.OrganizationsComponent
+                my_organization_component_1.MyOrganization
             ]
         }), 
         __metadata('design:paramtypes', [])
-    ], OrganizationsModule);
-    return OrganizationsModule;
+    ], MyOrganizationModule);
+    return MyOrganizationModule;
 }());
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = OrganizationsModule;
+exports.default = MyOrganizationModule;
 
 
 /***/ },
 
-/***/ "./src/app/pages/organizations/organizations.routing.ts":
+/***/ "./src/app/pages/organizations/components/my-organization/my-organization.routing.ts":
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 "use strict";
 var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
-var organizations_component_1 = __webpack_require__("./src/app/pages/organizations/organizations.component.ts");
+var my_organization_component_1 = __webpack_require__("./src/app/pages/organizations/components/my-organization/my-organization.component.ts");
+var certificate_issue_new_component_1 = __webpack_require__("./src/app/pages/shared/components/certificate-issue-new/certificate-issue-new.component.ts");
 // noinspection TypeScriptValidateTypes
 var routes = [
     {
         path: '',
-        component: organizations_component_1.OrganizationsComponent,
-        data: { breadcrumb: 'Organizations' },
+        component: my_organization_component_1.MyOrganization,
+        data: { breadcrumb: 'My Organization' },
+        children: []
+    },
+    {
+        path: 'issuecert',
+        component: certificate_issue_new_component_1.CertificateIssueNewComponent,
+        data: { breadcrumb: 'New Certificate' },
         children: []
     }
 ];
@@ -183,8 +222,10 @@ var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifi
 var navigation_helper_service_1 = __webpack_require__("./src/app/shared/navigation-helper.service.ts");
 var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
 var certificates_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/certificates.service.ts");
+var file_helper_service_1 = __webpack_require__("./src/app/shared/file-helper.service.ts");
 var CertificateIssueNewComponent = (function () {
-    function CertificateIssueNewComponent(certificateService, route, navigationHelper, notificationService) {
+    function CertificateIssueNewComponent(fileHelper, certificateService, route, navigationHelper, notificationService) {
+        this.fileHelper = fileHelper;
         this.certificateService = certificateService;
         this.route = route;
         this.navigationHelper = navigationHelper;
@@ -205,7 +246,7 @@ var CertificateIssueNewComponent = (function () {
         this.generateLabelValues();
     };
     CertificateIssueNewComponent.prototype.zipAndDownload = function () {
-        this.notificationService.generateNotification('Not Implemented', 'Download coming soon', mc_notifications_service_1.MCNotificationType.Info);
+        this.fileHelper.downloadPemCertificate(this.pemCertificate, this.entityTitle);
     };
     CertificateIssueNewComponent.prototype.issueNew = function () {
         var _this = this;
@@ -233,10 +274,10 @@ var CertificateIssueNewComponent = (function () {
             template: __webpack_require__("./src/app/pages/shared/components/certificate-issue-new/certificate-issue-new.html"),
             styles: []
         }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof certificates_service_1.CertificatesService !== 'undefined' && certificates_service_1.CertificatesService) === 'function' && _a) || Object, (typeof (_b = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _b) || Object, (typeof (_c = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _c) || Object, (typeof (_d = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _d) || Object])
+        __metadata('design:paramtypes', [(typeof (_a = typeof file_helper_service_1.FileHelperService !== 'undefined' && file_helper_service_1.FileHelperService) === 'function' && _a) || Object, (typeof (_b = typeof certificates_service_1.CertificatesService !== 'undefined' && certificates_service_1.CertificatesService) === 'function' && _b) || Object, (typeof (_c = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _c) || Object, (typeof (_d = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _d) || Object, (typeof (_e = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _e) || Object])
     ], CertificateIssueNewComponent);
     return CertificateIssueNewComponent;
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e;
 }());
 exports.CertificateIssueNewComponent = CertificateIssueNewComponent;
 
@@ -261,8 +302,10 @@ var theme_constants_1 = __webpack_require__("./src/app/theme/theme.constants.ts"
 var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth.service.ts");
 var navigation_helper_service_1 = __webpack_require__("./src/app/shared/navigation-helper.service.ts");
 var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifications.service.ts");
+var file_helper_service_1 = __webpack_require__("./src/app/shared/file-helper.service.ts");
 var CertificatesTableComponent = (function () {
-    function CertificatesTableComponent(navigationHelper, authService, certificateHelperService, notificationService) {
+    function CertificatesTableComponent(fileHelper, navigationHelper, authService, certificateHelperService, notificationService) {
+        this.fileHelper = fileHelper;
         this.navigationHelper = navigationHelper;
         this.authService = authService;
         this.certificateHelperService = certificateHelperService;
@@ -275,10 +318,11 @@ var CertificatesTableComponent = (function () {
     CertificatesTableComponent.prototype.ngOnChanges = function () {
         if (this.certificates) {
             this.certificateViewModels = this.certificateHelperService.convertCertificatesToViewModels(this.certificates);
-            console.log("before ", this.certificateViewModels);
             this.sortCertificates();
-            console.log("after ", this.certificateViewModels);
         }
+    };
+    CertificatesTableComponent.prototype.hasData = function () {
+        return this.certificateViewModels && this.certificateViewModels.length > 0;
     };
     CertificatesTableComponent.prototype.sortCertificates = function () {
         // We are sorting with longest due date on top
@@ -320,7 +364,8 @@ var CertificatesTableComponent = (function () {
         this.notificationService.generateNotification('Not Implemented', 'Revoke coming soon', mc_notifications_service_1.MCNotificationType.Info);
     };
     CertificatesTableComponent.prototype.download = function (certificate) {
-        this.notificationService.generateNotification('Not Implemented', 'Download coming soon', mc_notifications_service_1.MCNotificationType.Info);
+        var pemCertificate = { certificate: certificate.certificate };
+        this.fileHelper.downloadPemCertificate(pemCertificate, this.certificateTitle);
     };
     CertificatesTableComponent.prototype.onWindowResize = function () {
         this.calculateTableClass();
@@ -364,10 +409,10 @@ var CertificatesTableComponent = (function () {
             template: __webpack_require__("./src/app/pages/shared/components/certificates-table/certificates-table.html"),
             styles: [__webpack_require__("./src/app/pages/shared/components/certificates-table/certificates-table.scss")]
         }), 
-        __metadata('design:paramtypes', [(typeof (_b = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _b) || Object, (typeof (_c = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _c) || Object, (typeof (_d = typeof certificate_helper_service_1.CertificateHelperService !== 'undefined' && certificate_helper_service_1.CertificateHelperService) === 'function' && _d) || Object, (typeof (_e = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _e) || Object])
+        __metadata('design:paramtypes', [(typeof (_b = typeof file_helper_service_1.FileHelperService !== 'undefined' && file_helper_service_1.FileHelperService) === 'function' && _b) || Object, (typeof (_c = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _c) || Object, (typeof (_d = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _d) || Object, (typeof (_e = typeof certificate_helper_service_1.CertificateHelperService !== 'undefined' && certificate_helper_service_1.CertificateHelperService) === 'function' && _e) || Object, (typeof (_f = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _f) || Object])
     ], CertificatesTableComponent);
     return CertificatesTableComponent;
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d, _e, _f;
 }());
 exports.CertificatesTableComponent = CertificatesTableComponent;
 
@@ -377,7 +422,7 @@ exports.CertificatesTableComponent = CertificatesTableComponent;
 /***/ "./src/app/pages/shared/components/certificates-table/certificates-table.html":
 /***/ function(module, exports) {
 
-module.exports = "<div *ngIf=\"!isLoading && certificateViewModels\">\r\n  <table class=\"table table-bordered {{tableClass}}\">\r\n    <thead>\r\n      <tr class=\"black-muted-bg\">\r\n        <th class=\"\">Certificate</th>\r\n        <th class=\"nowrap\">Valid from</th>\r\n        <th class=\"nowrap\">Valid to</th>\r\n        <th class=\"table-buttons\"></th>\r\n      </tr>\r\n    </thead>\r\n    <tbody>\r\n      <tr *ngFor=\"let certificate of certificateViewModels; let i = index\">\r\n        <td class=\"\">{{'Certificate for ' + certificateTitle | truncate:50}}</td>\r\n        <td class=\"nowrap\">{{certificate.start | date:dateFormat}}</td>\r\n        <td class=\"nowrap\">{{certificate.end | date:dateFormat}}</td>\r\n        <td *ngIf=\"!certificate.revoked\" class=\"table-buttons\">\r\n          <button type=\"button\" class=\"btn btn-primary btn-raised btn-sm\" (click)=\"download(certificate)\">Download certificate</button>\r\n          <button type=\"button\" *ngIf=\"isAdmin()\" class=\"btn btn-danger btn-raised btn-sm\" (click)=\"revoke(certificate)\">Revoke certificate</button>\r\n        </td>\r\n        <td *ngIf=\"certificate.revoked\" class=\"table-buttons\">\r\n          <span class=\"red-text\">Revoked ({{certificate.revokeReasonText}})</span>\r\n        </td>\r\n      </tr>\r\n    </tbody>\r\n  </table>\r\n</div>\r\n<sk-fading-circle [isRunning]=\"isLoading\" ></sk-fading-circle>\r\n<div class=\"no-data\" *ngIf=\"!certificateViewModels && !isLoading\">No data</div>\r\n<div *ngIf=\"!isLoading\">\r\n  <mc-create-button [title]=\"newCertificateTitle\" [onClick]=\"onIssueCertificate\"></mc-create-button>\r\n</div>\r\n"
+module.exports = "<div *ngIf=\"!isLoading && hasData()\">\r\n  <table class=\"table table-bordered {{tableClass}}\">\r\n    <thead>\r\n      <tr class=\"black-muted-bg\">\r\n        <th class=\"\">Certificate</th>\r\n        <th class=\"nowrap\">Valid from</th>\r\n        <th class=\"nowrap\">Valid to</th>\r\n        <th class=\"table-buttons\"></th>\r\n      </tr>\r\n    </thead>\r\n    <tbody>\r\n      <tr *ngFor=\"let certificate of certificateViewModels; let i = index\">\r\n        <td class=\"\">{{'Certificate for ' + certificateTitle | truncate:50}}</td>\r\n        <td class=\"nowrap\">{{certificate.start | date:dateFormat}}</td>\r\n        <td class=\"nowrap\">{{certificate.end | date:dateFormat}}</td>\r\n        <td *ngIf=\"!certificate.revoked\" class=\"table-buttons\">\r\n          <button type=\"button\" class=\"btn btn-primary btn-raised btn-sm\" (click)=\"download(certificate)\">Download certificate</button>\r\n          <button type=\"button\" *ngIf=\"isAdmin()\" class=\"btn btn-danger btn-raised btn-sm\" (click)=\"revoke(certificate)\">Revoke certificate</button>\r\n        </td>\r\n        <td *ngIf=\"certificate.revoked\" class=\"table-buttons\">\r\n          <span class=\"red-text\">Revoked ({{certificate.revokeReasonText}})</span>\r\n        </td>\r\n      </tr>\r\n    </tbody>\r\n  </table>\r\n</div>\r\n<sk-fading-circle [isRunning]=\"isLoading\" ></sk-fading-circle>\r\n<div class=\"no-data\" *ngIf=\"!hasData() && !isLoading\">No data</div>\r\n<div *ngIf=\"!isLoading\">\r\n  <mc-create-button [title]=\"newCertificateTitle\" [onClick]=\"onIssueCertificate\"></mc-create-button>\r\n</div>\r\n"
 
 /***/ },
 

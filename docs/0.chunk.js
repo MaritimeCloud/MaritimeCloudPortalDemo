@@ -92,7 +92,7 @@ var DesignDetailsComponent = (function () {
             _this.title = 'Error while loading';
             _this.isLoadingDesign = false;
             _this.isLoadingInstances = false;
-            _this.notifications.generateNotification('Error', 'Error when trying to get design', mc_notifications_service_1.MCNotificationType.Error);
+            _this.notifications.generateNotification('Error', 'Error when trying to get design', mc_notifications_service_1.MCNotificationType.Error, err);
         });
     };
     DesignDetailsComponent.prototype.loadInstances = function () {
@@ -102,7 +102,7 @@ var DesignDetailsComponent = (function () {
             _this.isLoadingInstances = false;
         }, function (err) {
             _this.isLoadingInstances = false;
-            _this.notifications.generateNotification('Error', 'Error when trying to get instances', mc_notifications_service_1.MCNotificationType.Error);
+            _this.notifications.generateNotification('Error', 'Error when trying to get instances', mc_notifications_service_1.MCNotificationType.Error, err);
         });
     };
     DesignDetailsComponent.prototype.delete = function () {
@@ -127,7 +127,7 @@ var DesignDetailsComponent = (function () {
             _this.isLoadingDesign = false;
         }, function (err) {
             _this.isLoadingDesign = false;
-            _this.notifications.generateNotification('Error', 'Error when trying to get specifications', mc_notifications_service_1.MCNotificationType.Error);
+            _this.notifications.generateNotification('Error', 'Error when trying to get specifications', mc_notifications_service_1.MCNotificationType.Error, err);
         });
     };
     DesignDetailsComponent.prototype.generateLabelValuesForSpecification = function () {
@@ -142,7 +142,7 @@ var DesignDetailsComponent = (function () {
         }
     };
     DesignDetailsComponent.prototype.createInstance = function () {
-        this.navigationHelperService.navigateToCreateSInstance(this.design.designId, this.design.version);
+        this.navigationHelperService.navigateToCreateInstance(this.design.designId, this.design.version);
     };
     DesignDetailsComponent.prototype.gotoSpecification = function (linkValue) {
         try {
@@ -211,7 +211,7 @@ var DesignListComponent = (function () {
             _this.isLoading = false;
         }, function (err) {
             _this.isLoading = false;
-            _this.notifications.generateNotification('Error', 'Error when trying to get designs', mc_notifications_service_1.MCNotificationType.Error);
+            _this.notifications.generateNotification('Error', 'Error when trying to get designs', mc_notifications_service_1.MCNotificationType.Error, err);
         });
     };
     DesignListComponent.prototype.loadMyOrganization = function () {
@@ -219,7 +219,7 @@ var DesignListComponent = (function () {
         this.orgService.getMyOrganization().subscribe(function (organization) {
             _this.organization = organization;
         }, function (err) {
-            _this.notifications.generateNotification('Error', 'Error when trying to get organization', mc_notifications_service_1.MCNotificationType.Error);
+            _this.notifications.generateNotification('Error', 'Error when trying to get organization', mc_notifications_service_1.MCNotificationType.Error, err);
         });
     };
     DesignListComponent.prototype.gotoDesign = function (index) {
@@ -324,7 +324,7 @@ var DesignNewComponent = (function () {
         }
         catch (error) {
             this.isRegistering = false;
-            this.notifications.generateNotification('Error in XML', error.message, mc_notifications_service_1.MCNotificationType.Error);
+            this.notifications.generateNotification('Error in XML', error.message, mc_notifications_service_1.MCNotificationType.Error, error);
         }
     };
     DesignNewComponent.prototype.createDesign = function (design) {
@@ -343,7 +343,7 @@ var DesignNewComponent = (function () {
             _this.organization = organization;
             _this.calculateFormValid();
         }, function (err) {
-            _this.notifications.generateNotification('Error', 'Error when trying to get organization', mc_notifications_service_1.MCNotificationType.Error);
+            _this.notifications.generateNotification('Error', 'Error when trying to get organization', mc_notifications_service_1.MCNotificationType.Error, err);
         });
     };
     DesignNewComponent.prototype.loadSpecification = function () {
@@ -357,7 +357,7 @@ var DesignNewComponent = (function () {
             _this.isLoading = false;
         }, function (err) {
             _this.isLoading = false;
-            _this.notifications.generateNotification('Error', 'Error when trying to get specification', mc_notifications_service_1.MCNotificationType.Error);
+            _this.notifications.generateNotification('Error', 'Error when trying to get specification', mc_notifications_service_1.MCNotificationType.Error, err);
         });
     };
     DesignNewComponent = __decorate([
@@ -553,7 +553,7 @@ var InstanceDetailsComponent = (function () {
             }
             _this.title = 'Error while loading';
             _this.isLoadingInstance = false;
-            _this.notifications.generateNotification('Error', 'Error when trying to get instance', mc_notifications_service_1.MCNotificationType.Error);
+            _this.notifications.generateNotification('Error', 'Error when trying to get instance', mc_notifications_service_1.MCNotificationType.Error, err);
         });
     };
     // TODO this should be deleted and taken directly from the instance-model when service registry has proper data. from instance.designs
@@ -566,7 +566,7 @@ var InstanceDetailsComponent = (function () {
             _this.isLoadingInstance = false;
         }, function (err) {
             _this.isLoadingInstance = false;
-            _this.notifications.generateNotification('Error', 'Error when trying to get designs', mc_notifications_service_1.MCNotificationType.Error);
+            _this.notifications.generateNotification('Error', 'Error when trying to get designs', mc_notifications_service_1.MCNotificationType.Error, err);
         });
     };
     InstanceDetailsComponent.prototype.generateLabelValuesForDesigns = function () {
@@ -644,7 +644,7 @@ var InstanceListComponent = (function () {
             _this.isLoading = false;
         }, function (err) {
             _this.isLoading = false;
-            _this.notifications.generateNotification('Error', 'Error when trying to get instances', mc_notifications_service_1.MCNotificationType.Error);
+            _this.notifications.generateNotification('Error', 'Error when trying to get instances', mc_notifications_service_1.MCNotificationType.Error, err);
         });
     };
     InstanceListComponent.prototype.loadMyOrganization = function () {
@@ -652,7 +652,7 @@ var InstanceListComponent = (function () {
         this.orgService.getMyOrganization().subscribe(function (organization) {
             _this.organization = organization;
         }, function (err) {
-            _this.notifications.generateNotification('Error', 'Error when trying to get organization', mc_notifications_service_1.MCNotificationType.Error);
+            _this.notifications.generateNotification('Error', 'Error when trying to get organization', mc_notifications_service_1.MCNotificationType.Error, err);
         });
     };
     InstanceListComponent.prototype.gotoInstance = function (index) {
@@ -760,7 +760,7 @@ var InstanceNewComponent = (function () {
         }
         catch (error) {
             this.isRegistering = false;
-            this.notifications.generateNotification('Error in XML', error.message, mc_notifications_service_1.MCNotificationType.Error);
+            this.notifications.generateNotification('Error in XML', error.message, mc_notifications_service_1.MCNotificationType.Error, error);
         }
     };
     InstanceNewComponent.prototype.createInstance = function (instance) {
@@ -797,7 +797,7 @@ var InstanceNewComponent = (function () {
             _this.organization = organization;
             _this.calculateFormValid();
         }, function (err) {
-            _this.notifications.generateNotification('Error', 'Error when trying to get organization', mc_notifications_service_1.MCNotificationType.Error);
+            _this.notifications.generateNotification('Error', 'Error when trying to get organization', mc_notifications_service_1.MCNotificationType.Error, err);
         });
     };
     InstanceNewComponent.prototype.loadDesign = function () {
@@ -811,7 +811,7 @@ var InstanceNewComponent = (function () {
             _this.isLoading = false;
         }, function (err) {
             _this.isLoading = false;
-            _this.notifications.generateNotification('Error', 'Error when trying to get design', mc_notifications_service_1.MCNotificationType.Error);
+            _this.notifications.generateNotification('Error', 'Error when trying to get design', mc_notifications_service_1.MCNotificationType.Error, err);
         });
     };
     InstanceNewComponent = __decorate([
@@ -1166,7 +1166,7 @@ var SpecificationDetailsComponent = (function () {
             _this.isLoadingSpecification = false;
             _this.isLoadingDesigns = false;
             _this.isLoadingInstances = false;
-            _this.notifications.generateNotification('Error', 'Error when trying to get specification', mc_notifications_service_1.MCNotificationType.Error);
+            _this.notifications.generateNotification('Error', 'Error when trying to get specification', mc_notifications_service_1.MCNotificationType.Error, err);
         });
     };
     SpecificationDetailsComponent.prototype.isAdmin = function () {
@@ -1180,7 +1180,7 @@ var SpecificationDetailsComponent = (function () {
             _this.isLoadingInstances = false;
         }, function (err) {
             _this.isLoadingInstances = false;
-            _this.notifications.generateNotification('Error', 'Error when trying to get instances', mc_notifications_service_1.MCNotificationType.Error);
+            _this.notifications.generateNotification('Error', 'Error when trying to get instances', mc_notifications_service_1.MCNotificationType.Error, err);
         });
     };
     SpecificationDetailsComponent.prototype.loadDesigns = function () {
@@ -1190,7 +1190,7 @@ var SpecificationDetailsComponent = (function () {
             _this.isLoadingDesigns = false;
         }, function (err) {
             _this.isLoadingDesigns = false;
-            _this.notifications.generateNotification('Error', 'Error when trying to get designs', mc_notifications_service_1.MCNotificationType.Error);
+            _this.notifications.generateNotification('Error', 'Error when trying to get designs', mc_notifications_service_1.MCNotificationType.Error, err);
         });
     };
     SpecificationDetailsComponent.prototype.createDesign = function () {
@@ -1256,7 +1256,7 @@ var SpecificationListComponent = (function () {
         this.orgService.getMyOrganization().subscribe(function (organization) {
             _this.organization = organization;
         }, function (err) {
-            _this.notifications.generateNotification('Error', 'Error when trying to get organization', mc_notifications_service_1.MCNotificationType.Error);
+            _this.notifications.generateNotification('Error', 'Error when trying to get organization', mc_notifications_service_1.MCNotificationType.Error, err);
         });
     };
     SpecificationListComponent.prototype.loadSpecifications = function () {
@@ -1266,7 +1266,7 @@ var SpecificationListComponent = (function () {
             _this.isLoading = false;
         }, function (err) {
             _this.isLoading = false;
-            _this.notifications.generateNotification('Error', 'Error when trying to get specifications', mc_notifications_service_1.MCNotificationType.Error);
+            _this.notifications.generateNotification('Error', 'Error when trying to get specifications', mc_notifications_service_1.MCNotificationType.Error, err);
         });
     };
     SpecificationListComponent.prototype.createSpecification = function () {
@@ -1368,7 +1368,7 @@ var SpecificationNewComponent = (function () {
         }
         catch (error) {
             this.isRegistering = false;
-            this.notifications.generateNotification('Error in XML', error.message, mc_notifications_service_1.MCNotificationType.Error);
+            this.notifications.generateNotification('Error in XML', error.message, mc_notifications_service_1.MCNotificationType.Error, error);
         }
     };
     SpecificationNewComponent.prototype.createSpecification = function (specification) {
@@ -1530,8 +1530,10 @@ var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifi
 var navigation_helper_service_1 = __webpack_require__("./src/app/shared/navigation-helper.service.ts");
 var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
 var certificates_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/certificates.service.ts");
+var file_helper_service_1 = __webpack_require__("./src/app/shared/file-helper.service.ts");
 var CertificateIssueNewComponent = (function () {
-    function CertificateIssueNewComponent(certificateService, route, navigationHelper, notificationService) {
+    function CertificateIssueNewComponent(fileHelper, certificateService, route, navigationHelper, notificationService) {
+        this.fileHelper = fileHelper;
         this.certificateService = certificateService;
         this.route = route;
         this.navigationHelper = navigationHelper;
@@ -1552,7 +1554,7 @@ var CertificateIssueNewComponent = (function () {
         this.generateLabelValues();
     };
     CertificateIssueNewComponent.prototype.zipAndDownload = function () {
-        this.notificationService.generateNotification('Not Implemented', 'Download coming soon', mc_notifications_service_1.MCNotificationType.Info);
+        this.fileHelper.downloadPemCertificate(this.pemCertificate, this.entityTitle);
     };
     CertificateIssueNewComponent.prototype.issueNew = function () {
         var _this = this;
@@ -1580,10 +1582,10 @@ var CertificateIssueNewComponent = (function () {
             template: __webpack_require__("./src/app/pages/shared/components/certificate-issue-new/certificate-issue-new.html"),
             styles: []
         }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof certificates_service_1.CertificatesService !== 'undefined' && certificates_service_1.CertificatesService) === 'function' && _a) || Object, (typeof (_b = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _b) || Object, (typeof (_c = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _c) || Object, (typeof (_d = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _d) || Object])
+        __metadata('design:paramtypes', [(typeof (_a = typeof file_helper_service_1.FileHelperService !== 'undefined' && file_helper_service_1.FileHelperService) === 'function' && _a) || Object, (typeof (_b = typeof certificates_service_1.CertificatesService !== 'undefined' && certificates_service_1.CertificatesService) === 'function' && _b) || Object, (typeof (_c = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _c) || Object, (typeof (_d = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _d) || Object, (typeof (_e = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _e) || Object])
     ], CertificateIssueNewComponent);
     return CertificateIssueNewComponent;
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e;
 }());
 exports.CertificateIssueNewComponent = CertificateIssueNewComponent;
 
@@ -1608,8 +1610,10 @@ var theme_constants_1 = __webpack_require__("./src/app/theme/theme.constants.ts"
 var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth.service.ts");
 var navigation_helper_service_1 = __webpack_require__("./src/app/shared/navigation-helper.service.ts");
 var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifications.service.ts");
+var file_helper_service_1 = __webpack_require__("./src/app/shared/file-helper.service.ts");
 var CertificatesTableComponent = (function () {
-    function CertificatesTableComponent(navigationHelper, authService, certificateHelperService, notificationService) {
+    function CertificatesTableComponent(fileHelper, navigationHelper, authService, certificateHelperService, notificationService) {
+        this.fileHelper = fileHelper;
         this.navigationHelper = navigationHelper;
         this.authService = authService;
         this.certificateHelperService = certificateHelperService;
@@ -1622,10 +1626,11 @@ var CertificatesTableComponent = (function () {
     CertificatesTableComponent.prototype.ngOnChanges = function () {
         if (this.certificates) {
             this.certificateViewModels = this.certificateHelperService.convertCertificatesToViewModels(this.certificates);
-            console.log("before ", this.certificateViewModels);
             this.sortCertificates();
-            console.log("after ", this.certificateViewModels);
         }
+    };
+    CertificatesTableComponent.prototype.hasData = function () {
+        return this.certificateViewModels && this.certificateViewModels.length > 0;
     };
     CertificatesTableComponent.prototype.sortCertificates = function () {
         // We are sorting with longest due date on top
@@ -1667,7 +1672,8 @@ var CertificatesTableComponent = (function () {
         this.notificationService.generateNotification('Not Implemented', 'Revoke coming soon', mc_notifications_service_1.MCNotificationType.Info);
     };
     CertificatesTableComponent.prototype.download = function (certificate) {
-        this.notificationService.generateNotification('Not Implemented', 'Download coming soon', mc_notifications_service_1.MCNotificationType.Info);
+        var pemCertificate = { certificate: certificate.certificate };
+        this.fileHelper.downloadPemCertificate(pemCertificate, this.certificateTitle);
     };
     CertificatesTableComponent.prototype.onWindowResize = function () {
         this.calculateTableClass();
@@ -1711,10 +1717,10 @@ var CertificatesTableComponent = (function () {
             template: __webpack_require__("./src/app/pages/shared/components/certificates-table/certificates-table.html"),
             styles: [__webpack_require__("./src/app/pages/shared/components/certificates-table/certificates-table.scss")]
         }), 
-        __metadata('design:paramtypes', [(typeof (_b = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _b) || Object, (typeof (_c = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _c) || Object, (typeof (_d = typeof certificate_helper_service_1.CertificateHelperService !== 'undefined' && certificate_helper_service_1.CertificateHelperService) === 'function' && _d) || Object, (typeof (_e = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _e) || Object])
+        __metadata('design:paramtypes', [(typeof (_b = typeof file_helper_service_1.FileHelperService !== 'undefined' && file_helper_service_1.FileHelperService) === 'function' && _b) || Object, (typeof (_c = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _c) || Object, (typeof (_d = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _d) || Object, (typeof (_e = typeof certificate_helper_service_1.CertificateHelperService !== 'undefined' && certificate_helper_service_1.CertificateHelperService) === 'function' && _e) || Object, (typeof (_f = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _f) || Object])
     ], CertificatesTableComponent);
     return CertificatesTableComponent;
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d, _e, _f;
 }());
 exports.CertificatesTableComponent = CertificatesTableComponent;
 
@@ -1724,7 +1730,7 @@ exports.CertificatesTableComponent = CertificatesTableComponent;
 /***/ "./src/app/pages/shared/components/certificates-table/certificates-table.html":
 /***/ function(module, exports) {
 
-module.exports = "<div *ngIf=\"!isLoading && certificateViewModels\">\r\n  <table class=\"table table-bordered {{tableClass}}\">\r\n    <thead>\r\n      <tr class=\"black-muted-bg\">\r\n        <th class=\"\">Certificate</th>\r\n        <th class=\"nowrap\">Valid from</th>\r\n        <th class=\"nowrap\">Valid to</th>\r\n        <th class=\"table-buttons\"></th>\r\n      </tr>\r\n    </thead>\r\n    <tbody>\r\n      <tr *ngFor=\"let certificate of certificateViewModels; let i = index\">\r\n        <td class=\"\">{{'Certificate for ' + certificateTitle | truncate:50}}</td>\r\n        <td class=\"nowrap\">{{certificate.start | date:dateFormat}}</td>\r\n        <td class=\"nowrap\">{{certificate.end | date:dateFormat}}</td>\r\n        <td *ngIf=\"!certificate.revoked\" class=\"table-buttons\">\r\n          <button type=\"button\" class=\"btn btn-primary btn-raised btn-sm\" (click)=\"download(certificate)\">Download certificate</button>\r\n          <button type=\"button\" *ngIf=\"isAdmin()\" class=\"btn btn-danger btn-raised btn-sm\" (click)=\"revoke(certificate)\">Revoke certificate</button>\r\n        </td>\r\n        <td *ngIf=\"certificate.revoked\" class=\"table-buttons\">\r\n          <span class=\"red-text\">Revoked ({{certificate.revokeReasonText}})</span>\r\n        </td>\r\n      </tr>\r\n    </tbody>\r\n  </table>\r\n</div>\r\n<sk-fading-circle [isRunning]=\"isLoading\" ></sk-fading-circle>\r\n<div class=\"no-data\" *ngIf=\"!certificateViewModels && !isLoading\">No data</div>\r\n<div *ngIf=\"!isLoading\">\r\n  <mc-create-button [title]=\"newCertificateTitle\" [onClick]=\"onIssueCertificate\"></mc-create-button>\r\n</div>\r\n"
+module.exports = "<div *ngIf=\"!isLoading && hasData()\">\r\n  <table class=\"table table-bordered {{tableClass}}\">\r\n    <thead>\r\n      <tr class=\"black-muted-bg\">\r\n        <th class=\"\">Certificate</th>\r\n        <th class=\"nowrap\">Valid from</th>\r\n        <th class=\"nowrap\">Valid to</th>\r\n        <th class=\"table-buttons\"></th>\r\n      </tr>\r\n    </thead>\r\n    <tbody>\r\n      <tr *ngFor=\"let certificate of certificateViewModels; let i = index\">\r\n        <td class=\"\">{{'Certificate for ' + certificateTitle | truncate:50}}</td>\r\n        <td class=\"nowrap\">{{certificate.start | date:dateFormat}}</td>\r\n        <td class=\"nowrap\">{{certificate.end | date:dateFormat}}</td>\r\n        <td *ngIf=\"!certificate.revoked\" class=\"table-buttons\">\r\n          <button type=\"button\" class=\"btn btn-primary btn-raised btn-sm\" (click)=\"download(certificate)\">Download certificate</button>\r\n          <button type=\"button\" *ngIf=\"isAdmin()\" class=\"btn btn-danger btn-raised btn-sm\" (click)=\"revoke(certificate)\">Revoke certificate</button>\r\n        </td>\r\n        <td *ngIf=\"certificate.revoked\" class=\"table-buttons\">\r\n          <span class=\"red-text\">Revoked ({{certificate.revokeReasonText}})</span>\r\n        </td>\r\n      </tr>\r\n    </tbody>\r\n  </table>\r\n</div>\r\n<sk-fading-circle [isRunning]=\"isLoading\" ></sk-fading-circle>\r\n<div class=\"no-data\" *ngIf=\"!hasData() && !isLoading\">No data</div>\r\n<div *ngIf=\"!isLoading\">\r\n  <mc-create-button [title]=\"newCertificateTitle\" [onClick]=\"onIssueCertificate\"></mc-create-button>\r\n</div>\r\n"
 
 /***/ },
 
