@@ -73218,7 +73218,7 @@ exports.IdentityRegistryApiModule = IdentityRegistryApiModule;
 "use strict";
 "use strict";
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var rxjs_1 = __webpack_require__("./node_modules/rxjs/Rx.js");
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
 var certificate_helper_service_1 = __webpack_require__("./src/app/pages/shared/services/certificate-helper.service.ts");
 var organizations_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/organizations.service.ts");
 var devices_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/devices.service.ts");
@@ -73240,7 +73240,7 @@ var CertificatesService = (function () {
         if (entityType == null || !entityMrn) {
             throw new Error('Internal state lost');
         }
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             switch (entityType) {
                 case certificate_helper_service_1.CertificateEntityType.Device: {
                     _this.issueNewCertificateForDevice(entityMrn, observer);
@@ -73318,7 +73318,7 @@ exports.CertificatesService = CertificatesService;
 "use strict";
 "use strict";
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var rxjs_1 = __webpack_require__("./node_modules/rxjs/Rx.js");
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
 var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth.service.ts");
 var DevicecontrollerApi_1 = __webpack_require__("./src/app/backend-api/identity-registry/autogen/api/DevicecontrollerApi.ts");
 var DevicesService = (function () {
@@ -73338,7 +73338,7 @@ var DevicesService = (function () {
     };
     DevicesService.prototype.issueNewCertificate = function (deviceMrn) {
         var _this = this;
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             var orgMrn = _this.authService.authState.orgMrn;
             _this.deviceApi.newDeviceCertUsingGET(orgMrn, deviceMrn).subscribe(function (pemCertificate) {
                 _this.chosenDevice = null; // We need to reload now we have a new certificate
@@ -73366,7 +73366,7 @@ exports.DevicesService = DevicesService;
 "use strict";
 "use strict";
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var rxjs_1 = __webpack_require__("./node_modules/rxjs/Rx.js");
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
 var ServicecontrollerApi_1 = __webpack_require__("./src/app/backend-api/identity-registry/autogen/api/ServicecontrollerApi.ts");
 var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth.service.ts");
 var IdServicesService = (function () {
@@ -73378,7 +73378,7 @@ var IdServicesService = (function () {
     };
     IdServicesService.prototype.issueNewCertificate = function (serviceMrn) {
         var _this = this;
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             var orgMrn = _this.authService.authState.orgMrn;
             _this.servicesApi.newServiceCertUsingGET(orgMrn, serviceMrn).subscribe(function (pemCertificate) {
                 _this.chosenService = null; // We need to reload now we have a new certificate
@@ -73497,7 +73497,7 @@ exports.RolesService = RolesService;
 "use strict";
 "use strict";
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var rxjs_1 = __webpack_require__("./node_modules/rxjs/Rx.js");
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
 var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth.service.ts");
 var UsercontrollerApi_1 = __webpack_require__("./src/app/backend-api/identity-registry/autogen/api/UsercontrollerApi.ts");
 var UsersService = (function () {
@@ -73509,7 +73509,7 @@ var UsersService = (function () {
     };
     UsersService.prototype.issueNewCertificate = function (userMrn) {
         var _this = this;
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             var orgMrn = _this.authService.authState.orgMrn;
             _this.userApi.newUserCertUsingGET(orgMrn, userMrn).subscribe(function (pemCertificate) {
                 _this.chosenUser = null; // We need to reload now we have a new certificate
@@ -73537,7 +73537,7 @@ exports.UsersService = UsersService;
 "use strict";
 "use strict";
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var rxjs_1 = __webpack_require__("./node_modules/rxjs/Rx.js");
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
 var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth.service.ts");
 var VesselcontrollerApi_1 = __webpack_require__("./src/app/backend-api/identity-registry/autogen/api/VesselcontrollerApi.ts");
 var VesselsService = (function () {
@@ -73552,9 +73552,9 @@ var VesselsService = (function () {
     VesselsService.prototype.getVessel = function (vesselMrn) {
         var _this = this;
         if (this.chosenVessel && this.chosenVessel.mrn === vesselMrn) {
-            return rxjs_1.Observable.of(this.chosenVessel);
+            return Observable_1.Observable.of(this.chosenVessel);
         }
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             var orgMrn = _this.authService.authState.orgMrn;
             _this.vesselApi.getVesselUsingGET(orgMrn, vesselMrn).subscribe(function (vessel) {
                 _this.chosenVessel = vessel;
@@ -73566,7 +73566,7 @@ var VesselsService = (function () {
     };
     VesselsService.prototype.createVessel = function (vessel) {
         var _this = this;
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             var orgMrn = _this.authService.authState.orgMrn;
             _this.vesselApi.createVesselUsingPOST(orgMrn, vessel).subscribe(function (vessel) {
                 _this.chosenVessel = vessel;
@@ -73578,7 +73578,7 @@ var VesselsService = (function () {
     };
     VesselsService.prototype.issueNewCertificate = function (vesselMrn) {
         var _this = this;
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             var orgMrn = _this.authService.authState.orgMrn;
             _this.vesselApi.newVesselCertUsingGET(orgMrn, vesselMrn).subscribe(function (pemCertificate) {
                 _this.chosenVessel = null; // We need to reload now we have a new certificate
@@ -75380,7 +75380,7 @@ exports.ServiceRegistryModule = ServiceRegistryModule;
 "use strict";
 "use strict";
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var rxjs_1 = __webpack_require__("./node_modules/rxjs/Rx.js");
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
 var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth.service.ts");
 var TechnicaldesignresourceApi_1 = __webpack_require__("./src/app/backend-api/service-registry/autogen/api/TechnicaldesignresourceApi.ts");
 var XmlresourceApi_1 = __webpack_require__("./src/app/backend-api/service-registry/autogen/api/XmlresourceApi.ts");
@@ -75405,7 +75405,7 @@ var DesignsService = (function () {
         // TODO: add comments
         design.comment = '';
         design.designAsXml.comment = '';
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             // TODO fthis is just stupid. For now you need to create the xml and doc first and then the design
             _this.xmlApi.createXmlUsingPOST(design.designAsXml).subscribe(function (xml) {
                 design.designAsXml = xml;
@@ -75441,7 +75441,7 @@ var DesignsService = (function () {
         var _this = this;
         var orgMrn = this.authService.authState.orgMrn;
         // TODO I only create a new observable because I need to manipulate the response to get the description. If that is not needed anymore, i can just do a simple return of the call to the api, without subscribe
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             // TODO for now just get all designs. Needs to be for this org only though
             _this.designsApi.getAllDesignsUsingGET().subscribe(function (designs) {
                 // TODO delete this again, when description is part of the json
@@ -75458,7 +75458,7 @@ var DesignsService = (function () {
     // TODO for now there can only be 1 design for an instance, but may change
     DesignsService.prototype.getDesignsForInstance = function (instance) {
         var _this = this;
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             var designId = _this.xmlParser.getVauleFromEmbeddedField('implementsServiceDesign', 'id', instance.instanceAsXml);
             var version = _this.xmlParser.getVauleFromEmbeddedField('implementsServiceDesign', 'version', instance.instanceAsXml);
             _this.designsApi.getDesignUsingGET(designId, version).subscribe(function (design) {
@@ -75476,7 +75476,7 @@ var DesignsService = (function () {
     DesignsService.prototype.getDesignsForSpecification = function (specificationId, version) {
         var _this = this;
         // TODO I only create a new observable because I need to manipulate the response to get the description. If that is not needed anymore, i can just do a simple return of the call to the api, without subscribe
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             // TODO for now just get all designs. Needs to be for this specification only though
             _this.designsApi.getAllDesignsUsingGET().subscribe(function (designs) {
                 var designsFiltered = [];
@@ -75508,13 +75508,13 @@ var DesignsService = (function () {
             }
         }
         if (found) {
-            return rxjs_1.Observable.of(this.chosenDesign);
+            return Observable_1.Observable.of(this.chosenDesign);
         }
         if (!version) {
             version = 'latest';
         }
         // We create a new observable because we need to save the response for simple caching
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             _this.designsApi.getDesignUsingGET(designId, version).subscribe(function (design) {
                 // TODO delete this again, when description is part of the json
                 design.description = _this.getDescription(design);
@@ -75559,7 +75559,7 @@ exports.DesignsService = DesignsService;
 "use strict";
 "use strict";
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var rxjs_1 = __webpack_require__("./node_modules/rxjs/Rx.js");
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
 var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth.service.ts");
 var ServiceinstanceresourceApi_1 = __webpack_require__("./src/app/backend-api/service-registry/autogen/api/ServiceinstanceresourceApi.ts");
 var XmlresourceApi_1 = __webpack_require__("./src/app/backend-api/service-registry/autogen/api/XmlresourceApi.ts");
@@ -75584,7 +75584,7 @@ var InstancesService = (function () {
         // TODO: add comments
         instance.comment = '';
         instance.instanceAsXml.comment = '';
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             // TODO fthis is just stupid. For now you need to create the xml and doc first and then the instance
             _this.xmlApi.createXmlUsingPOST(instance.instanceAsXml).subscribe(function (xml) {
                 instance.instanceAsXml = xml;
@@ -75620,7 +75620,7 @@ var InstancesService = (function () {
         var _this = this;
         var orgMrn = this.authService.authState.orgMrn;
         // TODO I only create a new observable because I need to manipulate the response to get the description. If that is not needed anymore, i can just do a simple return of the call to the api, without subscribe
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             // TODO for now just get all instances. Needs to be for this org only though
             _this.instancesApi.getAllInstancesUsingGET().subscribe(function (instances) {
                 // TODO delete this again, when description is part of the json
@@ -75636,7 +75636,7 @@ var InstancesService = (function () {
     };
     InstancesService.prototype.getInstancesForDesign = function (designId, version) {
         var _this = this;
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             // TODO for now just get all instances and filter myself until the api can do it
             _this.instancesApi.getAllInstancesUsingGET().subscribe(function (instances) {
                 var instancesFiltered = [];
@@ -75657,7 +75657,7 @@ var InstancesService = (function () {
     InstancesService.prototype.getInstancesForSpecification = function (specificationId, version) {
         var _this = this;
         // TODO I only create a new observable because I need to manipulate the response to get the description. If that is not needed anymore, i can just do a simple return of the call to the api, without subscribe
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             // TODO for now just get all instances. Needs to be for this specification only though
             _this.instancesApi.getAllInstancesUsingGET().subscribe(function (instances) {
                 // TODO delete this again, when description is part of the json
@@ -75685,13 +75685,13 @@ var InstancesService = (function () {
             }
         }
         if (found) {
-            return rxjs_1.Observable.of(this.chosenInstance);
+            return Observable_1.Observable.of(this.chosenInstance);
         }
         if (!version) {
             version = 'latest';
         }
         // We create a new observable because we need to save the response for simple caching
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             _this.instancesApi.getInstanceUsingGET(instanceId, version).subscribe(function (instance) {
                 // TODO delete this again, when description is part of the json
                 instance.description = _this.getDescription(instance);
@@ -75736,7 +75736,7 @@ exports.InstancesService = InstancesService;
 "use strict";
 "use strict";
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var rxjs_1 = __webpack_require__("./node_modules/rxjs/Rx.js");
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
 var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth.service.ts");
 var ServicespecificationresourceApi_1 = __webpack_require__("./src/app/backend-api/service-registry/autogen/api/ServicespecificationresourceApi.ts");
 var XmlresourceApi_1 = __webpack_require__("./src/app/backend-api/service-registry/autogen/api/XmlresourceApi.ts");
@@ -75761,7 +75761,7 @@ var SpecificationsService = (function () {
         // TODO: add comments
         specification.comment = '';
         specification.specAsXml.comment = '';
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             // TODO fthis is just stupid. For now you need to create the xml and doc first and then the specification
             _this.xmlApi.createXmlUsingPOST(specification.specAsXml).subscribe(function (xml) {
                 specification.specAsXml = xml;
@@ -75795,7 +75795,7 @@ var SpecificationsService = (function () {
     };
     SpecificationsService.prototype.getSpecificationsForDesign = function (design) {
         var _this = this;
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             // TODO for now just get one specification. In theory there could be more though
             var specificationId = _this.xmlParser.getVauleFromEmbeddedField('designsServiceSpecifications', 'id', design.designAsXml);
             var version = _this.xmlParser.getVauleFromEmbeddedField('designsServiceSpecifications', 'version', design.designAsXml);
@@ -75815,7 +75815,7 @@ var SpecificationsService = (function () {
         var _this = this;
         var orgMrn = this.authService.authState.orgMrn;
         // TODO I only create a new observable because I need to manipulate the response to get the description. If that is not needed anymore, i can just do a simple return of the call to the api, without subscribe
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             // TODO for now just get all specifications. Needs to be for this org only though.
             // TODO as soon as the data in service registry organizationId is updated, I need to filter out all data that not belongs to this org, because the portal is for now only for the organizations own data. other orgs data comes in face 2
             _this.specificationsApi.getAllSpecificationsUsingGET().subscribe(function (specifications) {
@@ -75844,13 +75844,13 @@ var SpecificationsService = (function () {
             }
         }
         if (found) {
-            return rxjs_1.Observable.of(this.chosenSpecification);
+            return Observable_1.Observable.of(this.chosenSpecification);
         }
         if (!version) {
             version = 'latest';
         }
         // We create a new observable because we need to save the response for simple caching
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             _this.specificationsApi.getSpecificationUsingGET(specificationId, version).subscribe(function (specification) {
                 // TODO delete this again, when description is part of the json
                 specification.description = _this.getDescription(specification);
@@ -75896,7 +75896,7 @@ exports.SpecificationsService = SpecificationsService;
 "use strict";
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
 var http_1 = __webpack_require__("./node_modules/@angular/http/index.js");
-var rxjs_1 = __webpack_require__("./node_modules/rxjs/Rx.js");
+var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
 var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth.service.ts");
 var McHttpService = (function (_super) {
     __extends(McHttpService, _super);
@@ -75912,7 +75912,7 @@ var McHttpService = (function (_super) {
     };
     // Setting the http headers and if needed refreshes the access token
     McHttpService.prototype.prepareService = function (options) {
-        return rxjs_1.Observable.create(function (observer) {
+        return Observable_1.Observable.create(function (observer) {
             options.headers.set('Content-Type', 'application/json; charset=utf-8');
             if (McHttpService.shouldAuthenticate) {
                 auth_service_1.AuthService.getToken()
@@ -75936,10 +75936,10 @@ var McHttpService = (function (_super) {
         return observable.catch(function (err, source) {
             if (err.status == 401) {
                 auth_service_1.AuthService.handle401();
-                return rxjs_1.Observable.empty();
+                return Observable_1.Observable.empty();
             }
             else {
-                return rxjs_1.Observable.throw(err);
+                return Observable_1.Observable.throw(err);
             }
         });
     };
@@ -76753,7 +76753,7 @@ exports.MC_ERROR_HANDLER_PROVIDERS = [
 "use strict";
 "use strict";
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var rxjs_1 = __webpack_require__("./node_modules/rxjs/Rx.js");
+var ReplaySubject_1 = __webpack_require__("./node_modules/rxjs/ReplaySubject.js");
 var error_logging_service_1 = __webpack_require__("./src/app/shared/error-logging.service.ts");
 (function (MCNotificationType) {
     MCNotificationType[MCNotificationType["Success"] = 0] = "Success";
@@ -76765,7 +76765,7 @@ var MCNotificationType = exports.MCNotificationType;
 var MCNotificationsService = (function () {
     function MCNotificationsService(errorLogger) {
         this.errorLogger = errorLogger;
-        this.notificationObserver = new rxjs_1.ReplaySubject();
+        this.notificationObserver = new ReplaySubject_1.ReplaySubject();
         this.notifications = this.notificationObserver.asObservable();
     }
     MCNotificationsService.prototype.generateNotification = function (title, message, type, originalError) {
