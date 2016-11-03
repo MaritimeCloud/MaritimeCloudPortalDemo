@@ -3,9 +3,6 @@
     "js": "main.bundle.js",
     "css": "initial.css"
   },
-  "vendor": {
-    "js": "vendor.bundle.js"
-  },
   "polyfills": {
     "js": "polyfills.bundle.js"
   }
