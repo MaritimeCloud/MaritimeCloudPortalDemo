@@ -224,15 +224,40 @@ var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
 var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
 var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifications.service.ts");
 var organizations_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/organizations.service.ts");
+var forms_1 = __webpack_require__("./node_modules/@angular/forms/index.js");
+var mrn_helper_service_1 = __webpack_require__("./src/app/shared/mrn-helper.service.ts");
+var mc_utils_1 = __webpack_require__("./src/app/shared/mc-utils.ts");
+var app_constants_1 = __webpack_require__("./src/app/shared/app.constants.ts");
+var users_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/users.service.ts");
+var roles_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/roles.service.ts");
+var Role_1 = __webpack_require__("./src/app/backend-api/identity-registry/autogen/model/Role.ts");
+var RoleNameEnum = Role_1.Role.RoleNameEnum;
 var ApproveDetailsComponent = (function () {
-    function ApproveDetailsComponent(route, notifications, orgService) {
+    function ApproveDetailsComponent(route, router, notifications, userService, roleService, orgService, formBuilder, mrnHelper) {
         this.route = route;
+        this.router = router;
         this.notifications = notifications;
+        this.userService = userService;
+        this.roleService = roleService;
         this.orgService = orgService;
+        this.formBuilder = formBuilder;
+        this.mrnHelper = mrnHelper;
+        // McForm params
+        this.isApproving = false;
+        this.approveTitle = "Approve";
+        this.mrnPattern = mrnHelper.mrnPattern();
+        this.mrnPatternError = mrnHelper.mrnPatternError();
     }
     ApproveDetailsComponent.prototype.ngOnInit = function () {
         this.title = 'Approve organization';
         this.loadOrganization();
+    };
+    ApproveDetailsComponent.prototype.approve = function () {
+        this.isApproving = true;
+        this.approveOrganization();
+    };
+    ApproveDetailsComponent.prototype.cancel = function () {
+        this.router.navigate(['../'], { relativeTo: this.route });
     };
     ApproveDetailsComponent.prototype.loadOrganization = function () {
         var _this = this;
@@ -240,23 +265,104 @@ var ApproveDetailsComponent = (function () {
         var orgMrn = this.route.snapshot.params['id'];
         this.orgService.getUnapprovedOrganization(orgMrn).subscribe(function (organization) {
             _this.organization = organization;
+            _this.userMrn = _this.mrnHelper.mrnMaskForUserOfOrg(organization.mrn);
+            _this.generateForm();
             _this.isLoading = false;
         }, function (err) {
             _this.isLoading = false;
             _this.notifications.generateNotification('Error', 'Error when trying to get the organization', mc_notifications_service_1.MCNotificationType.Error, err);
+            _this.router.navigate(['../'], { relativeTo: _this.route });
         });
+    };
+    ApproveDetailsComponent.prototype.approveOrganization = function () {
+        var _this = this;
+        this.orgService.approveOrganization(this.organization.mrn).subscribe(function (organization) {
+            _this.createAdminRole();
+        }, function (err) {
+            _this.isApproving = false;
+            _this.notifications.generateNotification('Error', 'Error when trying to approve the organization', mc_notifications_service_1.MCNotificationType.Error, err);
+        });
+    };
+    ApproveDetailsComponent.prototype.createAdminRole = function () {
+        var _this = this;
+        var role = {};
+        role.permission = app_constants_1.MC_ADMIN;
+        role.roleName = RoleNameEnum.ROLE_ORG_ADMIN;
+        this.roleService.createRole(this.organization.mrn, role).subscribe(function (role) {
+            _this.createUser();
+        }, function (err) {
+            _this.isApproving = false;
+            _this.notifications.generateNotification('User not created', 'The organization was approved, but user creation failed. You can go to organizations and try to create the user again later.', mc_notifications_service_1.MCNotificationType.Alert, err);
+            _this.router.navigate(['../'], { relativeTo: _this.route });
+        });
+    };
+    ApproveDetailsComponent.prototype.createUser = function () {
+        var _this = this;
+        var user = {};
+        user.mrn = this.userMrn;
+        user.firstName = this.userForm.value.firstName;
+        user.lastName = this.userForm.value.lastName;
+        user.permissions = app_constants_1.MC_ADMIN;
+        user.email = this.userForm.value.emails.email;
+        this.userService.createUser(this.organization.mrn, user).subscribe(function (user) {
+            _this.isApproving = false;
+            _this.notifications.generateNotification('Organization Approved', 'The organization was approved and now has access to the Maritime Cloud', mc_notifications_service_1.MCNotificationType.Success);
+            _this.router.navigate(['../'], { relativeTo: _this.route });
+        }, function (err) {
+            _this.isApproving = false;
+            _this.notifications.generateNotification('User not created', 'The organization was approved, but user creation failed. You can go to organizations and try to create the user again later.', mc_notifications_service_1.MCNotificationType.Alert, err);
+            _this.router.navigate(['../'], { relativeTo: _this.route });
+        });
+    };
+    ApproveDetailsComponent.prototype.generateMRN = function (idValue) {
+        var mrn = (idValue ? idValue : '');
+        var valueNoSpaces = mrn.split(' ').join('').toLowerCase();
+        this.userMrn = this.mrnHelper.mrnMaskForUserOfOrg(this.organization.mrn) + valueNoSpaces;
+        this.userForm.patchValue({ mrn: this.userMrn });
+    };
+    /*
+     {
+     "mrn":"urn:mrn:mcl:user:dma:dma-employee",
+     "firstName":"Dma",
+     "lastName": "Employee",
+     "email" : "dma-employee@dma.dk",
+     "permissions": "MCADMIN"
+     }
+     */
+    ApproveDetailsComponent.prototype.generateForm = function () {
+        var _this = this;
+        this.userForm = this.formBuilder.group({});
+        this.formControlModels = [];
+        var formControlModel = { formGroup: this.userForm, elementId: 'mrn', inputType: 'text', labelName: 'MRN', placeholder: '', isDisabled: true };
+        var formControl = new forms_1.FormControl(this.userMrn, formControlModel.validator);
+        this.userForm.addControl(formControlModel.elementId, formControl);
+        this.formControlModels.push(formControlModel);
+        formControlModel = { formGroup: this.userForm, elementId: 'userId', inputType: 'text', labelName: 'User ID', placeholder: 'Enter user ID to generate MRN', validator: forms_1.Validators.required, pattern: this.mrnPattern, errorText: this.mrnPatternError };
+        formControl = new forms_1.FormControl('', formControlModel.validator);
+        formControl.valueChanges.subscribe(function (param) { return _this.generateMRN(param); });
+        this.userForm.addControl(formControlModel.elementId, formControl);
+        this.formControlModels.push(formControlModel);
+        formControlModel = { formGroup: this.userForm, elementId: 'firstName', inputType: 'text', labelName: 'First Name', placeholder: 'First Name is required', validator: forms_1.Validators.required };
+        formControl = new forms_1.FormControl('', formControlModel.validator);
+        this.userForm.addControl(formControlModel.elementId, formControl);
+        this.formControlModels.push(formControlModel);
+        formControlModel = { formGroup: this.userForm, elementId: 'lastName', inputType: 'text', labelName: 'Last Name', placeholder: 'Last Name is required', validator: forms_1.Validators.required };
+        formControl = new forms_1.FormControl('', formControlModel.validator);
+        this.userForm.addControl(formControlModel.elementId, formControl);
+        this.formControlModels.push(formControlModel);
+        mc_utils_1.McUtils.generateEmailConfirmGroup(this.formBuilder, this.userForm, this.formControlModels);
     };
     ApproveDetailsComponent = __decorate([
         core_1.Component({
             selector: 'approve-details',
             encapsulation: core_1.ViewEncapsulation.None,
             template: __webpack_require__("./src/app/pages/administration/approve-organizations/components/approve-details/approve-details.html"),
-            styles: []
+            styles: [__webpack_require__("./src/app/pages/administration/approve-organizations/components/approve-details/approve-details.scss")]
         }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _a) || Object, (typeof (_b = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _b) || Object, (typeof (_c = typeof organizations_service_1.OrganizationsService !== 'undefined' && organizations_service_1.OrganizationsService) === 'function' && _c) || Object])
+        __metadata('design:paramtypes', [(typeof (_a = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _a) || Object, (typeof (_b = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _b) || Object, (typeof (_c = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _c) || Object, (typeof (_d = typeof users_service_1.UsersService !== 'undefined' && users_service_1.UsersService) === 'function' && _d) || Object, (typeof (_e = typeof roles_service_1.RolesService !== 'undefined' && roles_service_1.RolesService) === 'function' && _e) || Object, (typeof (_f = typeof organizations_service_1.OrganizationsService !== 'undefined' && organizations_service_1.OrganizationsService) === 'function' && _f) || Object, (typeof (_g = typeof forms_1.FormBuilder !== 'undefined' && forms_1.FormBuilder) === 'function' && _g) || Object, (typeof (_h = typeof mrn_helper_service_1.MrnHelperService !== 'undefined' && mrn_helper_service_1.MrnHelperService) === 'function' && _h) || Object])
     ], ApproveDetailsComponent);
     return ApproveDetailsComponent;
-    var _a, _b, _c;
+    var _a, _b, _c, _d, _e, _f, _g, _h;
 }());
 exports.ApproveDetailsComponent = ApproveDetailsComponent;
 
@@ -266,7 +372,14 @@ exports.ApproveDetailsComponent = ApproveDetailsComponent;
 /***/ "./src/app/pages/administration/approve-organizations/components/approve-details/approve-details.html":
 /***/ function(module, exports) {
 
-module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{title}}\" baCardClass=\"with-scroll table-panel\">\r\n      <organization-details-table [isLoading]=\"isLoading\" [organization]=\"organization\"></organization-details-table>\r\n      Approve button coming soon\r\n    </ba-card>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{title}}\" baCardClass=\"with-scroll table-panel\">\r\n      <organization-details-table [isLoading]=\"isLoading\" [organization]=\"organization\"></organization-details-table>\r\n\r\n      <div class=\"separator\"></div>\r\n\r\n      <div *ngIf=\"!isLoading\" class=\"important-notice\">To approve <span>{{organization.name}}</span>, you need to fill out the form below with a user, that will get administrative access to the organization.\r\n      </div>\r\n\r\n      <div class=\"separator\"></div>\r\n\r\n      <mc-form [formGroup]=\"userForm\" [formControlModels]=\"formControlModels\" [isLoading]=\"isLoading\" [isRegistering]=\"isApproving\" [registerTitle]=\"approveTitle\" (onCancel)=\"cancel()\" (onRegister)=\"approve()\"></mc-form>\r\n    </ba-card>\r\n\r\n\r\n  </div>\r\n</div>\r\n"
+
+/***/ },
+
+/***/ "./src/app/pages/administration/approve-organizations/components/approve-details/approve-details.scss":
+/***/ function(module, exports) {
+
+module.exports = ".important-notice {\n  max-width: 440px;\n  line-height: 18px;\n  font-size: 18px;\n  margin-bottom: 15px; }\n  .important-notice > span {\n    font-style: italic;\n    font-weight: bold; }\n"
 
 /***/ },
 
@@ -289,7 +402,7 @@ var ApproveListComponent = (function () {
     }
     ApproveListComponent.prototype.ngOnInit = function () {
         this.isLoading = true;
-        this.onGotoDetails = this.gotoInstance.bind(this);
+        this.onGotoDetails = this.gotoDetails.bind(this);
         this.loadOrganizations();
     };
     ApproveListComponent.prototype.loadOrganizations = function () {
@@ -303,8 +416,8 @@ var ApproveListComponent = (function () {
             _this.notifications.generateNotification('Error', 'Error when trying to get organizations', mc_notifications_service_1.MCNotificationType.Error, err);
         });
     };
-    ApproveListComponent.prototype.gotoInstance = function (index) {
-        this.router.navigate([this.organizations[index].mrn], { relativeTo: this.route });
+    ApproveListComponent.prototype.gotoDetails = function (index) {
+        this.approve(this.organizations[index]);
     };
     ApproveListComponent.prototype.generateHeadersAndRows = function () {
         var _this = this;
@@ -345,7 +458,7 @@ var ApproveListComponent = (function () {
         this.tableRows = tableRows;
     };
     ApproveListComponent.prototype.approve = function (organization) {
-        console.log("Approve: ", organization);
+        this.router.navigate([organization.mrn], { relativeTo: this.route });
     };
     ApproveListComponent.prototype.delete = function (organization) {
         this.modalDescription = 'Do you want to delete ' + organization.name;
@@ -355,7 +468,7 @@ var ApproveListComponent = (function () {
     ApproveListComponent.prototype.cancelModal = function () {
         this.showModal = false;
     };
-    ApproveListComponent.prototype.deleteForSure = function (organization) {
+    ApproveListComponent.prototype.deleteForSure = function () {
         var _this = this;
         this.isLoading = true;
         this.showModal = false;
@@ -1009,6 +1122,7 @@ var OrganizationViewModelService = (function () {
         if (organization) {
             labelValues = [];
             labelValues.push({ label: 'MRN', valueHtml: organization.mrn });
+            labelValues.push({ label: 'Name', valueHtml: organization.name });
             labelValues.push({ label: 'Address', valueHtml: organization.address });
             labelValues.push({ label: 'Country', valueHtml: organization.country });
             if (organization.email) {
@@ -1084,6 +1198,16 @@ var SharedModule = (function () {
     return SharedModule;
 }());
 exports.SharedModule = SharedModule;
+
+
+/***/ },
+
+/***/ "./src/app/shared/app.constants.ts":
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+exports.MC_ADMIN = 'MCADMIN';
 
 
 /***/ }

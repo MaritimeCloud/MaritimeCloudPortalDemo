@@ -2091,6 +2091,7 @@ var OrganizationViewModelService = (function () {
         if (organization) {
             labelValues = [];
             labelValues.push({ label: 'MRN', valueHtml: organization.mrn });
+            labelValues.push({ label: 'Name', valueHtml: organization.name });
             labelValues.push({ label: 'Address', valueHtml: organization.address });
             labelValues.push({ label: 'Country', valueHtml: organization.country });
             if (organization.email) {
