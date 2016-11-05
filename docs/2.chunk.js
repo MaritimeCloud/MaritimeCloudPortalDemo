@@ -32,6 +32,363 @@ webpackJsonpac__name_([2],{
 
 /***/ },
 
+/***/ "./src/app/pages/administration/administration.component.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var AdministrationComponent = (function () {
+    function AdministrationComponent() {
+    }
+    AdministrationComponent = __decorate([
+        core_1.Component({
+            selector: 'administration',
+            template: "<router-outlet></router-outlet>"
+        }), 
+        __metadata('design:paramtypes', [])
+    ], AdministrationComponent);
+    return AdministrationComponent;
+}());
+exports.AdministrationComponent = AdministrationComponent;
+
+
+/***/ },
+
+/***/ "./src/app/pages/administration/administration.module.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var common_1 = __webpack_require__("./node_modules/@angular/common/index.js");
+var administration_routing_1 = __webpack_require__("./src/app/pages/administration/administration.routing.ts");
+var administration_component_1 = __webpack_require__("./src/app/pages/administration/administration.component.ts");
+var nga_module_1 = __webpack_require__("./src/app/theme/nga.module.ts");
+var approve_organization_module_1 = __webpack_require__("./src/app/pages/administration/approve-organizations/approve-organization.module.ts");
+var AdministrationModule = (function () {
+    function AdministrationModule() {
+    }
+    AdministrationModule = __decorate([
+        core_1.NgModule({
+            imports: [
+                common_1.CommonModule,
+                nga_module_1.NgaModule,
+                approve_organization_module_1.default,
+                administration_routing_1.routing
+            ],
+            declarations: [
+                administration_component_1.AdministrationComponent
+            ]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], AdministrationModule);
+    return AdministrationModule;
+}());
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = AdministrationModule;
+
+
+/***/ },
+
+/***/ "./src/app/pages/administration/administration.routing.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
+var administration_component_1 = __webpack_require__("./src/app/pages/administration/administration.component.ts");
+var approve_organization_component_1 = __webpack_require__("./src/app/pages/administration/approve-organizations/approve-organization.component.ts");
+var site_admin_guard_service_1 = __webpack_require__("./src/app/authentication/services/site-admin-guard.service.ts");
+// noinspection TypeScriptValidateTypes
+var routes = [
+    {
+        path: '',
+        component: administration_component_1.AdministrationComponent,
+        canActivate: [site_admin_guard_service_1.SiteAdminAuthGuard],
+        children: [
+            { path: 'approve', component: approve_organization_component_1.ApproveOrganizationComponent }
+        ]
+    }
+];
+exports.routing = router_1.RouterModule.forChild(routes);
+
+
+/***/ },
+
+/***/ "./src/app/pages/administration/approve-organizations/approve-organization.component.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var ApproveOrganizationComponent = (function () {
+    function ApproveOrganizationComponent() {
+    }
+    ApproveOrganizationComponent = __decorate([
+        core_1.Component({
+            selector: 'approve-organization',
+            template: "<router-outlet></router-outlet>"
+        }), 
+        __metadata('design:paramtypes', [])
+    ], ApproveOrganizationComponent);
+    return ApproveOrganizationComponent;
+}());
+exports.ApproveOrganizationComponent = ApproveOrganizationComponent;
+
+
+/***/ },
+
+/***/ "./src/app/pages/administration/approve-organizations/approve-organization.module.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var common_1 = __webpack_require__("./node_modules/@angular/common/index.js");
+var approve_organization_routing_1 = __webpack_require__("./src/app/pages/administration/approve-organizations/approve-organization.routing.ts");
+var approve_organization_component_1 = __webpack_require__("./src/app/pages/administration/approve-organizations/approve-organization.component.ts");
+var forms_1 = __webpack_require__("./node_modules/@angular/forms/index.js");
+var nga_module_1 = __webpack_require__("./src/app/theme/nga.module.ts");
+var shared_module_1 = __webpack_require__("./src/app/pages/shared/shared.module.ts");
+var approve_list_component_1 = __webpack_require__("./src/app/pages/administration/approve-organizations/components/approve-list/approve-list.component.ts");
+var approve_details_component_1 = __webpack_require__("./src/app/pages/administration/approve-organizations/components/approve-details/approve-details.component.ts");
+var ApproveOrganizationModule = (function () {
+    function ApproveOrganizationModule() {
+    }
+    ApproveOrganizationModule = __decorate([
+        core_1.NgModule({
+            imports: [
+                common_1.CommonModule,
+                nga_module_1.NgaModule,
+                forms_1.FormsModule,
+                forms_1.ReactiveFormsModule,
+                shared_module_1.SharedModule,
+                approve_organization_routing_1.routing
+            ],
+            declarations: [
+                approve_organization_component_1.ApproveOrganizationComponent,
+                approve_list_component_1.ApproveListComponent,
+                approve_details_component_1.ApproveDetailsComponent
+            ]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], ApproveOrganizationModule);
+    return ApproveOrganizationModule;
+}());
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = ApproveOrganizationModule;
+
+
+/***/ },
+
+/***/ "./src/app/pages/administration/approve-organizations/approve-organization.routing.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
+var approve_organization_component_1 = __webpack_require__("./src/app/pages/administration/approve-organizations/approve-organization.component.ts");
+var approve_list_component_1 = __webpack_require__("./src/app/pages/administration/approve-organizations/components/approve-list/approve-list.component.ts");
+var approve_details_component_1 = __webpack_require__("./src/app/pages/administration/approve-organizations/components/approve-details/approve-details.component.ts");
+// noinspection TypeScriptValidateTypes
+var routes = [
+    {
+        path: 'approve',
+        component: approve_organization_component_1.ApproveOrganizationComponent,
+        data: { breadcrumb: 'Approve organizations' },
+        children: [
+            {
+                path: '',
+                component: approve_list_component_1.ApproveListComponent
+            },
+            {
+                path: ':id',
+                component: approve_details_component_1.ApproveDetailsComponent,
+                data: { breadcrumb: 'Details' }
+            }
+        ]
+    }
+];
+exports.routing = router_1.RouterModule.forChild(routes);
+
+
+/***/ },
+
+/***/ "./src/app/pages/administration/approve-organizations/components/approve-details/approve-details.component.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
+var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifications.service.ts");
+var organizations_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/organizations.service.ts");
+var ApproveDetailsComponent = (function () {
+    function ApproveDetailsComponent(route, notifications, orgService) {
+        this.route = route;
+        this.notifications = notifications;
+        this.orgService = orgService;
+    }
+    ApproveDetailsComponent.prototype.ngOnInit = function () {
+        this.title = 'Approve organization';
+        this.loadOrganization();
+    };
+    ApproveDetailsComponent.prototype.loadOrganization = function () {
+        var _this = this;
+        this.isLoading = true;
+        var orgMrn = this.route.snapshot.params['id'];
+        this.orgService.getUnapprovedOrganization(orgMrn).subscribe(function (organization) {
+            _this.organization = organization;
+            _this.isLoading = false;
+        }, function (err) {
+            _this.isLoading = false;
+            _this.notifications.generateNotification('Error', 'Error when trying to get the organization', mc_notifications_service_1.MCNotificationType.Error, err);
+        });
+    };
+    ApproveDetailsComponent = __decorate([
+        core_1.Component({
+            selector: 'approve-details',
+            encapsulation: core_1.ViewEncapsulation.None,
+            template: __webpack_require__("./src/app/pages/administration/approve-organizations/components/approve-details/approve-details.html"),
+            styles: []
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _a) || Object, (typeof (_b = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _b) || Object, (typeof (_c = typeof organizations_service_1.OrganizationsService !== 'undefined' && organizations_service_1.OrganizationsService) === 'function' && _c) || Object])
+    ], ApproveDetailsComponent);
+    return ApproveDetailsComponent;
+    var _a, _b, _c;
+}());
+exports.ApproveDetailsComponent = ApproveDetailsComponent;
+
+
+/***/ },
+
+/***/ "./src/app/pages/administration/approve-organizations/components/approve-details/approve-details.html":
+/***/ function(module, exports) {
+
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{title}}\" baCardClass=\"with-scroll table-panel\">\r\n      <organization-details-table [isLoading]=\"isLoading\" [organization]=\"organization\"></organization-details-table>\r\n      Approve button coming soon\r\n    </ba-card>\r\n  </div>\r\n</div>\r\n"
+
+/***/ },
+
+/***/ "./src/app/pages/administration/approve-organizations/components/approve-list/approve-list.component.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
+var organizations_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/organizations.service.ts");
+var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifications.service.ts");
+var ApproveListComponent = (function () {
+    function ApproveListComponent(router, route, orgService, notifications) {
+        this.router = router;
+        this.route = route;
+        this.orgService = orgService;
+        this.notifications = notifications;
+        this.showModal = false;
+    }
+    ApproveListComponent.prototype.ngOnInit = function () {
+        this.isLoading = true;
+        this.onGotoDetails = this.gotoInstance.bind(this);
+        this.loadOrganizations();
+    };
+    ApproveListComponent.prototype.loadOrganizations = function () {
+        var _this = this;
+        this.orgService.getUnapprovedOrganizations().subscribe(function (organizations) {
+            _this.organizations = organizations;
+            _this.generateHeadersAndRows();
+            _this.isLoading = false;
+        }, function (err) {
+            _this.isLoading = false;
+            _this.notifications.generateNotification('Error', 'Error when trying to get organizations', mc_notifications_service_1.MCNotificationType.Error, err);
+        });
+    };
+    ApproveListComponent.prototype.gotoInstance = function (index) {
+        this.router.navigate([this.organizations[index].mrn], { relativeTo: this.route });
+    };
+    ApproveListComponent.prototype.generateHeadersAndRows = function () {
+        var _this = this;
+        var tableHeaders = [];
+        var tableRows = [];
+        var tableHeader = { title: 'Name', class: '' };
+        tableHeaders.push(tableHeader);
+        tableHeader = { title: 'Country', class: 'nowrap' };
+        tableHeaders.push(tableHeader);
+        tableHeader = { title: 'Address', class: 'nowrap' };
+        tableHeaders.push(tableHeader);
+        tableHeader = { title: '', class: 'table-buttons' };
+        tableHeaders.push(tableHeader);
+        var _loop_1 = function(organization) {
+            cells = [];
+            tableCell = { valueHtml: organization.name, class: '', truncateNumber: 70 };
+            cells.push(tableCell);
+            tableCell = { valueHtml: organization.country, class: 'nowrap', truncateNumber: 0 };
+            cells.push(tableCell);
+            tableCell = { valueHtml: organization.address, class: 'table-description', truncateNumber: 140 };
+            cells.push(tableCell);
+            var actionButtons = [];
+            var actionButton = { buttonClass: 'btn btn btn-success btn-raised btn-sm', name: 'Approve', onClick: function () { _this.approve(organization); } };
+            actionButtons.push(actionButton);
+            actionButton = { buttonClass: 'btn btn-danger btn-raised btn-sm', name: 'Delete', onClick: function () { _this.delete(organization); } };
+            actionButtons.push(actionButton);
+            var tableCellActionButtons = { valueHtml: '', class: 'nowrap table-buttons', truncateNumber: 0, actionButtons: actionButtons };
+            cells.push(tableCellActionButtons);
+            var tableRow = { cells: cells };
+            tableRows.push(tableRow);
+        };
+        var cells, tableCell;
+        for (var _i = 0, _a = this.organizations; _i < _a.length; _i++) {
+            var organization = _a[_i];
+            _loop_1(organization);
+        }
+        this.tableHeaders = tableHeaders;
+        this.tableRows = tableRows;
+    };
+    ApproveListComponent.prototype.approve = function (organization) {
+        console.log("Approve: ", organization);
+    };
+    ApproveListComponent.prototype.delete = function (organization) {
+        this.modalDescription = 'Do you want to delete ' + organization.name;
+        this.organizationToDelete = organization;
+        this.showModal = true;
+    };
+    ApproveListComponent.prototype.cancelModal = function () {
+        this.showModal = false;
+    };
+    ApproveListComponent.prototype.deleteForSure = function (organization) {
+        var _this = this;
+        this.isLoading = true;
+        this.showModal = false;
+        this.orgService.deleteOrganization(this.organizationToDelete.mrn).subscribe(function () {
+            _this.loadOrganizations();
+        }, function (err) {
+            _this.notifications.generateNotification('Error', 'Error when trying to delete organization', mc_notifications_service_1.MCNotificationType.Error, err);
+        });
+    };
+    ApproveListComponent = __decorate([
+        core_1.Component({
+            selector: 'approve-list',
+            encapsulation: core_1.ViewEncapsulation.None,
+            template: __webpack_require__("./src/app/pages/administration/approve-organizations/components/approve-list/approve-list.html"),
+            styles: []
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _a) || Object, (typeof (_b = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _b) || Object, (typeof (_c = typeof organizations_service_1.OrganizationsService !== 'undefined' && organizations_service_1.OrganizationsService) === 'function' && _c) || Object, (typeof (_d = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _d) || Object])
+    ], ApproveListComponent);
+    return ApproveListComponent;
+    var _a, _b, _c, _d;
+}());
+exports.ApproveListComponent = ApproveListComponent;
+
+
+/***/ },
+
+/***/ "./src/app/pages/administration/approve-organizations/components/approve-list/approve-list.html":
+/***/ function(module, exports) {
+
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"Organizations needing approval\" baCardClass=\"with-scroll table-panel\">\r\n      <mc-table [tableHeaders]=\"tableHeaders\" [tableRows]=\"tableRows\" [isLoading]=\"isLoading\" [onRowClick]=\"onGotoDetails\"></mc-table>\r\n    </ba-card>\r\n  </div>\r\n</div>\r\n<mc-modal (onCancel)=\"cancelModal()\" (onOk)=\"deleteForSure()\" [show]=\"showModal\" [title]=\"'Delete organization'\" [description]=\"modalDescription\" [cancelClass]=\"'btn btn-default btn-raised'\" [cancelTitle]=\"'Cancel'\" [okClass]=\"'btn btn-danger btn-raised'\" [okTitle]=\"'Delete'\"></mc-modal>\r\n"
+
+/***/ },
+
 /***/ "./src/app/pages/org-service-registry/shared/services/sr-view-model.service.ts":
 /***/ function(module, exports, __webpack_require__) {
 
@@ -87,127 +444,6 @@ var SrViewModelService = (function () {
     return SrViewModelService;
 }());
 exports.SrViewModelService = SrViewModelService;
-
-
-/***/ },
-
-/***/ "./src/app/pages/organizations/components/my-organization/my-organization.component.ts":
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-"use strict";
-var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifications.service.ts");
-var organizations_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/organizations.service.ts");
-var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth.service.ts");
-var certificate_helper_service_1 = __webpack_require__("./src/app/pages/shared/services/certificate-helper.service.ts");
-var MyOrganization = (function () {
-    function MyOrganization(notifications, orgService, authService) {
-        this.notifications = notifications;
-        this.orgService = orgService;
-        this.authService = authService;
-        this.isLoading = true;
-        this.entityType = certificate_helper_service_1.CertificateEntityType.Organization;
-    }
-    MyOrganization.prototype.ngOnInit = function () {
-        var _this = this;
-        this.isLoading = true;
-        this.orgService.getMyOrganization().subscribe(function (organization) {
-            _this.organization = organization;
-            _this.titleName = organization.name;
-            _this.certificateTitle = organization.name;
-            _this.isLoading = false;
-        }, function (err) {
-            _this.isLoading = false;
-            _this.notifications.generateNotification('Error', 'Error when trying to get organization', mc_notifications_service_1.MCNotificationType.Error, err);
-        });
-    };
-    MyOrganization = __decorate([
-        core_1.Component({
-            selector: 'my-organization',
-            encapsulation: core_1.ViewEncapsulation.None,
-            styles: [],
-            template: __webpack_require__("./src/app/pages/organizations/components/my-organization/my-organization.html")
-        }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _a) || Object, (typeof (_b = typeof organizations_service_1.OrganizationsService !== 'undefined' && organizations_service_1.OrganizationsService) === 'function' && _b) || Object, (typeof (_c = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _c) || Object])
-    ], MyOrganization);
-    return MyOrganization;
-    var _a, _b, _c;
-}());
-exports.MyOrganization = MyOrganization;
-
-
-/***/ },
-
-/***/ "./src/app/pages/organizations/components/my-organization/my-organization.html":
-/***/ function(module, exports) {
-
-module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{titleName}}\" baCardClass=\"with-scroll table-panel\">\r\n      <organization-details-table [isLoading]=\"isLoading\" [organization]=\"organization\"></organization-details-table>\r\n    </ba-card>\r\n\r\n    <div *ngIf=\"organization\">\r\n      <ba-card title=\"Certificates for {{organization.name}}\" baCardClass=\"with-scroll table-panel\">\r\n        <certificates-table [entityMrn]=\"organization.mrn\" [isLoading]=\"isLoading\" [certificateTitle]=\"certificateTitle\" [certificateEntityType]=\"entityType\" [certificates]=\"organization.certificates\"></certificates-table>\r\n      </ba-card>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
-
-/***/ },
-
-/***/ "./src/app/pages/organizations/components/my-organization/my-organization.module.ts":
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-"use strict";
-var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
-var common_1 = __webpack_require__("./node_modules/@angular/common/index.js");
-var forms_1 = __webpack_require__("./node_modules/@angular/forms/index.js");
-var my_organization_routing_1 = __webpack_require__("./src/app/pages/organizations/components/my-organization/my-organization.routing.ts");
-var nga_module_1 = __webpack_require__("./src/app/theme/nga.module.ts");
-var shared_module_1 = __webpack_require__("./src/app/pages/shared/shared.module.ts");
-var my_organization_component_1 = __webpack_require__("./src/app/pages/organizations/components/my-organization/my-organization.component.ts");
-var MyOrganizationModule = (function () {
-    function MyOrganizationModule() {
-    }
-    MyOrganizationModule = __decorate([
-        core_1.NgModule({
-            imports: [
-                common_1.CommonModule,
-                shared_module_1.SharedModule,
-                forms_1.FormsModule,
-                nga_module_1.NgaModule,
-                my_organization_routing_1.routing
-            ],
-            declarations: [
-                my_organization_component_1.MyOrganization
-            ]
-        }), 
-        __metadata('design:paramtypes', [])
-    ], MyOrganizationModule);
-    return MyOrganizationModule;
-}());
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = MyOrganizationModule;
-
-
-/***/ },
-
-/***/ "./src/app/pages/organizations/components/my-organization/my-organization.routing.ts":
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-"use strict";
-var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
-var my_organization_component_1 = __webpack_require__("./src/app/pages/organizations/components/my-organization/my-organization.component.ts");
-var certificate_issue_new_component_1 = __webpack_require__("./src/app/pages/shared/components/certificate-issue-new/certificate-issue-new.component.ts");
-// noinspection TypeScriptValidateTypes
-var routes = [
-    {
-        path: '',
-        component: my_organization_component_1.MyOrganization,
-        data: { breadcrumb: 'My Organization' },
-        children: []
-    },
-    {
-        path: 'issuecert',
-        component: certificate_issue_new_component_1.CertificateIssueNewComponent,
-        data: { breadcrumb: 'New Certificate' },
-        children: []
-    }
-];
-exports.routing = router_1.RouterModule.forChild(routes);
 
 
 /***/ },
@@ -303,26 +539,79 @@ var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth
 var navigation_helper_service_1 = __webpack_require__("./src/app/shared/navigation-helper.service.ts");
 var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifications.service.ts");
 var file_helper_service_1 = __webpack_require__("./src/app/shared/file-helper.service.ts");
+var common_1 = __webpack_require__("./node_modules/@angular/common/index.js");
 var CertificatesTableComponent = (function () {
-    function CertificatesTableComponent(fileHelper, navigationHelper, authService, certificateHelperService, notificationService) {
+    function CertificatesTableComponent(datePipe, fileHelper, navigationHelper, authService, certificateHelperService, notificationService) {
+        this.datePipe = datePipe;
         this.fileHelper = fileHelper;
         this.navigationHelper = navigationHelper;
         this.authService = authService;
         this.certificateHelperService = certificateHelperService;
         this.notificationService = notificationService;
         this.newCertificateTitle = "Issue new Certificate";
-        this.dateFormat = theme_constants_1.DATE_FORMAT;
-        this.calculateTableClass();
         this.onIssueCertificate = this.issueCertificate.bind(this);
     }
+    CertificatesTableComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        if (!this.authService.authState.rolesLoaded) {
+            this.authService.rolesLoaded.subscribe(function (mode) {
+                _this.generateHeadersAndRows();
+            });
+        }
+    };
     CertificatesTableComponent.prototype.ngOnChanges = function () {
         if (this.certificates) {
             this.certificateViewModels = this.certificateHelperService.convertCertificatesToViewModels(this.certificates);
             this.sortCertificates();
+            this.generateHeadersAndRows();
         }
     };
-    CertificatesTableComponent.prototype.hasData = function () {
-        return this.certificateViewModels && this.certificateViewModels.length > 0;
+    CertificatesTableComponent.prototype.generateHeadersAndRows = function () {
+        var _this = this;
+        var tableHeaders = [];
+        var tableRows = [];
+        var tableHeader = { title: 'Certificate', class: '' };
+        tableHeaders.push(tableHeader);
+        tableHeader = { title: 'Valid from', class: 'nowrap' };
+        tableHeaders.push(tableHeader);
+        tableHeader = { title: 'Valid to', class: 'nowrap' };
+        tableHeaders.push(tableHeader);
+        tableHeader = { title: '', class: 'table-buttons' };
+        tableHeaders.push(tableHeader);
+        var _loop_1 = function(certificate) {
+            cells = [];
+            tableCell = { valueHtml: 'Certificate for ' + this_1.certificateTitle, class: '', truncateNumber: 50 };
+            cells.push(tableCell);
+            tableCell = { valueHtml: this_1.datePipe.transform(certificate.start, theme_constants_1.DATE_FORMAT), class: 'nowrap', truncateNumber: 0 };
+            cells.push(tableCell);
+            tableCell = { valueHtml: this_1.datePipe.transform(certificate.end, theme_constants_1.DATE_FORMAT), class: 'nowrap', truncateNumber: 0 };
+            cells.push(tableCell);
+            if (certificate.revoked) {
+                tableCell = { valueHtml: 'Revoked (' + certificate.revokeReasonText + ')', class: 'red-text', truncateNumber: 50 };
+                cells.push(tableCell);
+            }
+            else {
+                var actionButtons = [];
+                var actionButton = { buttonClass: 'btn btn-primary btn-raised btn-sm', name: 'Download certificate', onClick: function () { _this.download(certificate); } };
+                actionButtons.push(actionButton);
+                if (this_1.isAdmin()) {
+                    actionButton = { buttonClass: 'btn btn-danger btn-raised btn-sm', name: 'Revoke certificate', onClick: function () { _this.revoke(certificate); } };
+                    actionButtons.push(actionButton);
+                }
+                var tableCellActionButtons = { valueHtml: '', class: 'table-buttons', truncateNumber: 0, actionButtons: actionButtons };
+                cells.push(tableCellActionButtons);
+            }
+            var tableRow = { cells: cells };
+            tableRows.push(tableRow);
+        };
+        var this_1 = this;
+        var cells, tableCell;
+        for (var _i = 0, _a = this.certificateViewModels; _i < _a.length; _i++) {
+            var certificate = _a[_i];
+            _loop_1(certificate);
+        }
+        this.tableHeaders = tableHeaders;
+        this.tableRows = tableRows;
     };
     CertificatesTableComponent.prototype.sortCertificates = function () {
         // We are sorting with longest due date on top
@@ -367,15 +656,6 @@ var CertificatesTableComponent = (function () {
         var pemCertificate = { certificate: certificate.certificate };
         this.fileHelper.downloadPemCertificate(pemCertificate, this.certificateTitle);
     };
-    CertificatesTableComponent.prototype.onWindowResize = function () {
-        this.calculateTableClass();
-    };
-    CertificatesTableComponent.prototype.calculateTableClass = function () {
-        this.tableClass = (this.isWindowToSmall() ? 'certificate-table-short' : 'certificate-table');
-    };
-    CertificatesTableComponent.prototype.isWindowToSmall = function () {
-        return window.innerWidth <= theme_constants_1.layoutSizes.resWidthCollapseSidebar;
-    };
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Object)
@@ -396,12 +676,6 @@ var CertificatesTableComponent = (function () {
         core_1.Input(), 
         __metadata('design:type', String)
     ], CertificatesTableComponent.prototype, "certificateTitle", void 0);
-    __decorate([
-        core_1.HostListener('window:resize'), 
-        __metadata('design:type', Function), 
-        __metadata('design:paramtypes', []), 
-        __metadata('design:returntype', void 0)
-    ], CertificatesTableComponent.prototype, "onWindowResize", null);
     CertificatesTableComponent = __decorate([
         core_1.Component({
             selector: 'certificates-table',
@@ -409,10 +683,10 @@ var CertificatesTableComponent = (function () {
             template: __webpack_require__("./src/app/pages/shared/components/certificates-table/certificates-table.html"),
             styles: [__webpack_require__("./src/app/pages/shared/components/certificates-table/certificates-table.scss")]
         }), 
-        __metadata('design:paramtypes', [(typeof (_b = typeof file_helper_service_1.FileHelperService !== 'undefined' && file_helper_service_1.FileHelperService) === 'function' && _b) || Object, (typeof (_c = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _c) || Object, (typeof (_d = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _d) || Object, (typeof (_e = typeof certificate_helper_service_1.CertificateHelperService !== 'undefined' && certificate_helper_service_1.CertificateHelperService) === 'function' && _e) || Object, (typeof (_f = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _f) || Object])
+        __metadata('design:paramtypes', [(typeof (_b = typeof common_1.DatePipe !== 'undefined' && common_1.DatePipe) === 'function' && _b) || Object, (typeof (_c = typeof file_helper_service_1.FileHelperService !== 'undefined' && file_helper_service_1.FileHelperService) === 'function' && _c) || Object, (typeof (_d = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _d) || Object, (typeof (_e = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _e) || Object, (typeof (_f = typeof certificate_helper_service_1.CertificateHelperService !== 'undefined' && certificate_helper_service_1.CertificateHelperService) === 'function' && _f) || Object, (typeof (_g = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _g) || Object])
     ], CertificatesTableComponent);
     return CertificatesTableComponent;
-    var _a, _b, _c, _d, _e, _f;
+    var _a, _b, _c, _d, _e, _f, _g;
 }());
 exports.CertificatesTableComponent = CertificatesTableComponent;
 
@@ -422,7 +696,7 @@ exports.CertificatesTableComponent = CertificatesTableComponent;
 /***/ "./src/app/pages/shared/components/certificates-table/certificates-table.html":
 /***/ function(module, exports) {
 
-module.exports = "<div *ngIf=\"!isLoading && hasData()\">\r\n  <table class=\"table table-bordered {{tableClass}}\">\r\n    <thead>\r\n      <tr class=\"black-muted-bg\">\r\n        <th class=\"\">Certificate</th>\r\n        <th class=\"nowrap\">Valid from</th>\r\n        <th class=\"nowrap\">Valid to</th>\r\n        <th class=\"table-buttons\"></th>\r\n      </tr>\r\n    </thead>\r\n    <tbody>\r\n      <tr *ngFor=\"let certificate of certificateViewModels; let i = index\">\r\n        <td class=\"\">{{'Certificate for ' + certificateTitle | truncate:50}}</td>\r\n        <td class=\"nowrap\">{{certificate.start | date:dateFormat}}</td>\r\n        <td class=\"nowrap\">{{certificate.end | date:dateFormat}}</td>\r\n        <td *ngIf=\"!certificate.revoked\" class=\"table-buttons\">\r\n          <button type=\"button\" class=\"btn btn-primary btn-raised btn-sm\" (click)=\"download(certificate)\">Download certificate</button>\r\n          <button type=\"button\" *ngIf=\"isAdmin()\" class=\"btn btn-danger btn-raised btn-sm\" (click)=\"revoke(certificate)\">Revoke certificate</button>\r\n        </td>\r\n        <td *ngIf=\"certificate.revoked\" class=\"table-buttons\">\r\n          <span class=\"red-text\">Revoked ({{certificate.revokeReasonText}})</span>\r\n        </td>\r\n      </tr>\r\n    </tbody>\r\n  </table>\r\n</div>\r\n<sk-fading-circle [isRunning]=\"isLoading\" ></sk-fading-circle>\r\n<div class=\"no-data\" *ngIf=\"!hasData() && !isLoading\">No data</div>\r\n<div *ngIf=\"!isLoading\">\r\n  <mc-create-button [title]=\"newCertificateTitle\" [onClick]=\"onIssueCertificate\"></mc-create-button>\r\n</div>\r\n"
+module.exports = "<mc-table [tableHeaders]=\"tableHeaders\" [tableRows]=\"tableRows\" [isLoading]=\"isLoading\"></mc-table>\r\n<div *ngIf=\"!isLoading\">\r\n  <mc-create-button [title]=\"newCertificateTitle\" [onClick]=\"onIssueCertificate\"></mc-create-button>\r\n</div>\r\n"
 
 /***/ },
 

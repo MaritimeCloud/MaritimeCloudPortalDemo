@@ -114,8 +114,8 @@ var DesignDetailsComponent = (function () {
         });
     };
     DesignDetailsComponent.prototype.isAdmin = function () {
-        // TODO ;-)
-        return this.authService.authState.user === 'rmj';
+        // TODO should this  all admins?
+        return this.authService.authState.isSiteAdmin();
     };
     // TODO this should be deleted and taken directly from the design-model when service registry has proper data. from design.specifications
     DesignDetailsComponent.prototype.loadSpecifications = function () {
@@ -538,8 +538,8 @@ var InstanceDetailsComponent = (function () {
         });
     };
     InstanceDetailsComponent.prototype.isAdmin = function () {
-        // TODO :
-        return this.authService.authState.user === 'rmj';
+        // TODO should this  all admins?
+        return this.authService.authState.isSiteAdmin();
     };
     InstanceDetailsComponent.prototype.loadInstance = function () {
         var _this = this;
@@ -1176,8 +1176,8 @@ var SpecificationDetailsComponent = (function () {
         });
     };
     SpecificationDetailsComponent.prototype.isAdmin = function () {
-        // TODO ;-)
-        return this.authService.authState.user === 'rmj';
+        // TODO should this  all admins?
+        return this.authService.authState.isSiteAdmin();
     };
     SpecificationDetailsComponent.prototype.loadInstances = function () {
         var _this = this;
@@ -1621,26 +1621,79 @@ var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth
 var navigation_helper_service_1 = __webpack_require__("./src/app/shared/navigation-helper.service.ts");
 var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifications.service.ts");
 var file_helper_service_1 = __webpack_require__("./src/app/shared/file-helper.service.ts");
+var common_1 = __webpack_require__("./node_modules/@angular/common/index.js");
 var CertificatesTableComponent = (function () {
-    function CertificatesTableComponent(fileHelper, navigationHelper, authService, certificateHelperService, notificationService) {
+    function CertificatesTableComponent(datePipe, fileHelper, navigationHelper, authService, certificateHelperService, notificationService) {
+        this.datePipe = datePipe;
         this.fileHelper = fileHelper;
         this.navigationHelper = navigationHelper;
         this.authService = authService;
         this.certificateHelperService = certificateHelperService;
         this.notificationService = notificationService;
         this.newCertificateTitle = "Issue new Certificate";
-        this.dateFormat = theme_constants_1.DATE_FORMAT;
-        this.calculateTableClass();
         this.onIssueCertificate = this.issueCertificate.bind(this);
     }
+    CertificatesTableComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        if (!this.authService.authState.rolesLoaded) {
+            this.authService.rolesLoaded.subscribe(function (mode) {
+                _this.generateHeadersAndRows();
+            });
+        }
+    };
     CertificatesTableComponent.prototype.ngOnChanges = function () {
         if (this.certificates) {
             this.certificateViewModels = this.certificateHelperService.convertCertificatesToViewModels(this.certificates);
             this.sortCertificates();
+            this.generateHeadersAndRows();
         }
     };
-    CertificatesTableComponent.prototype.hasData = function () {
-        return this.certificateViewModels && this.certificateViewModels.length > 0;
+    CertificatesTableComponent.prototype.generateHeadersAndRows = function () {
+        var _this = this;
+        var tableHeaders = [];
+        var tableRows = [];
+        var tableHeader = { title: 'Certificate', class: '' };
+        tableHeaders.push(tableHeader);
+        tableHeader = { title: 'Valid from', class: 'nowrap' };
+        tableHeaders.push(tableHeader);
+        tableHeader = { title: 'Valid to', class: 'nowrap' };
+        tableHeaders.push(tableHeader);
+        tableHeader = { title: '', class: 'table-buttons' };
+        tableHeaders.push(tableHeader);
+        var _loop_1 = function(certificate) {
+            cells = [];
+            tableCell = { valueHtml: 'Certificate for ' + this_1.certificateTitle, class: '', truncateNumber: 50 };
+            cells.push(tableCell);
+            tableCell = { valueHtml: this_1.datePipe.transform(certificate.start, theme_constants_1.DATE_FORMAT), class: 'nowrap', truncateNumber: 0 };
+            cells.push(tableCell);
+            tableCell = { valueHtml: this_1.datePipe.transform(certificate.end, theme_constants_1.DATE_FORMAT), class: 'nowrap', truncateNumber: 0 };
+            cells.push(tableCell);
+            if (certificate.revoked) {
+                tableCell = { valueHtml: 'Revoked (' + certificate.revokeReasonText + ')', class: 'red-text', truncateNumber: 50 };
+                cells.push(tableCell);
+            }
+            else {
+                var actionButtons = [];
+                var actionButton = { buttonClass: 'btn btn-primary btn-raised btn-sm', name: 'Download certificate', onClick: function () { _this.download(certificate); } };
+                actionButtons.push(actionButton);
+                if (this_1.isAdmin()) {
+                    actionButton = { buttonClass: 'btn btn-danger btn-raised btn-sm', name: 'Revoke certificate', onClick: function () { _this.revoke(certificate); } };
+                    actionButtons.push(actionButton);
+                }
+                var tableCellActionButtons = { valueHtml: '', class: 'table-buttons', truncateNumber: 0, actionButtons: actionButtons };
+                cells.push(tableCellActionButtons);
+            }
+            var tableRow = { cells: cells };
+            tableRows.push(tableRow);
+        };
+        var this_1 = this;
+        var cells, tableCell;
+        for (var _i = 0, _a = this.certificateViewModels; _i < _a.length; _i++) {
+            var certificate = _a[_i];
+            _loop_1(certificate);
+        }
+        this.tableHeaders = tableHeaders;
+        this.tableRows = tableRows;
     };
     CertificatesTableComponent.prototype.sortCertificates = function () {
         // We are sorting with longest due date on top
@@ -1685,15 +1738,6 @@ var CertificatesTableComponent = (function () {
         var pemCertificate = { certificate: certificate.certificate };
         this.fileHelper.downloadPemCertificate(pemCertificate, this.certificateTitle);
     };
-    CertificatesTableComponent.prototype.onWindowResize = function () {
-        this.calculateTableClass();
-    };
-    CertificatesTableComponent.prototype.calculateTableClass = function () {
-        this.tableClass = (this.isWindowToSmall() ? 'certificate-table-short' : 'certificate-table');
-    };
-    CertificatesTableComponent.prototype.isWindowToSmall = function () {
-        return window.innerWidth <= theme_constants_1.layoutSizes.resWidthCollapseSidebar;
-    };
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Object)
@@ -1714,12 +1758,6 @@ var CertificatesTableComponent = (function () {
         core_1.Input(), 
         __metadata('design:type', String)
     ], CertificatesTableComponent.prototype, "certificateTitle", void 0);
-    __decorate([
-        core_1.HostListener('window:resize'), 
-        __metadata('design:type', Function), 
-        __metadata('design:paramtypes', []), 
-        __metadata('design:returntype', void 0)
-    ], CertificatesTableComponent.prototype, "onWindowResize", null);
     CertificatesTableComponent = __decorate([
         core_1.Component({
             selector: 'certificates-table',
@@ -1727,10 +1765,10 @@ var CertificatesTableComponent = (function () {
             template: __webpack_require__("./src/app/pages/shared/components/certificates-table/certificates-table.html"),
             styles: [__webpack_require__("./src/app/pages/shared/components/certificates-table/certificates-table.scss")]
         }), 
-        __metadata('design:paramtypes', [(typeof (_b = typeof file_helper_service_1.FileHelperService !== 'undefined' && file_helper_service_1.FileHelperService) === 'function' && _b) || Object, (typeof (_c = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _c) || Object, (typeof (_d = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _d) || Object, (typeof (_e = typeof certificate_helper_service_1.CertificateHelperService !== 'undefined' && certificate_helper_service_1.CertificateHelperService) === 'function' && _e) || Object, (typeof (_f = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _f) || Object])
+        __metadata('design:paramtypes', [(typeof (_b = typeof common_1.DatePipe !== 'undefined' && common_1.DatePipe) === 'function' && _b) || Object, (typeof (_c = typeof file_helper_service_1.FileHelperService !== 'undefined' && file_helper_service_1.FileHelperService) === 'function' && _c) || Object, (typeof (_d = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _d) || Object, (typeof (_e = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _e) || Object, (typeof (_f = typeof certificate_helper_service_1.CertificateHelperService !== 'undefined' && certificate_helper_service_1.CertificateHelperService) === 'function' && _f) || Object, (typeof (_g = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _g) || Object])
     ], CertificatesTableComponent);
     return CertificatesTableComponent;
-    var _a, _b, _c, _d, _e, _f;
+    var _a, _b, _c, _d, _e, _f, _g;
 }());
 exports.CertificatesTableComponent = CertificatesTableComponent;
 
@@ -1740,7 +1778,7 @@ exports.CertificatesTableComponent = CertificatesTableComponent;
 /***/ "./src/app/pages/shared/components/certificates-table/certificates-table.html":
 /***/ function(module, exports) {
 
-module.exports = "<div *ngIf=\"!isLoading && hasData()\">\r\n  <table class=\"table table-bordered {{tableClass}}\">\r\n    <thead>\r\n      <tr class=\"black-muted-bg\">\r\n        <th class=\"\">Certificate</th>\r\n        <th class=\"nowrap\">Valid from</th>\r\n        <th class=\"nowrap\">Valid to</th>\r\n        <th class=\"table-buttons\"></th>\r\n      </tr>\r\n    </thead>\r\n    <tbody>\r\n      <tr *ngFor=\"let certificate of certificateViewModels; let i = index\">\r\n        <td class=\"\">{{'Certificate for ' + certificateTitle | truncate:50}}</td>\r\n        <td class=\"nowrap\">{{certificate.start | date:dateFormat}}</td>\r\n        <td class=\"nowrap\">{{certificate.end | date:dateFormat}}</td>\r\n        <td *ngIf=\"!certificate.revoked\" class=\"table-buttons\">\r\n          <button type=\"button\" class=\"btn btn-primary btn-raised btn-sm\" (click)=\"download(certificate)\">Download certificate</button>\r\n          <button type=\"button\" *ngIf=\"isAdmin()\" class=\"btn btn-danger btn-raised btn-sm\" (click)=\"revoke(certificate)\">Revoke certificate</button>\r\n        </td>\r\n        <td *ngIf=\"certificate.revoked\" class=\"table-buttons\">\r\n          <span class=\"red-text\">Revoked ({{certificate.revokeReasonText}})</span>\r\n        </td>\r\n      </tr>\r\n    </tbody>\r\n  </table>\r\n</div>\r\n<sk-fading-circle [isRunning]=\"isLoading\" ></sk-fading-circle>\r\n<div class=\"no-data\" *ngIf=\"!hasData() && !isLoading\">No data</div>\r\n<div *ngIf=\"!isLoading\">\r\n  <mc-create-button [title]=\"newCertificateTitle\" [onClick]=\"onIssueCertificate\"></mc-create-button>\r\n</div>\r\n"
+module.exports = "<mc-table [tableHeaders]=\"tableHeaders\" [tableRows]=\"tableRows\" [isLoading]=\"isLoading\"></mc-table>\r\n<div *ngIf=\"!isLoading\">\r\n  <mc-create-button [title]=\"newCertificateTitle\" [onClick]=\"onIssueCertificate\"></mc-create-button>\r\n</div>\r\n"
 
 /***/ },
 
