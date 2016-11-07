@@ -798,6 +798,7 @@ var OrganizationDetailsTableComponent = (function () {
         this.logoService = logoService;
         this.orgViewModelService = orgViewModelService;
         this.notifications = notifications;
+        this.displayLogo = true;
         this.onLogoLoaded = new core_1.EventEmitter();
         this.isLoadingOrgAndLogo = true;
         this.uploadingLogo = false;
@@ -846,6 +847,10 @@ var OrganizationDetailsTableComponent = (function () {
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Boolean)
+    ], OrganizationDetailsTableComponent.prototype, "displayLogo", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
     ], OrganizationDetailsTableComponent.prototype, "isLoading", void 0);
     __decorate([
         core_1.Input(), 
@@ -875,7 +880,7 @@ exports.OrganizationDetailsTableComponent = OrganizationDetailsTableComponent;
 /***/ "./src/app/pages/shared/components/organizaton-details-table/organization-details-table.html":
 /***/ function(module, exports) {
 
-module.exports = "<div *ngIf=\"logo\" style=\"margin-bottom: 10px;\">\r\n  <img class=\"logo-image-no-center\" [attr.src]=\"logo | sanitizeUrl\" *ngIf=\"logo && !canChangeLogo\">\r\n  <mc-logo-uploader [logo]=\"logo\" [uploadingLogo]=\"uploadingLogo\" (onUpload)=\"uploadLogo($event)\" *ngIf=\"logo && canChangeLogo\"></mc-logo-uploader>\r\n</div>\r\n<mc-label-value-table [isLoading]=\"isLoadingOrgAndLogo\" [labelValues]=\"labelValues\"></mc-label-value-table>\r\n"
+module.exports = "<div *ngIf=\"displayLogo && logo\" style=\"margin-bottom: 10px;\">\r\n  <img class=\"logo-image-no-center\" [attr.src]=\"logo | sanitizeUrl\" *ngIf=\"logo && !canChangeLogo\">\r\n  <mc-logo-uploader [logo]=\"logo\" [uploadingLogo]=\"uploadingLogo\" (onUpload)=\"uploadLogo($event)\" *ngIf=\"logo && canChangeLogo\"></mc-logo-uploader>\r\n</div>\r\n<mc-label-value-table [isLoading]=\"isLoadingOrgAndLogo\" [labelValues]=\"labelValues\"></mc-label-value-table>"
 
 /***/ },
 

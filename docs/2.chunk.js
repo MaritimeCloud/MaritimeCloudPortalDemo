@@ -267,14 +267,12 @@ var ApproveDetailsComponent = (function () {
             _this.organization = organization;
             _this.userMrn = _this.mrnHelper.mrnMaskForUserOfOrg(organization.mrn);
             _this.generateForm();
+            _this.isLoading = false;
         }, function (err) {
             _this.isLoading = false;
             _this.notifications.generateNotification('Error', 'Error when trying to get the organization', mc_notifications_service_1.MCNotificationType.Error, err);
             _this.router.navigate(['../'], { relativeTo: _this.route });
         });
-    };
-    ApproveDetailsComponent.prototype.logoLoaded = function () {
-        this.isLoading = false;
     };
     ApproveDetailsComponent.prototype.approveOrganization = function () {
         var _this = this;
@@ -374,7 +372,7 @@ exports.ApproveDetailsComponent = ApproveDetailsComponent;
 /***/ "./src/app/pages/administration/approve-organizations/components/approve-details/approve-details.html":
 /***/ function(module, exports) {
 
-module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{title}}\" baCardClass=\"with-scroll table-panel\">\r\n      <organization-details-table (onLogoLoaded)=\"logoLoaded()\" [isLoading]=\"isLoading\" [organization]=\"organization\"></organization-details-table>\r\n\r\n      <div  *ngIf=\"!isLoading\">\r\n        <div class=\"separator\"></div>\r\n\r\n        <div class=\"important-notice\">To approve <span>{{organization.name}}</span>, you need to fill out the form below with a user, that will get administrative access to the organization.\r\n        </div>\r\n\r\n        <div class=\"separator\"></div>\r\n\r\n        <mc-form [formGroup]=\"userForm\" [formControlModels]=\"formControlModels\" [isLoading]=\"isLoading\" [isRegistering]=\"isApproving\" [registerTitle]=\"approveTitle\" (onCancel)=\"cancel()\" (onRegister)=\"approve()\"></mc-form>\r\n      </div>\r\n    </ba-card>\r\n\r\n\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{title}}\" baCardClass=\"with-scroll table-panel\">\r\n      <organization-details-table [displayLogo]=\"false\" [isLoading]=\"isLoading\" [organization]=\"organization\"></organization-details-table>\r\n\r\n      <div  *ngIf=\"!isLoading\">\r\n        <div class=\"separator\"></div>\r\n\r\n        <div class=\"important-notice\">To approve <span>{{organization.name}}</span>, you need to fill out the form below with a user, that will get administrative access to the organization.\r\n        </div>\r\n\r\n        <div class=\"separator\"></div>\r\n\r\n        <mc-form [formGroup]=\"userForm\" [formControlModels]=\"formControlModels\" [isLoading]=\"isLoading\" [isRegistering]=\"isApproving\" [registerTitle]=\"approveTitle\" (onCancel)=\"cancel()\" (onRegister)=\"approve()\"></mc-form>\r\n      </div>\r\n    </ba-card>\r\n\r\n\r\n  </div>\r\n</div>\r\n"
 
 /***/ },
 
@@ -997,6 +995,7 @@ var OrganizationDetailsTableComponent = (function () {
         this.logoService = logoService;
         this.orgViewModelService = orgViewModelService;
         this.notifications = notifications;
+        this.displayLogo = true;
         this.onLogoLoaded = new core_1.EventEmitter();
         this.isLoadingOrgAndLogo = true;
         this.uploadingLogo = false;
@@ -1045,6 +1044,10 @@ var OrganizationDetailsTableComponent = (function () {
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Boolean)
+    ], OrganizationDetailsTableComponent.prototype, "displayLogo", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
     ], OrganizationDetailsTableComponent.prototype, "isLoading", void 0);
     __decorate([
         core_1.Input(), 
@@ -1074,7 +1077,7 @@ exports.OrganizationDetailsTableComponent = OrganizationDetailsTableComponent;
 /***/ "./src/app/pages/shared/components/organizaton-details-table/organization-details-table.html":
 /***/ function(module, exports) {
 
-module.exports = "<div *ngIf=\"logo\" style=\"margin-bottom: 10px;\">\r\n  <img class=\"logo-image-no-center\" [attr.src]=\"logo | sanitizeUrl\" *ngIf=\"logo && !canChangeLogo\">\r\n  <mc-logo-uploader [logo]=\"logo\" [uploadingLogo]=\"uploadingLogo\" (onUpload)=\"uploadLogo($event)\" *ngIf=\"logo && canChangeLogo\"></mc-logo-uploader>\r\n</div>\r\n<mc-label-value-table [isLoading]=\"isLoadingOrgAndLogo\" [labelValues]=\"labelValues\"></mc-label-value-table>\r\n"
+module.exports = "<div *ngIf=\"displayLogo && logo\" style=\"margin-bottom: 10px;\">\r\n  <img class=\"logo-image-no-center\" [attr.src]=\"logo | sanitizeUrl\" *ngIf=\"logo && !canChangeLogo\">\r\n  <mc-logo-uploader [logo]=\"logo\" [uploadingLogo]=\"uploadingLogo\" (onUpload)=\"uploadLogo($event)\" *ngIf=\"logo && canChangeLogo\"></mc-logo-uploader>\r\n</div>\r\n<mc-label-value-table [isLoading]=\"isLoadingOrgAndLogo\" [labelValues]=\"labelValues\"></mc-label-value-table>"
 
 /***/ },
 
