@@ -692,7 +692,12 @@ var OrganizationDetailsTableComponent = (function () {
         });
     };
     OrganizationDetailsTableComponent.prototype.canChangeTheLogo = function () {
-        return (this.authService.authState.isAdmin() && this.authService.isMyOrg(this.organization.mrn)) || this.authService.authState.isSiteAdmin();
+        return this.isFirefox() && ((this.authService.authState.isAdmin() && this.authService.isMyOrg(this.organization.mrn)) || this.authService.authState.isSiteAdmin());
+    };
+    // TODO: fix this so it works in other browsers
+    OrganizationDetailsTableComponent.prototype.isFirefox = function () {
+        var userAgent = window.navigator.userAgent;
+        return userAgent.toLowerCase().indexOf('firefox') > -1;
     };
     __decorate([
         core_1.Input(), 
