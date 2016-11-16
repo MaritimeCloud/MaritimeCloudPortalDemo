@@ -102,7 +102,8 @@ var organizations_service_1 = __webpack_require__("./src/app/backend-api/identit
 var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth.service.ts");
 var certificate_helper_service_1 = __webpack_require__("./src/app/pages/shared/services/certificate-helper.service.ts");
 var MyOrganization = (function () {
-    function MyOrganization(notifications, orgService, authService) {
+    function MyOrganization(changeDetector, notifications, orgService, authService) {
+        this.changeDetector = changeDetector;
         this.notifications = notifications;
         this.orgService = orgService;
         this.authService = authService;
@@ -123,6 +124,7 @@ var MyOrganization = (function () {
     };
     MyOrganization.prototype.logoLoaded = function () {
         this.isLoading = false;
+        this.changeDetector.detectChanges();
     };
     MyOrganization = __decorate([
         core_1.Component({
@@ -131,10 +133,10 @@ var MyOrganization = (function () {
             styles: [],
             template: __webpack_require__("./src/app/pages/organizations/components/my-organization/my-organization.html")
         }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _a) || Object, (typeof (_b = typeof organizations_service_1.OrganizationsService !== 'undefined' && organizations_service_1.OrganizationsService) === 'function' && _b) || Object, (typeof (_c = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _c) || Object])
+        __metadata('design:paramtypes', [(typeof (_a = typeof core_1.ChangeDetectorRef !== 'undefined' && core_1.ChangeDetectorRef) === 'function' && _a) || Object, (typeof (_b = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _b) || Object, (typeof (_c = typeof organizations_service_1.OrganizationsService !== 'undefined' && organizations_service_1.OrganizationsService) === 'function' && _c) || Object, (typeof (_d = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _d) || Object])
     ], MyOrganization);
     return MyOrganization;
-    var _a, _b, _c;
+    var _a, _b, _c, _d;
 }());
 exports.MyOrganization = MyOrganization;
 
@@ -144,7 +146,7 @@ exports.MyOrganization = MyOrganization;
 /***/ "./src/app/pages/organizations/components/my-organization/my-organization.html":
 /***/ function(module, exports) {
 
-module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{titleName}}\" baCardClass=\"with-scroll table-panel\">\r\n      <organization-details-table (onLogoLoaded)=\"logoLoaded()\" [isLoading]=\"isLoading\" [organization]=\"organization\"></organization-details-table>\r\n    </ba-card>\r\n\r\n    <div *ngIf=\"organization && !isLoading\">\r\n      <ba-card title=\"Certificates for {{organization.name}}\" baCardClass=\"with-scroll table-panel\">\r\n        <certificates-table [entityMrn]=\"organization.mrn\" [isLoading]=\"isLoading\" [certificateTitle]=\"certificateTitle\" [certificateEntityType]=\"entityType\" [certificates]=\"organization.certificates\"></certificates-table>\r\n      </ba-card>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{titleName}}\" baCardClass=\"with-scroll table-panel\">\r\n      <organization-details-table (onLogoLoaded)=\"logoLoaded()\" [isLoading]=\"isLoading\" [organization]=\"organization\"></organization-details-table>\r\n    </ba-card>\r\n\r\n    <div *ngIf=\"!isLoading && organization\">\r\n      <ba-card title=\"Certificates for {{organization.name}}\" baCardClass=\"with-scroll table-panel\">\r\n        <certificates-table [entityMrn]=\"organization.mrn\" [isLoading]=\"isLoading\" [certificateTitle]=\"certificateTitle\" [certificateEntityType]=\"entityType\" [certificates]=\"organization.certificates\"></certificates-table>\r\n      </ba-card>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ },
 

@@ -232,6 +232,7 @@ var users_service_1 = __webpack_require__("./src/app/backend-api/identity-regist
 var roles_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/roles.service.ts");
 var Role_1 = __webpack_require__("./src/app/backend-api/identity-registry/autogen/model/Role.ts");
 var RoleNameEnum = Role_1.Role.RoleNameEnum;
+var mcFormControlModel_1 = __webpack_require__("./src/app/theme/components/mcForm/mcFormControlModel.ts");
 var ApproveDetailsComponent = (function () {
     function ApproveDetailsComponent(route, router, notifications, userService, roleService, orgService, formBuilder, mrnHelper) {
         this.route = route;
@@ -304,7 +305,7 @@ var ApproveDetailsComponent = (function () {
         user.lastName = this.userForm.value.lastName;
         user.permissions = app_constants_1.MC_ADMIN;
         user.email = this.userForm.value.emails.email;
-        this.userService.createUser(this.organization.mrn, user).subscribe(function (user) {
+        this.userService.createUserForOrg(this.organization.mrn, user).subscribe(function (user) {
             _this.isApproving = false;
             _this.notifications.generateNotification('Organization Approved', 'The organization was approved and now has access to the Maritime Cloud', mc_notifications_service_1.MCNotificationType.Success);
             _this.router.navigate(['../'], { relativeTo: _this.route });
@@ -333,20 +334,20 @@ var ApproveDetailsComponent = (function () {
         var _this = this;
         this.userForm = this.formBuilder.group({});
         this.formControlModels = [];
-        var formControlModel = { formGroup: this.userForm, elementId: 'mrn', inputType: 'text', labelName: 'MRN', placeholder: '', isDisabled: true };
+        var formControlModel = { formGroup: this.userForm, elementId: 'mrn', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'MRN', placeholder: '', isDisabled: true };
         var formControl = new forms_1.FormControl(this.userMrn, formControlModel.validator);
         this.userForm.addControl(formControlModel.elementId, formControl);
         this.formControlModels.push(formControlModel);
-        formControlModel = { formGroup: this.userForm, elementId: 'userId', inputType: 'text', labelName: 'User ID', placeholder: 'Enter user ID to generate MRN', validator: forms_1.Validators.required, pattern: this.mrnPattern, errorText: this.mrnPatternError };
+        formControlModel = { formGroup: this.userForm, elementId: 'userId', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'User ID', placeholder: 'Enter user ID to generate MRN', validator: forms_1.Validators.required, pattern: this.mrnPattern, errorText: this.mrnPatternError };
         formControl = new forms_1.FormControl('', formControlModel.validator);
         formControl.valueChanges.subscribe(function (param) { return _this.generateMRN(param); });
         this.userForm.addControl(formControlModel.elementId, formControl);
         this.formControlModels.push(formControlModel);
-        formControlModel = { formGroup: this.userForm, elementId: 'firstName', inputType: 'text', labelName: 'First Name', placeholder: 'First Name is required', validator: forms_1.Validators.required };
+        formControlModel = { formGroup: this.userForm, elementId: 'firstName', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'First Name', placeholder: 'First Name is required', validator: forms_1.Validators.required };
         formControl = new forms_1.FormControl('', formControlModel.validator);
         this.userForm.addControl(formControlModel.elementId, formControl);
         this.formControlModels.push(formControlModel);
-        formControlModel = { formGroup: this.userForm, elementId: 'lastName', inputType: 'text', labelName: 'Last Name', placeholder: 'Last Name is required', validator: forms_1.Validators.required };
+        formControlModel = { formGroup: this.userForm, elementId: 'lastName', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'Last Name', placeholder: 'Last Name is required', validator: forms_1.Validators.required };
         formControl = new forms_1.FormControl('', formControlModel.validator);
         this.userForm.addControl(formControlModel.elementId, formControl);
         this.formControlModels.push(formControlModel);
