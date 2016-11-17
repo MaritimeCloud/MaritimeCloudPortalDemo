@@ -649,8 +649,10 @@ var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifi
 var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth.service.ts");
 var id_services_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/id-services.service.ts");
 var ServiceViewModel_1 = __webpack_require__("./src/app/pages/org-identity-registry/services/view-models/ServiceViewModel.ts");
+var file_helper_service_1 = __webpack_require__("./src/app/shared/file-helper.service.ts");
 var ServiceDetailsComponent = (function () {
-    function ServiceDetailsComponent(authService, route, servicesService, router, notifications) {
+    function ServiceDetailsComponent(fileHelperService, authService, route, servicesService, router, notifications) {
+        this.fileHelperService = fileHelperService;
         this.authService = authService;
         this.route = route;
         this.servicesService = servicesService;
@@ -661,6 +663,24 @@ var ServiceDetailsComponent = (function () {
     ServiceDetailsComponent.prototype.ngOnInit = function () {
         this.entityType = certificate_helper_service_1.CertificateEntityType.Service;
         this.loadService();
+    };
+    ServiceDetailsComponent.prototype.downloadXML = function () {
+        var _this = this;
+        this.servicesService.getIdServiceJbossXml(this.service.mrn).subscribe(function (xmlString) {
+            _this.fileHelperService.downloadFile(xmlString, 'text/xml', 'keycloak-oidc-subsystem.xml');
+        }, function (err) {
+            _this.isLoading = false;
+            _this.notifications.generateNotification('Error', 'Error when trying to download the XML', mc_notifications_service_1.MCNotificationType.Error, err);
+        });
+    };
+    ServiceDetailsComponent.prototype.downloadJSON = function () {
+        var _this = this;
+        this.servicesService.getServiceKeycloakJson(this.service.mrn).subscribe(function (jsonString) {
+            _this.fileHelperService.downloadFile(jsonString, 'text/json', 'keycloak.json');
+        }, function (err) {
+            _this.isLoading = false;
+            _this.notifications.generateNotification('Error', 'Error when trying to download the JSON', mc_notifications_service_1.MCNotificationType.Error, err);
+        });
     };
     ServiceDetailsComponent.prototype.loadService = function () {
         var _this = this;
@@ -720,10 +740,10 @@ var ServiceDetailsComponent = (function () {
             template: __webpack_require__("./src/app/pages/org-identity-registry/services/components/service-details/service-details.html"),
             styles: []
         }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _a) || Object, (typeof (_b = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _b) || Object, (typeof (_c = typeof id_services_service_1.IdServicesService !== 'undefined' && id_services_service_1.IdServicesService) === 'function' && _c) || Object, (typeof (_d = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _d) || Object, (typeof (_e = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _e) || Object])
+        __metadata('design:paramtypes', [(typeof (_a = typeof file_helper_service_1.FileHelperService !== 'undefined' && file_helper_service_1.FileHelperService) === 'function' && _a) || Object, (typeof (_b = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _b) || Object, (typeof (_c = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _c) || Object, (typeof (_d = typeof id_services_service_1.IdServicesService !== 'undefined' && id_services_service_1.IdServicesService) === 'function' && _d) || Object, (typeof (_e = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _e) || Object, (typeof (_f = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _f) || Object])
     ], ServiceDetailsComponent);
     return ServiceDetailsComponent;
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d, _e, _f;
 }());
 exports.ServiceDetailsComponent = ServiceDetailsComponent;
 
@@ -733,7 +753,7 @@ exports.ServiceDetailsComponent = ServiceDetailsComponent;
 /***/ "./src/app/pages/org-identity-registry/services/components/service-details/service-details.html":
 /***/ function(module, exports) {
 
-module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{title}}\" baCardClass=\"with-scroll table-panel\">\r\n      <mc-label-value-table [isLoading]=\"isLoading\" [labelValues]=\"labelValues\"></mc-label-value-table>\r\n      <ul *ngIf=\"!isLoading && showDelete()\" class=\"btn-list clearfix\">\r\n        <li>\r\n          <button type=\"button\" class=\"btn btn-danger btn-raised\" (click)=\"delete()\">Delete service</button>\r\n        </li>\r\n      </ul>\r\n    </ba-card>\r\n\r\n    <div *ngIf=\"service\">\r\n      <ba-card title=\"Certificates for {{title}}\" baCardClass=\"with-scroll table-panel\">\r\n        <certificates-table [entityMrn]=\"service.mrn\" [isLoading]=\"isLoading\" [certificateTitle]=\"title\" [certificateEntityType]=\"entityType\" [certificates]=\"service.certificates\"></certificates-table>\r\n      </ba-card>\r\n    </div>\r\n  </div>\r\n</div>\r\n<mc-modal (onCancel)=\"cancelModal()\" (onOk)=\"deleteForSure()\" [show]=\"showModal\" [title]=\"'Delete service'\" [description]=\"modalDescription\" [cancelClass]=\"'btn btn-default btn-raised'\" [cancelTitle]=\"'Cancel'\" [okClass]=\"'btn btn-danger btn-raised'\" [okTitle]=\"'Delete'\"></mc-modal>\r\n"
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{title}}\" baCardClass=\"with-scroll table-panel\">\r\n      <mc-label-value-table [isLoading]=\"isLoading\" [labelValues]=\"labelValues\"></mc-label-value-table>\r\n      <ul *ngIf=\"!isLoading && this.service.oidcRedirectUri\" class=\"btn-list clearfix\">\r\n        <li>\r\n          <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"downloadXML()\">Download JBOSS XML</button>\r\n        </li>\r\n        <li>\r\n          <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"downloadJSON()\">Download Keycloak JSON</button>\r\n        </li>\r\n        <li *ngIf=\"showDelete()\">\r\n          <button type=\"button\" class=\"btn btn-danger btn-raised\" (click)=\"delete()\">Delete Service</button>\r\n        </li>\r\n      </ul>\r\n    </ba-card>\r\n\r\n    <div *ngIf=\"service\">\r\n      <ba-card title=\"Certificates for {{title}}\" baCardClass=\"with-scroll table-panel\">\r\n        <certificates-table [entityMrn]=\"service.mrn\" [isLoading]=\"isLoading\" [certificateTitle]=\"title\" [certificateEntityType]=\"entityType\" [certificates]=\"service.certificates\"></certificates-table>\r\n      </ba-card>\r\n    </div>\r\n  </div>\r\n</div>\r\n<mc-modal (onCancel)=\"cancelModal()\" (onOk)=\"deleteForSure()\" [show]=\"showModal\" [title]=\"'Delete service'\" [description]=\"modalDescription\" [cancelClass]=\"'btn btn-default btn-raised'\" [cancelTitle]=\"'Cancel'\" [okClass]=\"'btn btn-danger btn-raised'\" [okTitle]=\"'Delete'\"></mc-modal>\r\n"
 
 /***/ },
 
