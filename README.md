@@ -1,4 +1,6 @@
-# NOTE: Mock-up project of the Maritime Cloud Portal
+# OBSOLETE: This project is obsolete. The development of the Maritime Cloud Portal is continued at https://github.com/MaritimeCloud/MaritimeCloudPortal
+
+## NOTE: Mock-up project of the Maritime Cloud Portal
 
 This project has been developed as a pure Mock-up project for showing the functionallity of the Maritime Cloud Identity Registry https://github.com/MaritimeCloud/IdentityRegistry
 The project started as another Portal and has shamelessly been altered without proper cleanup of legacy code. The reason for this was to speed up the development for showing t a functioning Portal at a Conference. Further development will be done in a new and fresh project.
