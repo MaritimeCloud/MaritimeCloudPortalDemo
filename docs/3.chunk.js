@@ -227,7 +227,7 @@ var OrganizationDetailsComponent = (function () {
         this.shouldDisplayDelete = !this.authService.isMyOrg(this.organization.mrn) && this.authService.authState.isSiteAdmin();
     };
     OrganizationDetailsComponent.prototype.delete = function () {
-        this.modalDescription = 'Are you sure you want to delete the organization? \n\nAll entities will be deleted and all issued certificates will be revoked.';
+        this.modalDescription = "Are you sure you want to delete the organization?<br><br>All entities will be deleted and all issued certificates will be revoked.";
         this.showModal = true;
     };
     OrganizationDetailsComponent.prototype.cancelModal = function () {
@@ -393,7 +393,6 @@ exports.OrganizationsComponent = OrganizationsComponent;
 "use strict";
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
 var common_1 = __webpack_require__("./node_modules/@angular/common/index.js");
-var forms_1 = __webpack_require__("./node_modules/@angular/forms/index.js");
 var nga_module_1 = __webpack_require__("./src/app/theme/nga.module.ts");
 var organizations_component_1 = __webpack_require__("./src/app/pages/organizations/organizations.component.ts");
 var organizations_routing_1 = __webpack_require__("./src/app/pages/organizations/organizations.routing.ts");
@@ -408,7 +407,6 @@ var OrganizationsModule = (function () {
             imports: [
                 common_1.CommonModule,
                 shared_module_1.SharedModule,
-                forms_1.FormsModule,
                 nga_module_1.NgaModule,
                 organizations_routing_1.routing
             ],
@@ -1001,7 +999,9 @@ var ServiceDetailsViewComponent = (function () {
         this.servicesService = servicesService;
         this.notifications = notifications;
         this.shouldShowDelete = true;
+        this.shouldShowUpdate = true;
         this.deleteAction = new core_1.EventEmitter();
+        this.updateAction = new core_1.EventEmitter();
     }
     ServiceDetailsViewComponent.prototype.ngOnInit = function () {
         this.entityType = certificate_helper_service_1.CertificateEntityType.Service;
@@ -1047,11 +1047,17 @@ var ServiceDetailsViewComponent = (function () {
     ServiceDetailsViewComponent.prototype.showDelete = function () {
         return this.shouldShowDelete && this.isAdmin() && this.service != null;
     };
+    ServiceDetailsViewComponent.prototype.showUpdate = function () {
+        return this.shouldShowUpdate && this.isAdmin() && this.service != null;
+    };
     ServiceDetailsViewComponent.prototype.isAdmin = function () {
         return this.authService.authState.isAdmin();
     };
     ServiceDetailsViewComponent.prototype.delete = function () {
         this.deleteAction.emit('');
+    };
+    ServiceDetailsViewComponent.prototype.update = function () {
+        this.updateAction.emit('');
     };
     __decorate([
         core_1.Input(), 
@@ -1064,6 +1070,10 @@ var ServiceDetailsViewComponent = (function () {
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Boolean)
+    ], ServiceDetailsViewComponent.prototype, "shouldShowUpdate", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
     ], ServiceDetailsViewComponent.prototype, "isLoading", void 0);
     __decorate([
         core_1.Input(), 
@@ -1073,6 +1083,10 @@ var ServiceDetailsViewComponent = (function () {
         core_1.Output(), 
         __metadata('design:type', (typeof (_b = typeof core_1.EventEmitter !== 'undefined' && core_1.EventEmitter) === 'function' && _b) || Object)
     ], ServiceDetailsViewComponent.prototype, "deleteAction", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', (typeof (_c = typeof core_1.EventEmitter !== 'undefined' && core_1.EventEmitter) === 'function' && _c) || Object)
+    ], ServiceDetailsViewComponent.prototype, "updateAction", void 0);
     ServiceDetailsViewComponent = __decorate([
         core_1.Component({
             selector: 'service-details-view',
@@ -1080,10 +1094,10 @@ var ServiceDetailsViewComponent = (function () {
             template: __webpack_require__("./src/app/pages/shared/components/service-details-view/service-details-view.html"),
             styles: []
         }), 
-        __metadata('design:paramtypes', [(typeof (_c = typeof file_helper_service_1.FileHelperService !== 'undefined' && file_helper_service_1.FileHelperService) === 'function' && _c) || Object, (typeof (_d = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _d) || Object, (typeof (_e = typeof id_services_service_1.IdServicesService !== 'undefined' && id_services_service_1.IdServicesService) === 'function' && _e) || Object, (typeof (_f = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _f) || Object])
+        __metadata('design:paramtypes', [(typeof (_d = typeof file_helper_service_1.FileHelperService !== 'undefined' && file_helper_service_1.FileHelperService) === 'function' && _d) || Object, (typeof (_e = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _e) || Object, (typeof (_f = typeof id_services_service_1.IdServicesService !== 'undefined' && id_services_service_1.IdServicesService) === 'function' && _f) || Object, (typeof (_g = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _g) || Object])
     ], ServiceDetailsViewComponent);
     return ServiceDetailsViewComponent;
-    var _a, _b, _c, _d, _e, _f;
+    var _a, _b, _c, _d, _e, _f, _g;
 }());
 exports.ServiceDetailsViewComponent = ServiceDetailsViewComponent;
 
@@ -1093,7 +1107,7 @@ exports.ServiceDetailsViewComponent = ServiceDetailsViewComponent;
 /***/ "./src/app/pages/shared/components/service-details-view/service-details-view.html":
 /***/ function(module, exports) {
 
-module.exports = "<ba-card title=\"{{title}}\" baCardClass=\"with-scroll table-panel\">\r\n  <mc-label-value-table [isLoading]=\"isLoading\" [labelValues]=\"labelValues\"></mc-label-value-table>\r\n  <ul *ngIf=\"!isLoading && service && (this.service.oidcRedirectUri || showDelete())\" class=\"btn-list clearfix\">\r\n    <li *ngIf=\"this.service.oidcRedirectUri\">\r\n      <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"downloadXML()\">Download JBOSS XML</button>\r\n    </li>\r\n    <li *ngIf=\"this.service.oidcRedirectUri\">\r\n      <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"downloadJSON()\">Download Keycloak JSON</button>\r\n    </li>\r\n    <li *ngIf=\"showDelete()\">\r\n      <button type=\"button\" class=\"btn btn-danger btn-raised\" (click)=\"delete()\">Delete Service</button>\r\n    </li>\r\n  </ul>\r\n</ba-card>\r\n\r\n<div *ngIf=\"service\">\r\n  <ba-card title=\"Certificates for {{service.name}}\" baCardClass=\"with-scroll table-panel\">\r\n    <certificates-table [entityMrn]=\"service.mrn\" [isLoading]=\"isLoading\" [certificateTitle]=\"service.name\" [certificateEntityType]=\"entityType\" [certificates]=\"service.certificates\"></certificates-table>\r\n  </ba-card>\r\n</div>\r\n\r\n"
+module.exports = "<ba-card title=\"{{title}}\" baCardClass=\"with-scroll table-panel\">\r\n  <mc-label-value-table [isLoading]=\"isLoading\" [labelValues]=\"labelValues\"></mc-label-value-table>\r\n  <ul *ngIf=\"!isLoading && service && (this.service.oidcRedirectUri || showDelete() || showUpdate())\" class=\"btn-list clearfix\">\r\n    <li *ngIf=\"this.service.oidcRedirectUri\">\r\n      <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"downloadXML()\">Download JBOSS XML</button>\r\n    </li>\r\n    <li *ngIf=\"this.service.oidcRedirectUri\">\r\n      <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"downloadJSON()\">Download Keycloak JSON</button>\r\n    </li>\r\n    <li *ngIf=\"showUpdate()\">\r\n      <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"update()\">Update</button>\r\n    </li>\r\n    <li *ngIf=\"showDelete()\">\r\n      <button type=\"button\" class=\"btn btn-danger btn-raised\" (click)=\"delete()\">Delete Service</button>\r\n    </li>\r\n  </ul>\r\n</ba-card>\r\n\r\n<div *ngIf=\"service\">\r\n  <ba-card title=\"Certificates for {{service.name}}\" baCardClass=\"with-scroll table-panel\">\r\n    <certificates-table [entityMrn]=\"service.mrn\" [isLoading]=\"isLoading\" [certificateTitle]=\"service.name\" [certificateEntityType]=\"entityType\" [certificates]=\"service.certificates\"></certificates-table>\r\n  </ba-card>\r\n</div>\r\n\r\n"
 
 /***/ },
 

@@ -128,13 +128,15 @@ var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
 var devices_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/devices.service.ts");
 var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifications.service.ts");
 var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth.service.ts");
+var navigation_helper_service_1 = __webpack_require__("./src/app/shared/navigation-helper.service.ts");
 var DeviceDetailsComponent = (function () {
-    function DeviceDetailsComponent(authService, route, devicesService, router, notifications) {
+    function DeviceDetailsComponent(authService, route, devicesService, router, notifications, navigationHelper) {
         this.authService = authService;
         this.route = route;
         this.devicesService = devicesService;
         this.router = router;
         this.notifications = notifications;
+        this.navigationHelper = navigationHelper;
         this.showModal = false;
     }
     DeviceDetailsComponent.prototype.ngOnInit = function () {
@@ -163,11 +165,17 @@ var DeviceDetailsComponent = (function () {
             this.labelValues.push({ label: 'Permissions', valueHtml: this.device.permissions });
         }
     };
+    DeviceDetailsComponent.prototype.showUpdate = function () {
+        return this.isAdmin() && this.device != null;
+    };
     DeviceDetailsComponent.prototype.showDelete = function () {
         return this.isAdmin() && this.device != null;
     };
     DeviceDetailsComponent.prototype.isAdmin = function () {
         return this.authService.authState.isAdmin();
+    };
+    DeviceDetailsComponent.prototype.update = function () {
+        this.navigationHelper.navigateToUpdateDevice(this.device.mrn);
     };
     DeviceDetailsComponent.prototype.delete = function () {
         this.modalDescription = 'Are you sure you want to delete the device?';
@@ -194,10 +202,10 @@ var DeviceDetailsComponent = (function () {
             template: __webpack_require__("./src/app/pages/org-identity-registry/devices/components/device-details/device-details.html"),
             styles: []
         }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _a) || Object, (typeof (_b = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _b) || Object, (typeof (_c = typeof devices_service_1.DevicesService !== 'undefined' && devices_service_1.DevicesService) === 'function' && _c) || Object, (typeof (_d = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _d) || Object, (typeof (_e = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _e) || Object])
+        __metadata('design:paramtypes', [(typeof (_a = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _a) || Object, (typeof (_b = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _b) || Object, (typeof (_c = typeof devices_service_1.DevicesService !== 'undefined' && devices_service_1.DevicesService) === 'function' && _c) || Object, (typeof (_d = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _d) || Object, (typeof (_e = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _e) || Object, (typeof (_f = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _f) || Object])
     ], DeviceDetailsComponent);
     return DeviceDetailsComponent;
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d, _e, _f;
 }());
 exports.DeviceDetailsComponent = DeviceDetailsComponent;
 
@@ -207,7 +215,7 @@ exports.DeviceDetailsComponent = DeviceDetailsComponent;
 /***/ "./src/app/pages/org-identity-registry/devices/components/device-details/device-details.html":
 /***/ function(module, exports) {
 
-module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{title}}\" baCardClass=\"with-scroll table-panel\">\r\n      <mc-label-value-table [isLoading]=\"isLoading\" [labelValues]=\"labelValues\"></mc-label-value-table>\r\n      <ul *ngIf=\"!isLoading && showDelete()\" class=\"btn-list clearfix\">\r\n        <li>\r\n          <button type=\"button\" class=\"btn btn-danger btn-raised\" (click)=\"delete()\">Delete device</button>\r\n        </li>\r\n      </ul>\r\n    </ba-card>\r\n\r\n    <div *ngIf=\"device\">\r\n      <ba-card title=\"Certificates for {{title}}\" baCardClass=\"with-scroll table-panel\">\r\n        <certificates-table [entityMrn]=\"device.mrn\" [isLoading]=\"isLoading\" [certificateTitle]=\"title\" [certificateEntityType]=\"entityType\" [certificates]=\"device.certificates\"></certificates-table>\r\n      </ba-card>\r\n    </div>\r\n  </div>\r\n</div>\r\n<mc-modal (onCancel)=\"cancelModal()\" (onOk)=\"deleteForSure()\" [show]=\"showModal\" [title]=\"'Delete device'\" [description]=\"modalDescription\" [cancelClass]=\"'btn btn-default btn-raised'\" [cancelTitle]=\"'Cancel'\" [okClass]=\"'btn btn-danger btn-raised'\" [okTitle]=\"'Delete'\"></mc-modal>\r\n"
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{title}}\" baCardClass=\"with-scroll table-panel\">\r\n      <mc-label-value-table [isLoading]=\"isLoading\" [labelValues]=\"labelValues\"></mc-label-value-table>\r\n      <ul *ngIf=\"!isLoading && (showDelete() || showUpdate())\" class=\"btn-list clearfix\">\r\n        <li *ngIf=\"showUpdate()\">\r\n          <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"update()\">Update device</button>\r\n        </li>\r\n        <li *ngIf=\"showDelete()\">\r\n          <button type=\"button\" class=\"btn btn-danger btn-raised\" (click)=\"delete()\">Delete device</button>\r\n        </li>\r\n      </ul>\r\n    </ba-card>\r\n\r\n    <div *ngIf=\"device\">\r\n      <ba-card title=\"Certificates for {{title}}\" baCardClass=\"with-scroll table-panel\">\r\n        <certificates-table [entityMrn]=\"device.mrn\" [isLoading]=\"isLoading\" [certificateTitle]=\"title\" [certificateEntityType]=\"entityType\" [certificates]=\"device.certificates\"></certificates-table>\r\n      </ba-card>\r\n    </div>\r\n  </div>\r\n</div>\r\n<mc-modal (onCancel)=\"cancelModal()\" (onOk)=\"deleteForSure()\" [show]=\"showModal\" [title]=\"'Delete device'\" [description]=\"modalDescription\" [cancelClass]=\"'btn btn-default btn-raised'\" [cancelTitle]=\"'Cancel'\" [okClass]=\"'btn btn-danger btn-raised'\" [okTitle]=\"'Delete'\"></mc-modal>\r\n"
 
 /***/ },
 
@@ -432,6 +440,111 @@ module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-
 
 /***/ },
 
+/***/ "./src/app/pages/org-identity-registry/devices/components/device-update/device-update.component.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
+var navigation_helper_service_1 = __webpack_require__("./src/app/shared/navigation-helper.service.ts");
+var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifications.service.ts");
+var organizations_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/organizations.service.ts");
+var forms_1 = __webpack_require__("./node_modules/@angular/forms/index.js");
+var devices_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/devices.service.ts");
+var mcFormControlModel_1 = __webpack_require__("./src/app/theme/components/mcForm/mcFormControlModel.ts");
+var DeviceUpdateComponent = (function () {
+    function DeviceUpdateComponent(formBuilder, activatedRoute, navigationService, notifications, orgService, devicesService) {
+        this.formBuilder = formBuilder;
+        this.activatedRoute = activatedRoute;
+        this.navigationService = navigationService;
+        this.notifications = notifications;
+        this.orgService = orgService;
+        this.devicesService = devicesService;
+        // McForm params
+        this.isLoading = true;
+        this.isUpdating = false;
+        this.updateTitle = "Update device";
+    }
+    DeviceUpdateComponent.prototype.ngOnInit = function () {
+        this.isUpdating = false;
+        this.isLoading = true;
+        this.loadDevice();
+    };
+    DeviceUpdateComponent.prototype.cancel = function () {
+        var deviceMrn = (this.device ? this.device.mrn : '');
+        this.navigationService.navigateToDevice(deviceMrn);
+    };
+    DeviceUpdateComponent.prototype.update = function () {
+        this.isUpdating = true;
+        this.device.name = this.updateForm.value.name;
+        this.device.permissions = this.updateForm.value.permissions;
+        this.updateDevice(this.device);
+    };
+    DeviceUpdateComponent.prototype.updateDevice = function (device) {
+        var _this = this;
+        this.devicesService.updateDevice(device).subscribe(function (_) {
+            _this.isUpdating = false;
+            _this.navigationService.navigateToDevice(_this.device.mrn);
+        }, function (err) {
+            _this.isUpdating = false;
+            _this.notifications.generateNotification('Error', 'Error when trying to update device', mc_notifications_service_1.MCNotificationType.Error, err);
+        });
+    };
+    DeviceUpdateComponent.prototype.loadDevice = function () {
+        var _this = this;
+        this.isLoading = true;
+        var mrn = this.activatedRoute.snapshot.params['id'];
+        this.devicesService.getDevice(mrn).subscribe(function (device) {
+            _this.device = device;
+            _this.generateForm();
+            _this.isLoading = false;
+        }, function (err) {
+            _this.isLoading = false;
+            _this.notifications.generateNotification('Error', 'Error when trying to get the device', mc_notifications_service_1.MCNotificationType.Error, err);
+            _this.navigationService.navigateToDevice(mrn);
+        });
+    };
+    DeviceUpdateComponent.prototype.generateForm = function () {
+        this.updateForm = this.formBuilder.group({});
+        this.formControlModels = [];
+        var formControlModel = { formGroup: this.updateForm, elementId: 'mrn', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'MRN', placeholder: '', isDisabled: true };
+        var formControl = new forms_1.FormControl(this.device.mrn, formControlModel.validator);
+        this.updateForm.addControl(formControlModel.elementId, formControl);
+        this.formControlModels.push(formControlModel);
+        formControlModel = { formGroup: this.updateForm, elementId: 'name', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'Name', placeholder: 'Name is required', validator: forms_1.Validators.required };
+        formControl = new forms_1.FormControl(this.device.name, formControlModel.validator);
+        this.updateForm.addControl(formControlModel.elementId, formControl);
+        this.formControlModels.push(formControlModel);
+        formControlModel = { formGroup: this.updateForm, elementId: 'permissions', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'Permissions', placeholder: '' };
+        formControl = new forms_1.FormControl(this.device.permissions, formControlModel.validator);
+        this.updateForm.addControl(formControlModel.elementId, formControl);
+        this.formControlModels.push(formControlModel);
+    };
+    DeviceUpdateComponent = __decorate([
+        core_1.Component({
+            selector: 'device-update',
+            encapsulation: core_1.ViewEncapsulation.None,
+            template: __webpack_require__("./src/app/pages/org-identity-registry/devices/components/device-update/device-update.html"),
+            styles: []
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof forms_1.FormBuilder !== 'undefined' && forms_1.FormBuilder) === 'function' && _a) || Object, (typeof (_b = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _b) || Object, (typeof (_c = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _c) || Object, (typeof (_d = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _d) || Object, (typeof (_e = typeof organizations_service_1.OrganizationsService !== 'undefined' && organizations_service_1.OrganizationsService) === 'function' && _e) || Object, (typeof (_f = typeof devices_service_1.DevicesService !== 'undefined' && devices_service_1.DevicesService) === 'function' && _f) || Object])
+    ], DeviceUpdateComponent);
+    return DeviceUpdateComponent;
+    var _a, _b, _c, _d, _e, _f;
+}());
+exports.DeviceUpdateComponent = DeviceUpdateComponent;
+
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/devices/components/device-update/device-update.html":
+/***/ function(module, exports) {
+
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"Update Device - {{device?.name}}\" baCardClass=\"with-scroll table-panel\">\r\n      <mc-form [formNeedsUpdating]=\"true\" [formGroup]=\"updateForm\" [formControlModels]=\"formControlModels\" [isLoading]=\"isLoading\" [isRegistering]=\"isUpdating\" [registerTitle]=\"updateTitle\" (onCancel)=\"cancel()\" (onRegister)=\"update()\"></mc-form>\r\n    </ba-card>\r\n  </div>\r\n</div>\r\n"
+
+/***/ },
+
 /***/ "./src/app/pages/org-identity-registry/devices/devices.component.ts":
 /***/ function(module, exports, __webpack_require__) {
 
@@ -469,6 +582,7 @@ var device_details_component_1 = __webpack_require__("./src/app/pages/org-identi
 var nga_module_1 = __webpack_require__("./src/app/theme/nga.module.ts");
 var shared_module_1 = __webpack_require__("./src/app/pages/shared/shared.module.ts");
 var device_new_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/devices/components/device-new/device-new.component.ts");
+var device_update_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/devices/components/device-update/device-update.component.ts");
 var DevicesModule = (function () {
     function DevicesModule() {
     }
@@ -484,7 +598,8 @@ var DevicesModule = (function () {
                 devices_component_1.DevicesComponent,
                 device_details_component_1.DeviceDetailsComponent,
                 device_list_component_1.DeviceListComponent,
-                device_new_component_1.DeviceNewComponent
+                device_new_component_1.DeviceNewComponent,
+                device_update_component_1.DeviceUpdateComponent
             ]
         }), 
         __metadata('design:paramtypes', [])
@@ -508,6 +623,7 @@ var device_list_component_1 = __webpack_require__("./src/app/pages/org-identity-
 var device_details_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/devices/components/device-details/device-details.component.ts");
 var device_new_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/devices/components/device-new/device-new.component.ts");
 var certificate_issue_new_component_1 = __webpack_require__("./src/app/pages/shared/components/certificate-issue-new/certificate-issue-new.component.ts");
+var device_update_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/devices/components/device-update/device-update.component.ts");
 // noinspection TypeScriptValidateTypes
 var routes = [
     {
@@ -534,6 +650,11 @@ var routes = [
                 path: ':id',
                 component: device_details_component_1.DeviceDetailsComponent,
                 data: { breadcrumb: 'Details' }
+            },
+            {
+                path: 'update/:id',
+                component: device_update_component_1.DeviceUpdateComponent,
+                data: { breadcrumb: 'Update' }
             }
         ]
     }
@@ -828,6 +949,7 @@ var mcFormControlModel_1 = __webpack_require__("./src/app/theme/components/mcFor
 var id_services_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/id-services.service.ts");
 var ServiceViewModel_1 = __webpack_require__("./src/app/pages/org-identity-registry/services/view-models/ServiceViewModel.ts");
 var url_validator_1 = __webpack_require__("./src/app/theme/validators/url.validator.ts");
+var select_validator_1 = __webpack_require__("./src/app/theme/validators/select.validator.ts");
 var ServiceNewComponent = (function () {
     function ServiceNewComponent(formBuilder, activatedRoute, navigationService, notifications, orgService, servicesService, mrnHelper) {
         this.formBuilder = formBuilder;
@@ -870,10 +992,16 @@ var ServiceNewComponent = (function () {
         service.name = this.registerForm.value.name;
         service.permissions = this.registerForm.value.permissions;
         service.certDomainName = this.registerForm.value.certDomainName;
-        service.oidcRedirectUri = this.registerForm.value.oidcRedirectUri;
-        var oidcAccessType = this.registerForm.value.oidcAccessType;
-        if (oidcAccessType && oidcAccessType.toLowerCase().indexOf('undefined') < 0) {
-            service.oidcAccessType = oidcAccessType;
+        if (this.useOIDC) {
+            service.oidcRedirectUri = this.registerForm.value.oidcRedirectUri;
+            var oidcAccessType = this.registerForm.value.oidcAccessType;
+            if (oidcAccessType && oidcAccessType.toLowerCase().indexOf('undefined') < 0) {
+                service.oidcAccessType = oidcAccessType;
+            }
+        }
+        else {
+            service.oidcAccessType = null;
+            service.oidcRedirectUri = null;
         }
         this.createService(service);
     };
@@ -951,7 +1079,7 @@ var ServiceNewComponent = (function () {
         this.registerForm.addControl(formControlModel.elementId, formControl);
         this.formControlModels.push(formControlModel);
         var formControlModelCheckbox = { state: this.useOIDC, formGroup: this.registerForm, elementId: 'useOIDC', controlType: mcFormControlModel_1.McFormControlType.Checkbox, labelName: 'Use OpenID Connect (OIDC)' };
-        formControl = new forms_1.FormControl({ value: '', disabled: false }, formControlModelCheckbox.validator);
+        formControl = new forms_1.FormControl({ value: formControlModelCheckbox.state, disabled: false }, formControlModelCheckbox.validator);
         formControl.valueChanges.subscribe(function (param) { return _this.shouldUseOIDC(param); });
         this.registerForm.addControl(formControlModelCheckbox.elementId, formControl);
         this.formControlModels.push(formControlModelCheckbox);
@@ -960,7 +1088,7 @@ var ServiceNewComponent = (function () {
             formControl = new forms_1.FormControl('', formControlModel.validator);
             this.registerForm.addControl(formControlModel.elementId, formControl);
             this.formControlModels.push(formControlModel);
-            var formControlModelSelect = { selectValues: this.selectValues(), formGroup: this.registerForm, elementId: 'oidcAccessType', controlType: mcFormControlModel_1.McFormControlType.Select, labelName: 'Access type', placeholder: '', validator: forms_1.Validators.required };
+            var formControlModelSelect = { selectValues: this.selectValues(), formGroup: this.registerForm, elementId: 'oidcAccessType', controlType: mcFormControlModel_1.McFormControlType.Select, labelName: 'Access type', placeholder: '', validator: select_validator_1.SelectValidator.validate };
             formControl = new forms_1.FormControl('', formControlModelSelect.validator);
             this.registerForm.addControl(formControlModelSelect.elementId, formControl);
             this.formControlModels.push(formControlModelSelect);
@@ -968,10 +1096,10 @@ var ServiceNewComponent = (function () {
     };
     ServiceNewComponent.prototype.selectValues = function () {
         var selectValues = [];
-        selectValues.push({ value: undefined, label: 'Choose access type...' });
+        selectValues.push({ value: undefined, label: 'Choose access type...', isSelected: true });
         var allOidcTypes = ServiceViewModel_1.ServiceViewModel.getAllOidcAccessTypes();
         allOidcTypes.forEach(function (oidcType) {
-            selectValues.push({ value: oidcType.value, label: oidcType.label });
+            selectValues.push({ value: oidcType.value, label: oidcType.label, isSelected: false });
         });
         return selectValues;
     };
@@ -996,6 +1124,206 @@ exports.ServiceNewComponent = ServiceNewComponent;
 /***/ function(module, exports) {
 
 module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"Register new Service for {{organization?.name}}\" baCardClass=\"with-scroll table-panel\">\r\n      <mc-form [formGroup]=\"registerForm\" [formControlModels]=\"formControlModels\" [isLoading]=\"isLoading\" [isRegistering]=\"isRegistering\" [registerTitle]=\"registerTitle\" (onCancel)=\"cancel()\" (onRegister)=\"register()\"></mc-form>\r\n    </ba-card>\r\n  </div>\r\n</div>\r\n"
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/services/components/service-update/service-update.component.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
+var navigation_helper_service_1 = __webpack_require__("./src/app/shared/navigation-helper.service.ts");
+var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifications.service.ts");
+var forms_1 = __webpack_require__("./node_modules/@angular/forms/index.js");
+var mrn_helper_service_1 = __webpack_require__("./src/app/shared/mrn-helper.service.ts");
+var mcFormControlModel_1 = __webpack_require__("./src/app/theme/components/mcForm/mcFormControlModel.ts");
+var id_services_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/id-services.service.ts");
+var Service_1 = __webpack_require__("./src/app/backend-api/identity-registry/autogen/model/Service.ts");
+var ServiceViewModel_1 = __webpack_require__("./src/app/pages/org-identity-registry/services/view-models/ServiceViewModel.ts");
+var url_validator_1 = __webpack_require__("./src/app/theme/validators/url.validator.ts");
+var select_validator_1 = __webpack_require__("./src/app/theme/validators/select.validator.ts");
+var OidcAccessTypeEnum = Service_1.Service.OidcAccessTypeEnum;
+var ServiceUpdateComponent = (function () {
+    function ServiceUpdateComponent(formBuilder, activatedRoute, navigationService, notifications, servicesService, mrnHelper) {
+        this.formBuilder = formBuilder;
+        this.activatedRoute = activatedRoute;
+        this.navigationService = navigationService;
+        this.notifications = notifications;
+        this.servicesService = servicesService;
+        this.showModal = false;
+        // McForm params
+        this.useOIDC = false;
+        this.isLoading = true;
+        this.isUpdating = false;
+        this.updateTitle = "Update";
+    }
+    ServiceUpdateComponent.prototype.ngOnInit = function () {
+        this.isUpdating = false;
+        this.isLoading = true;
+        this.loadIdService();
+    };
+    ServiceUpdateComponent.prototype.loadIdService = function () {
+        var _this = this;
+        var mrn = this.activatedRoute.snapshot.params['id'];
+        this.servicesService.getIdService(mrn).subscribe(function (idService) {
+            _this.idService = idService;
+            _this.useOIDC = _this.idService.oidcRedirectUri && _this.idService.oidcRedirectUri.length > 0;
+            _this.generateForm();
+            _this.isLoading = false;
+        }, function (err) {
+            _this.notifications.generateNotification('Error', 'Error when trying to get the service', mc_notifications_service_1.MCNotificationType.Error, err);
+            _this.navigationService.navigateToVessel(mrn);
+        });
+    };
+    ServiceUpdateComponent.prototype.cancel = function () {
+        this.navigationService.gobackFromUpdateService();
+    };
+    ServiceUpdateComponent.prototype.update = function () {
+        if (this.hasActiveCertificate()) {
+            this.modalDescription = "<b>Certificates</b> will be <b>invalid</b> if you update the service.<br>You need to revoke the certificates and issue new ones.<br><br>Would you still like to update?";
+            this.showModal = true;
+        }
+        else {
+            this.updateForSure();
+        }
+    };
+    ServiceUpdateComponent.prototype.hasActiveCertificate = function () {
+        if (this.idService.certificates && this.idService.certificates.length > 0) {
+            for (var _i = 0, _a = this.idService.certificates; _i < _a.length; _i++) {
+                var certificate = _a[_i];
+                if (!certificate.revoked) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+    ServiceUpdateComponent.prototype.cancelModal = function () {
+        this.showModal = false;
+    };
+    ServiceUpdateComponent.prototype.updateForSure = function () {
+        this.isUpdating = true;
+        this.updateValues(true);
+        this.updateIdService(this.idService);
+    };
+    ServiceUpdateComponent.prototype.updateValues = function (overwriteOidc) {
+        this.idService.name = this.updateForm.value.name;
+        this.idService.permissions = this.updateForm.value.permissions;
+        this.idService.certDomainName = this.updateForm.value.certDomainName;
+        if (overwriteOidc) {
+            if (this.useOIDC) {
+                this.idService.oidcRedirectUri = this.updateForm.value.oidcRedirectUri;
+                var oidcAccessType = this.updateForm.value.oidcAccessType;
+                if (oidcAccessType && oidcAccessType.toLowerCase().indexOf('undefined') < 0) {
+                    this.idService.oidcAccessType = oidcAccessType;
+                }
+                else {
+                    this.idService.oidcAccessType = null;
+                }
+            }
+            else {
+                this.idService.oidcAccessType = null;
+                this.idService.oidcRedirectUri = null;
+                this.idService.oidcClientId = null;
+                this.idService.oidcClientSecret = null;
+            }
+        }
+    };
+    ServiceUpdateComponent.prototype.updateIdService = function (service) {
+        var _this = this;
+        this.servicesService.updateIdService(service).subscribe(function (_) {
+            _this.isUpdating = false;
+            _this.navigationService.gobackFromUpdateService();
+        }, function (err) {
+            _this.isUpdating = false;
+            _this.notifications.generateNotification('Error', 'Error when trying to update service', mc_notifications_service_1.MCNotificationType.Error, err);
+        });
+    };
+    ServiceUpdateComponent.prototype.shouldUseOIDC = function (useOIDC) {
+        this.useOIDC = useOIDC;
+        this.updateValues(false);
+        this.generateForm();
+    };
+    ServiceUpdateComponent.prototype.generateForm = function () {
+        var _this = this;
+        this.updateForm = this.formBuilder.group({});
+        this.formControlModels = [];
+        var formControlModel = { formGroup: this.updateForm, elementId: 'mrn', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'MRN', placeholder: '', isDisabled: true };
+        var formControl = new forms_1.FormControl(this.idService.mrn, formControlModel.validator);
+        this.updateForm.addControl(formControlModel.elementId, formControl);
+        this.formControlModels.push(formControlModel);
+        formControlModel = { formGroup: this.updateForm, elementId: 'name', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'Name', placeholder: '', isDisabled: true };
+        formControl = new forms_1.FormControl(this.idService.name, formControlModel.validator);
+        this.updateForm.addControl(formControlModel.elementId, formControl);
+        this.formControlModels.push(formControlModel);
+        formControlModel = { formGroup: this.updateForm, elementId: 'permissions', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'Permissions', placeholder: '' };
+        formControl = new forms_1.FormControl(this.idService.permissions, formControlModel.validator);
+        this.updateForm.addControl(formControlModel.elementId, formControl);
+        this.formControlModels.push(formControlModel);
+        formControlModel = { formGroup: this.updateForm, elementId: 'certDomainName', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'Certificate domain name', placeholder: '' };
+        formControl = new forms_1.FormControl(this.idService.certDomainName, formControlModel.validator);
+        this.updateForm.addControl(formControlModel.elementId, formControl);
+        this.formControlModels.push(formControlModel);
+        var formControlModelCheckbox = { state: this.useOIDC, formGroup: this.updateForm, elementId: 'useOIDC', controlType: mcFormControlModel_1.McFormControlType.Checkbox, labelName: 'Use OpenID Connect (OIDC)' };
+        formControl = new forms_1.FormControl({ value: "\"" + formControlModelCheckbox.state + "\"", disabled: false }, formControlModelCheckbox.validator);
+        formControl.valueChanges.subscribe(function (param) { return _this.shouldUseOIDC(param); });
+        this.updateForm.addControl(formControlModelCheckbox.elementId, formControl);
+        this.formControlModels.push(formControlModelCheckbox);
+        if (this.useOIDC) {
+            formControlModel = { formGroup: this.updateForm, elementId: 'oidcRedirectUri', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'OIDC Redirect URI', placeholder: '', validator: forms_1.Validators.compose([forms_1.Validators.required, url_validator_1.UrlValidator.validate]), errorText: 'URI not valid' };
+            formControl = new forms_1.FormControl(this.idService.oidcRedirectUri, formControlModel.validator);
+            this.updateForm.addControl(formControlModel.elementId, formControl);
+            this.formControlModels.push(formControlModel);
+            var selectValues = this.selectValues();
+            var formControlModelSelect = { selectValues: selectValues, formGroup: this.updateForm, elementId: 'oidcAccessType', controlType: mcFormControlModel_1.McFormControlType.Select, labelName: 'Access type', placeholder: '', validator: select_validator_1.SelectValidator.validate };
+            formControl = new forms_1.FormControl(this.selectedValue(selectValues), formControlModelSelect.validator);
+            this.updateForm.addControl(formControlModelSelect.elementId, formControl);
+            this.formControlModels.push(formControlModelSelect);
+        }
+    };
+    ServiceUpdateComponent.prototype.selectedValue = function (selectValues) {
+        for (var _i = 0, selectValues_1 = selectValues; _i < selectValues_1.length; _i++) {
+            var selectModel = selectValues_1[_i];
+            if (selectModel.isSelected) {
+                return selectModel.value;
+            }
+        }
+        return '';
+    };
+    ServiceUpdateComponent.prototype.selectValues = function () {
+        var _this = this;
+        var selectValues = [];
+        selectValues.push({ value: undefined, label: 'Choose access type...', isSelected: this.idService.oidcAccessType == null });
+        var allOidcTypes = ServiceViewModel_1.ServiceViewModel.getAllOidcAccessTypes();
+        allOidcTypes.forEach(function (oidcType) {
+            var isSelected = OidcAccessTypeEnum[oidcType.value] === OidcAccessTypeEnum[_this.idService.oidcAccessType];
+            selectValues.push({ value: oidcType.value, label: oidcType.label, isSelected: isSelected });
+        });
+        return selectValues;
+    };
+    ServiceUpdateComponent = __decorate([
+        core_1.Component({
+            selector: 'service-update',
+            encapsulation: core_1.ViewEncapsulation.None,
+            template: __webpack_require__("./src/app/pages/org-identity-registry/services/components/service-update/service-update.html"),
+            styles: []
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof forms_1.FormBuilder !== 'undefined' && forms_1.FormBuilder) === 'function' && _a) || Object, (typeof (_b = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _b) || Object, (typeof (_c = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _c) || Object, (typeof (_d = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _d) || Object, (typeof (_e = typeof id_services_service_1.IdServicesService !== 'undefined' && id_services_service_1.IdServicesService) === 'function' && _e) || Object, (typeof (_f = typeof mrn_helper_service_1.MrnHelperService !== 'undefined' && mrn_helper_service_1.MrnHelperService) === 'function' && _f) || Object])
+    ], ServiceUpdateComponent);
+    return ServiceUpdateComponent;
+    var _a, _b, _c, _d, _e, _f;
+}());
+exports.ServiceUpdateComponent = ServiceUpdateComponent;
+
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/services/components/service-update/service-update.html":
+/***/ function(module, exports) {
+
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"Update - {{idService?.name}}\" baCardClass=\"with-scroll table-panel\">\r\n      <mc-form [formNeedsUpdating]=\"true\" [formGroup]=\"updateForm\" [formControlModels]=\"formControlModels\" [isLoading]=\"isLoading\" [isRegistering]=\"isUpdating\" [registerTitle]=\"updateTitle\" (onCancel)=\"cancel()\" (onRegister)=\"update()\"></mc-form>\r\n    </ba-card>\r\n  </div>\r\n</div>\r\n<mc-modal (onCancel)=\"cancelModal()\" (onOk)=\"updateForSure()\" [show]=\"showModal\" [title]=\"'Update service'\" [description]=\"modalDescription\" [cancelClass]=\"'btn btn-default btn-raised'\" [cancelTitle]=\"'Cancel'\" [okClass]=\"'btn btn-danger btn-raised'\" [okTitle]=\"'Update'\"></mc-modal>\r\n"
 
 /***/ },
 
@@ -1036,6 +1364,7 @@ var service_details_component_1 = __webpack_require__("./src/app/pages/org-ident
 var nga_module_1 = __webpack_require__("./src/app/theme/nga.module.ts");
 var shared_module_1 = __webpack_require__("./src/app/pages/shared/shared.module.ts");
 var service_new_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/services/components/service-new/service-new.component.ts");
+var service_update_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/services/components/service-update/service-update.component.ts");
 var ServicesModule = (function () {
     function ServicesModule() {
     }
@@ -1051,10 +1380,12 @@ var ServicesModule = (function () {
                 services_component_1.ServicesComponent,
                 service_details_component_1.ServiceDetailsComponent,
                 service_list_component_1.ServiceListComponent,
-                service_new_component_1.ServiceNewComponent
+                service_new_component_1.ServiceNewComponent,
+                service_update_component_1.ServiceUpdateComponent
             ],
             exports: [
-                service_new_component_1.ServiceNewComponent
+                service_new_component_1.ServiceNewComponent,
+                service_update_component_1.ServiceUpdateComponent
             ]
         }), 
         __metadata('design:paramtypes', [])
@@ -1078,6 +1409,7 @@ var service_list_component_1 = __webpack_require__("./src/app/pages/org-identity
 var service_details_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/services/components/service-details/service-details.component.ts");
 var service_new_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/services/components/service-new/service-new.component.ts");
 var certificate_issue_new_component_1 = __webpack_require__("./src/app/pages/shared/components/certificate-issue-new/certificate-issue-new.component.ts");
+var service_update_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/services/components/service-update/service-update.component.ts");
 // noinspection TypeScriptValidateTypes
 var routes = [
     {
@@ -1104,6 +1436,11 @@ var routes = [
                 path: ':id',
                 component: service_details_component_1.ServiceDetailsComponent,
                 data: { breadcrumb: 'Details' }
+            },
+            {
+                path: 'update/:id',
+                component: service_update_component_1.ServiceUpdateComponent,
+                data: { breadcrumb: 'Update' }
             }
         ]
     }
@@ -1621,18 +1958,23 @@ var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
 var VesselViewModel_1 = __webpack_require__("./src/app/pages/org-identity-registry/vessels/view-models/VesselViewModel.ts");
 var certificate_helper_service_1 = __webpack_require__("./src/app/pages/shared/services/certificate-helper.service.ts");
 var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth.service.ts");
+var navigation_helper_service_1 = __webpack_require__("./src/app/shared/navigation-helper.service.ts");
 var VesselDetailsComponent = (function () {
-    function VesselDetailsComponent(authService, route, router, vesselsService, notifications) {
+    function VesselDetailsComponent(authService, route, router, vesselsService, notifications, navigationHelper) {
         this.authService = authService;
         this.route = route;
         this.router = router;
         this.vesselsService = vesselsService;
         this.notifications = notifications;
+        this.navigationHelper = navigationHelper;
         this.showModal = false;
     }
     VesselDetailsComponent.prototype.ngOnInit = function () {
         this.entityType = certificate_helper_service_1.CertificateEntityType.Vessel;
         this.loadVessel();
+    };
+    VesselDetailsComponent.prototype.showUpdate = function () {
+        return this.isAdmin() && this.vessel != null;
     };
     VesselDetailsComponent.prototype.showDelete = function () {
         return this.isAdmin() && this.vessel != null;
@@ -1668,6 +2010,9 @@ var VesselDetailsComponent = (function () {
             });
         }
     };
+    VesselDetailsComponent.prototype.update = function () {
+        this.navigationHelper.navigateToUpdateVessel(this.vessel.mrn);
+    };
     VesselDetailsComponent.prototype.delete = function () {
         this.modalDescription = 'Are you sure you want to delete the vessel?';
         this.showModal = true;
@@ -1693,10 +2038,10 @@ var VesselDetailsComponent = (function () {
             template: __webpack_require__("./src/app/pages/org-identity-registry/vessels/components/vessel-details/vessel-details.html"),
             styles: []
         }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _a) || Object, (typeof (_b = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _b) || Object, (typeof (_c = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _c) || Object, (typeof (_d = typeof vessels_service_1.VesselsService !== 'undefined' && vessels_service_1.VesselsService) === 'function' && _d) || Object, (typeof (_e = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _e) || Object])
+        __metadata('design:paramtypes', [(typeof (_a = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _a) || Object, (typeof (_b = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _b) || Object, (typeof (_c = typeof router_1.Router !== 'undefined' && router_1.Router) === 'function' && _c) || Object, (typeof (_d = typeof vessels_service_1.VesselsService !== 'undefined' && vessels_service_1.VesselsService) === 'function' && _d) || Object, (typeof (_e = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _e) || Object, (typeof (_f = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _f) || Object])
     ], VesselDetailsComponent);
     return VesselDetailsComponent;
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d, _e, _f;
 }());
 exports.VesselDetailsComponent = VesselDetailsComponent;
 
@@ -1706,7 +2051,7 @@ exports.VesselDetailsComponent = VesselDetailsComponent;
 /***/ "./src/app/pages/org-identity-registry/vessels/components/vessel-details/vessel-details.html":
 /***/ function(module, exports) {
 
-module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{title}}\" baCardClass=\"with-scroll table-panel\">\r\n      <mc-label-value-table [isLoading]=\"isLoading\" [labelValues]=\"labelValues\"></mc-label-value-table>\r\n      <ul *ngIf=\"!isLoading && showDelete()\" class=\"btn-list clearfix\">\r\n        <li>\r\n          <button type=\"button\" class=\"btn btn-danger btn-raised\" (click)=\"delete()\">Delete vessel</button>\r\n        </li>\r\n      </ul>\r\n    </ba-card>\r\n\r\n    <div *ngIf=\"vessel\">\r\n        <ba-card title=\"Certificates for {{title}}\" baCardClass=\"with-scroll table-panel\">\r\n            <certificates-table [entityMrn]=\"vessel.mrn\" [isLoading]=\"isLoading\" [certificateTitle]=\"title\" [certificateEntityType]=\"entityType\" [certificates]=\"vessel.certificates\"></certificates-table>\r\n        </ba-card>\r\n    </div>\r\n  </div>\r\n</div>\r\n<mc-modal (onCancel)=\"cancelModal()\" (onOk)=\"deleteForSure()\" [show]=\"showModal\" [title]=\"'Delete vessel'\" [description]=\"modalDescription\" [cancelClass]=\"'btn btn-default btn-raised'\" [cancelTitle]=\"'Cancel'\" [okClass]=\"'btn btn-danger btn-raised'\" [okTitle]=\"'Delete'\"></mc-modal>\r\n"
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{title}}\" baCardClass=\"with-scroll table-panel\">\r\n      <mc-label-value-table [isLoading]=\"isLoading\" [labelValues]=\"labelValues\"></mc-label-value-table>\r\n      <ul *ngIf=\"!isLoading && (showDelete() || showUpdate())\" class=\"btn-list clearfix\">\r\n        <li *ngIf=\"showUpdate()\">\r\n          <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"update()\">Update vessel</button>\r\n        </li>\r\n        <li *ngIf=\"showDelete()\">\r\n          <button type=\"button\" class=\"btn btn-danger btn-raised\" (click)=\"delete()\">Delete vessel</button>\r\n        </li>\r\n      </ul>\r\n    </ba-card>\r\n\r\n    <div *ngIf=\"vessel\">\r\n        <ba-card title=\"Certificates for {{title}}\" baCardClass=\"with-scroll table-panel\">\r\n            <certificates-table [entityMrn]=\"vessel.mrn\" [isLoading]=\"isLoading\" [certificateTitle]=\"title\" [certificateEntityType]=\"entityType\" [certificates]=\"vessel.certificates\"></certificates-table>\r\n        </ba-card>\r\n    </div>\r\n  </div>\r\n</div>\r\n<mc-modal (onCancel)=\"cancelModal()\" (onOk)=\"deleteForSure()\" [show]=\"showModal\" [title]=\"'Delete vessel'\" [description]=\"modalDescription\" [cancelClass]=\"'btn btn-default btn-raised'\" [cancelTitle]=\"'Cancel'\" [okClass]=\"'btn btn-danger btn-raised'\" [okTitle]=\"'Delete'\"></mc-modal>\r\n"
 
 /***/ },
 
@@ -1955,6 +2300,164 @@ module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-
 
 /***/ },
 
+/***/ "./src/app/pages/org-identity-registry/vessels/components/vessel-update/vessel-update.component.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
+var navigation_helper_service_1 = __webpack_require__("./src/app/shared/navigation-helper.service.ts");
+var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifications.service.ts");
+var forms_1 = __webpack_require__("./node_modules/@angular/forms/index.js");
+var VesselViewModel_1 = __webpack_require__("./src/app/pages/org-identity-registry/vessels/view-models/VesselViewModel.ts");
+var VesselAttribute_1 = __webpack_require__("./src/app/backend-api/identity-registry/autogen/model/VesselAttribute.ts");
+var AttributeNameEnum = VesselAttribute_1.VesselAttribute.AttributeNameEnum;
+var vessels_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/vessels.service.ts");
+var mcFormControlModel_1 = __webpack_require__("./src/app/theme/components/mcForm/mcFormControlModel.ts");
+var VesselUpdateComponent = (function () {
+    function VesselUpdateComponent(formBuilder, activatedRoute, navigationService, notifications, vesselsService) {
+        this.formBuilder = formBuilder;
+        this.activatedRoute = activatedRoute;
+        this.navigationService = navigationService;
+        this.notifications = notifications;
+        this.vesselsService = vesselsService;
+        this.showModal = false;
+        // McForm params
+        this.isLoading = true;
+        this.isUpdating = false;
+        this.updateTitle = "Update vessel";
+    }
+    VesselUpdateComponent.prototype.ngOnInit = function () {
+        this.isUpdating = false;
+        this.isLoading = true;
+        this.loadVessel();
+    };
+    VesselUpdateComponent.prototype.loadVessel = function () {
+        var _this = this;
+        var mrn = this.activatedRoute.snapshot.params['id'];
+        this.vesselsService.getVessel(mrn).subscribe(function (vessel) {
+            _this.vessel = vessel;
+            _this.generateForm();
+            _this.isLoading = false;
+        }, function (err) {
+            _this.notifications.generateNotification('Error', 'Error when trying to get the vessel', mc_notifications_service_1.MCNotificationType.Error, err);
+            _this.navigationService.navigateToVessel(mrn);
+        });
+    };
+    VesselUpdateComponent.prototype.cancel = function () {
+        var vesselMrn = (this.vessel ? this.vessel.mrn : '');
+        this.navigationService.navigateToVessel(vesselMrn);
+    };
+    VesselUpdateComponent.prototype.update = function () {
+        if (this.hasActiveCertificate()) {
+            this.modalDescription = "<b>Certificates</b> will be <b>invalid</b> if you update the Vessel.<br>You need to revoke the certificates and issue new ones.<br><br>Would you still like to update?";
+            this.showModal = true;
+        }
+        else {
+            this.updateForSure();
+        }
+    };
+    VesselUpdateComponent.prototype.hasActiveCertificate = function () {
+        if (this.vessel.certificates && this.vessel.certificates.length > 0) {
+            for (var _i = 0, _a = this.vessel.certificates; _i < _a.length; _i++) {
+                var certificate = _a[_i];
+                if (!certificate.revoked) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+    VesselUpdateComponent.prototype.cancelModal = function () {
+        this.showModal = false;
+    };
+    VesselUpdateComponent.prototype.updateForSure = function () {
+        this.isUpdating = true;
+        this.vessel.name = this.updateForm.value.name;
+        this.vessel.permissions = this.updateForm.value.permissions;
+        var formAttributes = this.updateForm.value.attributes;
+        var vesselAttributes = [];
+        Object.getOwnPropertyNames(formAttributes).forEach(function (propertyName) {
+            if (formAttributes[propertyName] && formAttributes[propertyName].length > 0) {
+                vesselAttributes.push({ attributeName: AttributeNameEnum[propertyName], attributeValue: formAttributes[propertyName] });
+            }
+        });
+        this.vessel.attributes = vesselAttributes;
+        this.updateVessel(this.vessel);
+    };
+    VesselUpdateComponent.prototype.updateVessel = function (vessel) {
+        var _this = this;
+        this.vesselsService.updateVessel(vessel).subscribe(function (_) {
+            _this.isUpdating = false;
+            _this.navigationService.navigateToVessel(vessel.mrn);
+        }, function (err) {
+            _this.isUpdating = false;
+            _this.notifications.generateNotification('Error', 'Error when trying to update vessel', mc_notifications_service_1.MCNotificationType.Error, err);
+        });
+    };
+    VesselUpdateComponent.prototype.generateForm = function () {
+        this.updateForm = this.formBuilder.group({});
+        this.formControlModels = [];
+        var formControlModel = { formGroup: this.updateForm, elementId: 'mrn', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'MRN', placeholder: '', isDisabled: true };
+        var formControl = new forms_1.FormControl(this.vessel.mrn, formControlModel.validator);
+        this.updateForm.addControl(formControlModel.elementId, formControl);
+        this.formControlModels.push(formControlModel);
+        formControlModel = { formGroup: this.updateForm, elementId: 'name', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'Name', placeholder: 'Name is required', validator: forms_1.Validators.required };
+        formControl = new forms_1.FormControl(this.vessel.name, formControlModel.validator);
+        this.updateForm.addControl(formControlModel.elementId, formControl);
+        this.formControlModels.push(formControlModel);
+        formControlModel = { formGroup: this.updateForm, elementId: 'permissions', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'Permissions', placeholder: '' };
+        formControl = new forms_1.FormControl(this.vessel.permissions, formControlModel.validator);
+        this.updateForm.addControl(formControlModel.elementId, formControl);
+        this.formControlModels.push(formControlModel);
+        this.generateAttributesGroup();
+    };
+    VesselUpdateComponent.prototype.generateAttributesGroup = function () {
+        var _this = this;
+        var attributesGroup = this.formBuilder.group({});
+        this.updateForm.addControl('attributes', attributesGroup);
+        var vesselAttributes = VesselViewModel_1.VesselViewModel.getAllPossibleVesselAttributes();
+        vesselAttributes.forEach(function (vesselAttribute) {
+            var formControlModel = { formGroup: attributesGroup, elementId: AttributeNameEnum[vesselAttribute.attributeName], controlType: mcFormControlModel_1.McFormControlType.Text, labelName: vesselAttribute.attributeNameText, placeholder: '' };
+            var formControl = new forms_1.FormControl(_this.getAttributeValue(vesselAttribute.attributeName), formControlModel.validator);
+            attributesGroup.addControl(formControlModel.elementId, formControl);
+            _this.formControlModels.push(formControlModel);
+        });
+    };
+    VesselUpdateComponent.prototype.getAttributeValue = function (attributeName) {
+        for (var _i = 0, _a = this.vessel.attributes; _i < _a.length; _i++) {
+            var attribute = _a[_i];
+            if (attribute.attributeName === attributeName) {
+                return attribute.attributeValue;
+            }
+        }
+        return '';
+    };
+    VesselUpdateComponent = __decorate([
+        core_1.Component({
+            selector: 'vessel-update',
+            encapsulation: core_1.ViewEncapsulation.None,
+            template: __webpack_require__("./src/app/pages/org-identity-registry/vessels/components/vessel-update/vessel-update.html"),
+            styles: []
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof forms_1.FormBuilder !== 'undefined' && forms_1.FormBuilder) === 'function' && _a) || Object, (typeof (_b = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _b) || Object, (typeof (_c = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _c) || Object, (typeof (_d = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _d) || Object, (typeof (_e = typeof vessels_service_1.VesselsService !== 'undefined' && vessels_service_1.VesselsService) === 'function' && _e) || Object])
+    ], VesselUpdateComponent);
+    return VesselUpdateComponent;
+    var _a, _b, _c, _d, _e;
+}());
+exports.VesselUpdateComponent = VesselUpdateComponent;
+
+
+/***/ },
+
+/***/ "./src/app/pages/org-identity-registry/vessels/components/vessel-update/vessel-update.html":
+/***/ function(module, exports) {
+
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"Update Vessel - {{vessel?.name}}\" baCardClass=\"with-scroll table-panel\">\r\n        <mc-form [formNeedsUpdating]=\"true\" [formGroup]=\"updateForm\" [formControlModels]=\"formControlModels\" [isLoading]=\"isNewLoading\" [isRegistering]=\"isUpdating\" [registerTitle]=\"updateTitle\" (onCancel)=\"cancel()\" (onRegister)=\"update()\"></mc-form>\r\n    </ba-card>\r\n  </div>\r\n</div>\r\n<mc-modal (onCancel)=\"cancelModal()\" (onOk)=\"updateForSure()\" [show]=\"showModal\" [title]=\"'Update vessel'\" [description]=\"modalDescription\" [cancelClass]=\"'btn btn-default btn-raised'\" [cancelTitle]=\"'Cancel'\" [okClass]=\"'btn btn-danger btn-raised'\" [okTitle]=\"'Update'\"></mc-modal>"
+
+/***/ },
+
 /***/ "./src/app/pages/org-identity-registry/vessels/vessels.component.ts":
 /***/ function(module, exports, __webpack_require__) {
 
@@ -1992,7 +2495,7 @@ var vessel_details_component_1 = __webpack_require__("./src/app/pages/org-identi
 var nga_module_1 = __webpack_require__("./src/app/theme/nga.module.ts");
 var shared_module_1 = __webpack_require__("./src/app/pages/shared/shared.module.ts");
 var vessel_new_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/vessels/components/vessel-new/vessel-new.component.ts");
-var forms_1 = __webpack_require__("./node_modules/@angular/forms/index.js");
+var vessel_update_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/vessels/components/vessel-update/vessel-update.component.ts");
 var VesselsModule = (function () {
     function VesselsModule() {
     }
@@ -2001,8 +2504,6 @@ var VesselsModule = (function () {
             imports: [
                 common_1.CommonModule,
                 nga_module_1.NgaModule,
-                forms_1.FormsModule,
-                forms_1.ReactiveFormsModule,
                 shared_module_1.SharedModule,
                 vessels_routing_1.routing
             ],
@@ -2010,7 +2511,8 @@ var VesselsModule = (function () {
                 vessels_component_1.VesselsComponent,
                 vessel_details_component_1.VesselDetailsComponent,
                 vessel_list_component_1.VesselListComponent,
-                vessel_new_component_1.VesselNewComponent
+                vessel_new_component_1.VesselNewComponent,
+                vessel_update_component_1.VesselUpdateComponent
             ]
         }), 
         __metadata('design:paramtypes', [])
@@ -2034,6 +2536,7 @@ var vessel_list_component_1 = __webpack_require__("./src/app/pages/org-identity-
 var vessel_details_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/vessels/components/vessel-details/vessel-details.component.ts");
 var vessel_new_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/vessels/components/vessel-new/vessel-new.component.ts");
 var certificate_issue_new_component_1 = __webpack_require__("./src/app/pages/shared/components/certificate-issue-new/certificate-issue-new.component.ts");
+var vessel_update_component_1 = __webpack_require__("./src/app/pages/org-identity-registry/vessels/components/vessel-update/vessel-update.component.ts");
 // noinspection TypeScriptValidateTypes
 var routes = [
     {
@@ -2060,6 +2563,11 @@ var routes = [
                 path: ':id',
                 component: vessel_details_component_1.VesselDetailsComponent,
                 data: { breadcrumb: 'Details' }
+            },
+            {
+                path: 'update/:id',
+                component: vessel_update_component_1.VesselUpdateComponent,
+                data: { breadcrumb: 'Update' }
             }
         ]
     }
@@ -2765,7 +3273,9 @@ var ServiceDetailsViewComponent = (function () {
         this.servicesService = servicesService;
         this.notifications = notifications;
         this.shouldShowDelete = true;
+        this.shouldShowUpdate = true;
         this.deleteAction = new core_1.EventEmitter();
+        this.updateAction = new core_1.EventEmitter();
     }
     ServiceDetailsViewComponent.prototype.ngOnInit = function () {
         this.entityType = certificate_helper_service_1.CertificateEntityType.Service;
@@ -2811,11 +3321,17 @@ var ServiceDetailsViewComponent = (function () {
     ServiceDetailsViewComponent.prototype.showDelete = function () {
         return this.shouldShowDelete && this.isAdmin() && this.service != null;
     };
+    ServiceDetailsViewComponent.prototype.showUpdate = function () {
+        return this.shouldShowUpdate && this.isAdmin() && this.service != null;
+    };
     ServiceDetailsViewComponent.prototype.isAdmin = function () {
         return this.authService.authState.isAdmin();
     };
     ServiceDetailsViewComponent.prototype.delete = function () {
         this.deleteAction.emit('');
+    };
+    ServiceDetailsViewComponent.prototype.update = function () {
+        this.updateAction.emit('');
     };
     __decorate([
         core_1.Input(), 
@@ -2828,6 +3344,10 @@ var ServiceDetailsViewComponent = (function () {
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Boolean)
+    ], ServiceDetailsViewComponent.prototype, "shouldShowUpdate", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
     ], ServiceDetailsViewComponent.prototype, "isLoading", void 0);
     __decorate([
         core_1.Input(), 
@@ -2837,6 +3357,10 @@ var ServiceDetailsViewComponent = (function () {
         core_1.Output(), 
         __metadata('design:type', (typeof (_b = typeof core_1.EventEmitter !== 'undefined' && core_1.EventEmitter) === 'function' && _b) || Object)
     ], ServiceDetailsViewComponent.prototype, "deleteAction", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', (typeof (_c = typeof core_1.EventEmitter !== 'undefined' && core_1.EventEmitter) === 'function' && _c) || Object)
+    ], ServiceDetailsViewComponent.prototype, "updateAction", void 0);
     ServiceDetailsViewComponent = __decorate([
         core_1.Component({
             selector: 'service-details-view',
@@ -2844,10 +3368,10 @@ var ServiceDetailsViewComponent = (function () {
             template: __webpack_require__("./src/app/pages/shared/components/service-details-view/service-details-view.html"),
             styles: []
         }), 
-        __metadata('design:paramtypes', [(typeof (_c = typeof file_helper_service_1.FileHelperService !== 'undefined' && file_helper_service_1.FileHelperService) === 'function' && _c) || Object, (typeof (_d = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _d) || Object, (typeof (_e = typeof id_services_service_1.IdServicesService !== 'undefined' && id_services_service_1.IdServicesService) === 'function' && _e) || Object, (typeof (_f = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _f) || Object])
+        __metadata('design:paramtypes', [(typeof (_d = typeof file_helper_service_1.FileHelperService !== 'undefined' && file_helper_service_1.FileHelperService) === 'function' && _d) || Object, (typeof (_e = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _e) || Object, (typeof (_f = typeof id_services_service_1.IdServicesService !== 'undefined' && id_services_service_1.IdServicesService) === 'function' && _f) || Object, (typeof (_g = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _g) || Object])
     ], ServiceDetailsViewComponent);
     return ServiceDetailsViewComponent;
-    var _a, _b, _c, _d, _e, _f;
+    var _a, _b, _c, _d, _e, _f, _g;
 }());
 exports.ServiceDetailsViewComponent = ServiceDetailsViewComponent;
 
@@ -2857,7 +3381,7 @@ exports.ServiceDetailsViewComponent = ServiceDetailsViewComponent;
 /***/ "./src/app/pages/shared/components/service-details-view/service-details-view.html":
 /***/ function(module, exports) {
 
-module.exports = "<ba-card title=\"{{title}}\" baCardClass=\"with-scroll table-panel\">\r\n  <mc-label-value-table [isLoading]=\"isLoading\" [labelValues]=\"labelValues\"></mc-label-value-table>\r\n  <ul *ngIf=\"!isLoading && service && (this.service.oidcRedirectUri || showDelete())\" class=\"btn-list clearfix\">\r\n    <li *ngIf=\"this.service.oidcRedirectUri\">\r\n      <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"downloadXML()\">Download JBOSS XML</button>\r\n    </li>\r\n    <li *ngIf=\"this.service.oidcRedirectUri\">\r\n      <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"downloadJSON()\">Download Keycloak JSON</button>\r\n    </li>\r\n    <li *ngIf=\"showDelete()\">\r\n      <button type=\"button\" class=\"btn btn-danger btn-raised\" (click)=\"delete()\">Delete Service</button>\r\n    </li>\r\n  </ul>\r\n</ba-card>\r\n\r\n<div *ngIf=\"service\">\r\n  <ba-card title=\"Certificates for {{service.name}}\" baCardClass=\"with-scroll table-panel\">\r\n    <certificates-table [entityMrn]=\"service.mrn\" [isLoading]=\"isLoading\" [certificateTitle]=\"service.name\" [certificateEntityType]=\"entityType\" [certificates]=\"service.certificates\"></certificates-table>\r\n  </ba-card>\r\n</div>\r\n\r\n"
+module.exports = "<ba-card title=\"{{title}}\" baCardClass=\"with-scroll table-panel\">\r\n  <mc-label-value-table [isLoading]=\"isLoading\" [labelValues]=\"labelValues\"></mc-label-value-table>\r\n  <ul *ngIf=\"!isLoading && service && (this.service.oidcRedirectUri || showDelete() || showUpdate())\" class=\"btn-list clearfix\">\r\n    <li *ngIf=\"this.service.oidcRedirectUri\">\r\n      <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"downloadXML()\">Download JBOSS XML</button>\r\n    </li>\r\n    <li *ngIf=\"this.service.oidcRedirectUri\">\r\n      <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"downloadJSON()\">Download Keycloak JSON</button>\r\n    </li>\r\n    <li *ngIf=\"showUpdate()\">\r\n      <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"update()\">Update</button>\r\n    </li>\r\n    <li *ngIf=\"showDelete()\">\r\n      <button type=\"button\" class=\"btn btn-danger btn-raised\" (click)=\"delete()\">Delete Service</button>\r\n    </li>\r\n  </ul>\r\n</ba-card>\r\n\r\n<div *ngIf=\"service\">\r\n  <ba-card title=\"Certificates for {{service.name}}\" baCardClass=\"with-scroll table-panel\">\r\n    <certificates-table [entityMrn]=\"service.mrn\" [isLoading]=\"isLoading\" [certificateTitle]=\"service.name\" [certificateEntityType]=\"entityType\" [certificates]=\"service.certificates\"></certificates-table>\r\n  </ba-card>\r\n</div>\r\n\r\n"
 
 /***/ },
 

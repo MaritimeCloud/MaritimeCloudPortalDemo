@@ -188,6 +188,121 @@ exports.SrViewModelService = SrViewModelService;
 
 /***/ },
 
+/***/ "./src/app/pages/organizations/components/my-organization-update/my-organization-update.component.ts":
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
+var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
+var forms_1 = __webpack_require__("./node_modules/@angular/forms/index.js");
+var mcFormControlModel_1 = __webpack_require__("./src/app/theme/components/mcForm/mcFormControlModel.ts");
+var navigation_helper_service_1 = __webpack_require__("./src/app/shared/navigation-helper.service.ts");
+var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifications.service.ts");
+var organizations_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/organizations.service.ts");
+var mc_utils_1 = __webpack_require__("./src/app/shared/mc-utils.ts");
+var url_validator_1 = __webpack_require__("./src/app/theme/validators/url.validator.ts");
+var MyOrganizationUpdateComponent = (function () {
+    function MyOrganizationUpdateComponent(formBuilder, activatedRoute, navigationService, notifications, orgService) {
+        this.formBuilder = formBuilder;
+        this.activatedRoute = activatedRoute;
+        this.navigationService = navigationService;
+        this.notifications = notifications;
+        this.orgService = orgService;
+        // McForm params
+        this.isLoading = true;
+        this.isUpdating = false;
+        this.updateTitle = "Update organization";
+    }
+    MyOrganizationUpdateComponent.prototype.ngOnInit = function () {
+        this.isUpdating = false;
+        this.isLoading = true;
+        this.loadOrganization();
+    };
+    MyOrganizationUpdateComponent.prototype.cancel = function () {
+        this.navigationService.takeMeHome();
+    };
+    MyOrganizationUpdateComponent.prototype.update = function () {
+        this.isUpdating = true;
+        this.organization.name = this.updateForm.value.name;
+        this.organization.address = this.updateForm.value.address;
+        this.organization.country = this.updateForm.value.country;
+        this.organization.email = this.updateForm.value.emails.email;
+        this.organization.url = this.updateForm.value.url;
+        this.updateOrganization(this.organization);
+    };
+    MyOrganizationUpdateComponent.prototype.updateOrganization = function (organization) {
+        var _this = this;
+        this.orgService.updateOrganization(organization).subscribe(function (_) {
+            _this.isUpdating = false;
+            _this.navigationService.takeMeHome();
+        }, function (err) {
+            _this.isUpdating = false;
+            _this.notifications.generateNotification('Error', 'Error when trying to update organization', mc_notifications_service_1.MCNotificationType.Error, err);
+        });
+    };
+    MyOrganizationUpdateComponent.prototype.loadOrganization = function () {
+        var _this = this;
+        this.isLoading = true;
+        this.orgService.getMyOrganization().subscribe(function (organization) {
+            _this.organization = organization;
+            _this.generateForm();
+            _this.isLoading = false;
+        }, function (err) {
+            _this.isLoading = false;
+            _this.notifications.generateNotification('Error', 'Error when trying to get the organization', mc_notifications_service_1.MCNotificationType.Error, err);
+            _this.navigationService.takeMeHome();
+        });
+    };
+    MyOrganizationUpdateComponent.prototype.generateForm = function () {
+        this.updateForm = this.formBuilder.group({});
+        this.formControlModels = [];
+        var formControlModel = { formGroup: this.updateForm, elementId: 'mrn', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'MRN', placeholder: '', isDisabled: true };
+        var formControl = new forms_1.FormControl(this.organization.mrn, formControlModel.validator);
+        this.updateForm.addControl(formControlModel.elementId, formControl);
+        this.formControlModels.push(formControlModel);
+        formControlModel = { formGroup: this.updateForm, elementId: 'name', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'Organization name', placeholder: 'Name is required', validator: forms_1.Validators.required };
+        formControl = new forms_1.FormControl(this.organization.name, formControlModel.validator);
+        this.updateForm.addControl(formControlModel.elementId, formControl);
+        this.formControlModels.push(formControlModel);
+        formControlModel = { formGroup: this.updateForm, elementId: 'address', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'Address', placeholder: 'Address is required', validator: forms_1.Validators.required };
+        formControl = new forms_1.FormControl(this.organization.address, formControlModel.validator);
+        this.updateForm.addControl(formControlModel.elementId, formControl);
+        this.formControlModels.push(formControlModel);
+        formControlModel = { formGroup: this.updateForm, elementId: 'country', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'Country', placeholder: 'Country is required', validator: forms_1.Validators.required };
+        formControl = new forms_1.FormControl(this.organization.country, formControlModel.validator);
+        this.updateForm.addControl(formControlModel.elementId, formControl);
+        this.formControlModels.push(formControlModel);
+        mc_utils_1.McUtils.generateEmailConfirmGroup(this.formBuilder, this.updateForm, this.formControlModels, this.organization.email);
+        formControlModel = { formGroup: this.updateForm, elementId: 'url', controlType: mcFormControlModel_1.McFormControlType.Text, labelName: 'URL to homepage', placeholder: 'URL is required', validator: forms_1.Validators.compose([forms_1.Validators.required, url_validator_1.UrlValidator.validate]), errorText: 'Url not valid' };
+        formControl = new forms_1.FormControl(this.organization.url, formControlModel.validator);
+        this.updateForm.addControl(formControlModel.elementId, formControl);
+        this.formControlModels.push(formControlModel);
+    };
+    MyOrganizationUpdateComponent = __decorate([
+        core_1.Component({
+            selector: 'organization-update',
+            encapsulation: core_1.ViewEncapsulation.None,
+            template: __webpack_require__("./src/app/pages/organizations/components/my-organization-update/my-organization-update.html"),
+            styles: []
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof forms_1.FormBuilder !== 'undefined' && forms_1.FormBuilder) === 'function' && _a) || Object, (typeof (_b = typeof router_1.ActivatedRoute !== 'undefined' && router_1.ActivatedRoute) === 'function' && _b) || Object, (typeof (_c = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _c) || Object, (typeof (_d = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _d) || Object, (typeof (_e = typeof organizations_service_1.OrganizationsService !== 'undefined' && organizations_service_1.OrganizationsService) === 'function' && _e) || Object])
+    ], MyOrganizationUpdateComponent);
+    return MyOrganizationUpdateComponent;
+    var _a, _b, _c, _d, _e;
+}());
+exports.MyOrganizationUpdateComponent = MyOrganizationUpdateComponent;
+
+
+/***/ },
+
+/***/ "./src/app/pages/organizations/components/my-organization-update/my-organization-update.html":
+/***/ function(module, exports) {
+
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"Update Organization - {{organization?.name}}\" baCardClass=\"with-scroll table-panel\">\r\n      <mc-form [formNeedsUpdating]=\"true\" [formGroup]=\"updateForm\" [formControlModels]=\"formControlModels\" [isLoading]=\"isLoading\" [isRegistering]=\"isUpdating\" [registerTitle]=\"updateTitle\" (onCancel)=\"cancel()\" (onRegister)=\"update()\"></mc-form>\r\n    </ba-card>\r\n  </div>\r\n</div>\r\n"
+
+/***/ },
+
 /***/ "./src/app/pages/organizations/components/my-organization/my-organization.component.ts":
 /***/ function(module, exports, __webpack_require__) {
 
@@ -198,12 +313,14 @@ var mc_notifications_service_1 = __webpack_require__("./src/app/shared/mc-notifi
 var organizations_service_1 = __webpack_require__("./src/app/backend-api/identity-registry/services/organizations.service.ts");
 var auth_service_1 = __webpack_require__("./src/app/authentication/services/auth.service.ts");
 var certificate_helper_service_1 = __webpack_require__("./src/app/pages/shared/services/certificate-helper.service.ts");
+var navigation_helper_service_1 = __webpack_require__("./src/app/shared/navigation-helper.service.ts");
 var MyOrganization = (function () {
-    function MyOrganization(changeDetector, notifications, orgService, authService) {
+    function MyOrganization(changeDetector, notifications, orgService, authService, navigationHelper) {
         this.changeDetector = changeDetector;
         this.notifications = notifications;
         this.orgService = orgService;
         this.authService = authService;
+        this.navigationHelper = navigationHelper;
         this.isLoading = true;
         this.entityType = certificate_helper_service_1.CertificateEntityType.Organization;
     }
@@ -223,6 +340,12 @@ var MyOrganization = (function () {
         this.isLoading = false;
         this.changeDetector.detectChanges();
     };
+    MyOrganization.prototype.shouldDisplayUpdate = function () {
+        return this.authService.authState.isAdmin();
+    };
+    MyOrganization.prototype.update = function () {
+        this.navigationHelper.navigateToUpdateMyOrg();
+    };
     MyOrganization = __decorate([
         core_1.Component({
             selector: 'my-organization',
@@ -230,10 +353,10 @@ var MyOrganization = (function () {
             styles: [],
             template: __webpack_require__("./src/app/pages/organizations/components/my-organization/my-organization.html")
         }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof core_1.ChangeDetectorRef !== 'undefined' && core_1.ChangeDetectorRef) === 'function' && _a) || Object, (typeof (_b = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _b) || Object, (typeof (_c = typeof organizations_service_1.OrganizationsService !== 'undefined' && organizations_service_1.OrganizationsService) === 'function' && _c) || Object, (typeof (_d = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _d) || Object])
+        __metadata('design:paramtypes', [(typeof (_a = typeof core_1.ChangeDetectorRef !== 'undefined' && core_1.ChangeDetectorRef) === 'function' && _a) || Object, (typeof (_b = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _b) || Object, (typeof (_c = typeof organizations_service_1.OrganizationsService !== 'undefined' && organizations_service_1.OrganizationsService) === 'function' && _c) || Object, (typeof (_d = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _d) || Object, (typeof (_e = typeof navigation_helper_service_1.NavigationHelperService !== 'undefined' && navigation_helper_service_1.NavigationHelperService) === 'function' && _e) || Object])
     ], MyOrganization);
     return MyOrganization;
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e;
 }());
 exports.MyOrganization = MyOrganization;
 
@@ -243,7 +366,7 @@ exports.MyOrganization = MyOrganization;
 /***/ "./src/app/pages/organizations/components/my-organization/my-organization.html":
 /***/ function(module, exports) {
 
-module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{titleName}}\" baCardClass=\"with-scroll table-panel\">\r\n      <organization-details-table (onLogoLoaded)=\"logoLoaded()\" [isLoading]=\"isLoading\" [organization]=\"organization\"></organization-details-table>\r\n    </ba-card>\r\n\r\n    <div *ngIf=\"!isLoading && organization\">\r\n      <ba-card title=\"Certificates for {{organization.name}}\" baCardClass=\"with-scroll table-panel\">\r\n        <certificates-table [entityMrn]=\"organization.mrn\" [isLoading]=\"isLoading\" [certificateTitle]=\"certificateTitle\" [certificateEntityType]=\"entityType\" [certificates]=\"organization.certificates\"></certificates-table>\r\n      </ba-card>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-card title=\"{{titleName}}\" baCardClass=\"with-scroll table-panel\">\r\n      <organization-details-table (onLogoLoaded)=\"logoLoaded()\" [isLoading]=\"isLoading\" [organization]=\"organization\"></organization-details-table>\r\n      <ul *ngIf=\"!isLoading && shouldDisplayUpdate()\" class=\"btn-list clearfix\">\r\n        <li *ngIf=\"shouldDisplayUpdate()\">\r\n          <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"update()\">Update Organization</button>\r\n        </li>\r\n      </ul>\r\n    </ba-card>\r\n\r\n    <div *ngIf=\"!isLoading && organization\">\r\n      <ba-card title=\"Certificates for {{organization.name}}\" baCardClass=\"with-scroll table-panel\">\r\n        <certificates-table [entityMrn]=\"organization.mrn\" [isLoading]=\"isLoading\" [certificateTitle]=\"certificateTitle\" [certificateEntityType]=\"entityType\" [certificates]=\"organization.certificates\"></certificates-table>\r\n      </ba-card>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ },
 
@@ -254,11 +377,11 @@ module.exports = "<div class=\"row\">\r\n  <div class=\"col-lg-12\">\r\n    <ba-
 "use strict";
 var core_1 = __webpack_require__("./node_modules/@angular/core/index.js");
 var common_1 = __webpack_require__("./node_modules/@angular/common/index.js");
-var forms_1 = __webpack_require__("./node_modules/@angular/forms/index.js");
 var my_organization_routing_1 = __webpack_require__("./src/app/pages/organizations/components/my-organization/my-organization.routing.ts");
 var nga_module_1 = __webpack_require__("./src/app/theme/nga.module.ts");
 var shared_module_1 = __webpack_require__("./src/app/pages/shared/shared.module.ts");
 var my_organization_component_1 = __webpack_require__("./src/app/pages/organizations/components/my-organization/my-organization.component.ts");
+var my_organization_update_component_1 = __webpack_require__("./src/app/pages/organizations/components/my-organization-update/my-organization-update.component.ts");
 var MyOrganizationModule = (function () {
     function MyOrganizationModule() {
     }
@@ -267,12 +390,12 @@ var MyOrganizationModule = (function () {
             imports: [
                 common_1.CommonModule,
                 shared_module_1.SharedModule,
-                forms_1.FormsModule,
                 nga_module_1.NgaModule,
                 my_organization_routing_1.routing
             ],
             declarations: [
-                my_organization_component_1.MyOrganization
+                my_organization_component_1.MyOrganization,
+                my_organization_update_component_1.MyOrganizationUpdateComponent
             ]
         }), 
         __metadata('design:paramtypes', [])
@@ -293,6 +416,7 @@ exports.default = MyOrganizationModule;
 var router_1 = __webpack_require__("./node_modules/@angular/router/index.js");
 var my_organization_component_1 = __webpack_require__("./src/app/pages/organizations/components/my-organization/my-organization.component.ts");
 var certificate_issue_new_component_1 = __webpack_require__("./src/app/pages/shared/components/certificate-issue-new/certificate-issue-new.component.ts");
+var my_organization_update_component_1 = __webpack_require__("./src/app/pages/organizations/components/my-organization-update/my-organization-update.component.ts");
 // noinspection TypeScriptValidateTypes
 var routes = [
     {
@@ -306,6 +430,11 @@ var routes = [
         component: certificate_issue_new_component_1.CertificateIssueNewComponent,
         data: { breadcrumb: 'New Certificate' },
         children: []
+    },
+    {
+        path: 'update',
+        component: my_organization_update_component_1.MyOrganizationUpdateComponent,
+        data: { breadcrumb: 'Update' }
     }
 ];
 exports.routing = router_1.RouterModule.forChild(routes);
@@ -853,7 +982,9 @@ var ServiceDetailsViewComponent = (function () {
         this.servicesService = servicesService;
         this.notifications = notifications;
         this.shouldShowDelete = true;
+        this.shouldShowUpdate = true;
         this.deleteAction = new core_1.EventEmitter();
+        this.updateAction = new core_1.EventEmitter();
     }
     ServiceDetailsViewComponent.prototype.ngOnInit = function () {
         this.entityType = certificate_helper_service_1.CertificateEntityType.Service;
@@ -899,11 +1030,17 @@ var ServiceDetailsViewComponent = (function () {
     ServiceDetailsViewComponent.prototype.showDelete = function () {
         return this.shouldShowDelete && this.isAdmin() && this.service != null;
     };
+    ServiceDetailsViewComponent.prototype.showUpdate = function () {
+        return this.shouldShowUpdate && this.isAdmin() && this.service != null;
+    };
     ServiceDetailsViewComponent.prototype.isAdmin = function () {
         return this.authService.authState.isAdmin();
     };
     ServiceDetailsViewComponent.prototype.delete = function () {
         this.deleteAction.emit('');
+    };
+    ServiceDetailsViewComponent.prototype.update = function () {
+        this.updateAction.emit('');
     };
     __decorate([
         core_1.Input(), 
@@ -916,6 +1053,10 @@ var ServiceDetailsViewComponent = (function () {
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Boolean)
+    ], ServiceDetailsViewComponent.prototype, "shouldShowUpdate", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
     ], ServiceDetailsViewComponent.prototype, "isLoading", void 0);
     __decorate([
         core_1.Input(), 
@@ -925,6 +1066,10 @@ var ServiceDetailsViewComponent = (function () {
         core_1.Output(), 
         __metadata('design:type', (typeof (_b = typeof core_1.EventEmitter !== 'undefined' && core_1.EventEmitter) === 'function' && _b) || Object)
     ], ServiceDetailsViewComponent.prototype, "deleteAction", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', (typeof (_c = typeof core_1.EventEmitter !== 'undefined' && core_1.EventEmitter) === 'function' && _c) || Object)
+    ], ServiceDetailsViewComponent.prototype, "updateAction", void 0);
     ServiceDetailsViewComponent = __decorate([
         core_1.Component({
             selector: 'service-details-view',
@@ -932,10 +1077,10 @@ var ServiceDetailsViewComponent = (function () {
             template: __webpack_require__("./src/app/pages/shared/components/service-details-view/service-details-view.html"),
             styles: []
         }), 
-        __metadata('design:paramtypes', [(typeof (_c = typeof file_helper_service_1.FileHelperService !== 'undefined' && file_helper_service_1.FileHelperService) === 'function' && _c) || Object, (typeof (_d = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _d) || Object, (typeof (_e = typeof id_services_service_1.IdServicesService !== 'undefined' && id_services_service_1.IdServicesService) === 'function' && _e) || Object, (typeof (_f = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _f) || Object])
+        __metadata('design:paramtypes', [(typeof (_d = typeof file_helper_service_1.FileHelperService !== 'undefined' && file_helper_service_1.FileHelperService) === 'function' && _d) || Object, (typeof (_e = typeof auth_service_1.AuthService !== 'undefined' && auth_service_1.AuthService) === 'function' && _e) || Object, (typeof (_f = typeof id_services_service_1.IdServicesService !== 'undefined' && id_services_service_1.IdServicesService) === 'function' && _f) || Object, (typeof (_g = typeof mc_notifications_service_1.MCNotificationsService !== 'undefined' && mc_notifications_service_1.MCNotificationsService) === 'function' && _g) || Object])
     ], ServiceDetailsViewComponent);
     return ServiceDetailsViewComponent;
-    var _a, _b, _c, _d, _e, _f;
+    var _a, _b, _c, _d, _e, _f, _g;
 }());
 exports.ServiceDetailsViewComponent = ServiceDetailsViewComponent;
 
@@ -945,7 +1090,7 @@ exports.ServiceDetailsViewComponent = ServiceDetailsViewComponent;
 /***/ "./src/app/pages/shared/components/service-details-view/service-details-view.html":
 /***/ function(module, exports) {
 
-module.exports = "<ba-card title=\"{{title}}\" baCardClass=\"with-scroll table-panel\">\r\n  <mc-label-value-table [isLoading]=\"isLoading\" [labelValues]=\"labelValues\"></mc-label-value-table>\r\n  <ul *ngIf=\"!isLoading && service && (this.service.oidcRedirectUri || showDelete())\" class=\"btn-list clearfix\">\r\n    <li *ngIf=\"this.service.oidcRedirectUri\">\r\n      <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"downloadXML()\">Download JBOSS XML</button>\r\n    </li>\r\n    <li *ngIf=\"this.service.oidcRedirectUri\">\r\n      <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"downloadJSON()\">Download Keycloak JSON</button>\r\n    </li>\r\n    <li *ngIf=\"showDelete()\">\r\n      <button type=\"button\" class=\"btn btn-danger btn-raised\" (click)=\"delete()\">Delete Service</button>\r\n    </li>\r\n  </ul>\r\n</ba-card>\r\n\r\n<div *ngIf=\"service\">\r\n  <ba-card title=\"Certificates for {{service.name}}\" baCardClass=\"with-scroll table-panel\">\r\n    <certificates-table [entityMrn]=\"service.mrn\" [isLoading]=\"isLoading\" [certificateTitle]=\"service.name\" [certificateEntityType]=\"entityType\" [certificates]=\"service.certificates\"></certificates-table>\r\n  </ba-card>\r\n</div>\r\n\r\n"
+module.exports = "<ba-card title=\"{{title}}\" baCardClass=\"with-scroll table-panel\">\r\n  <mc-label-value-table [isLoading]=\"isLoading\" [labelValues]=\"labelValues\"></mc-label-value-table>\r\n  <ul *ngIf=\"!isLoading && service && (this.service.oidcRedirectUri || showDelete() || showUpdate())\" class=\"btn-list clearfix\">\r\n    <li *ngIf=\"this.service.oidcRedirectUri\">\r\n      <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"downloadXML()\">Download JBOSS XML</button>\r\n    </li>\r\n    <li *ngIf=\"this.service.oidcRedirectUri\">\r\n      <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"downloadJSON()\">Download Keycloak JSON</button>\r\n    </li>\r\n    <li *ngIf=\"showUpdate()\">\r\n      <button type=\"button\" class=\"btn btn-primary btn-raised\" (click)=\"update()\">Update</button>\r\n    </li>\r\n    <li *ngIf=\"showDelete()\">\r\n      <button type=\"button\" class=\"btn btn-danger btn-raised\" (click)=\"delete()\">Delete Service</button>\r\n    </li>\r\n  </ul>\r\n</ba-card>\r\n\r\n<div *ngIf=\"service\">\r\n  <ba-card title=\"Certificates for {{service.name}}\" baCardClass=\"with-scroll table-panel\">\r\n    <certificates-table [entityMrn]=\"service.mrn\" [isLoading]=\"isLoading\" [certificateTitle]=\"service.name\" [certificateEntityType]=\"entityType\" [certificates]=\"service.certificates\"></certificates-table>\r\n  </ba-card>\r\n</div>\r\n\r\n"
 
 /***/ },
 
