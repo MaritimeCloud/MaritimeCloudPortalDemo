@@ -2689,7 +2689,7 @@ var SrViewModelService = (function () {
         var labelValues = undefined;
         if (specification) {
             labelValues = [];
-            labelValues.push({ label: 'ID', valueHtml: specification.specificationId });
+            labelValues.push({ label: 'MRN', valueHtml: specification.specificationId });
             labelValues.push({ label: 'Name', valueHtml: specification.name });
             labelValues.push({ label: 'Version', valueHtml: specification.version });
             labelValues.push({ label: 'Status', valueHtml: specification.status });
@@ -2701,7 +2701,7 @@ var SrViewModelService = (function () {
         var labelValues = undefined;
         if (design) {
             labelValues = [];
-            labelValues.push({ label: 'ID', valueHtml: design.designId });
+            labelValues.push({ label: 'MRN', valueHtml: design.designId });
             labelValues.push({ label: 'Name', valueHtml: design.name });
             labelValues.push({ label: 'Version', valueHtml: design.version });
             labelValues.push({ label: 'Status', valueHtml: design.status });
@@ -2713,7 +2713,7 @@ var SrViewModelService = (function () {
         var labelValues = undefined;
         if (instance) {
             labelValues = [];
-            labelValues.push({ label: 'ID', valueHtml: instance.instanceId });
+            labelValues.push({ label: 'MRN', valueHtml: instance.instanceId });
             labelValues.push({ label: 'Name', valueHtml: instance.name });
             labelValues.push({ label: 'Version', valueHtml: instance.version });
             labelValues.push({ label: 'Status', valueHtml: instance.status });
