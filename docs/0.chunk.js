@@ -1351,11 +1351,7 @@ var InstanceDetailsComponent = (function () {
         this.fileHelperService.downloadXml(this.instance.instanceAsXml);
     };
     InstanceDetailsComponent.prototype.downloadDoc = function () {
-        var _this = this;
-        // TODO How the %¤"# should i get it???
-        this.docsService.getDoc().subscribe(function (doc) {
-            _this.fileHelperService.downloadDoc(doc);
-        });
+        this.fileHelperService.downloadDoc(this.instance.instanceAsDoc);
     };
     InstanceDetailsComponent.prototype.createIdService = function () {
         this.navigationHelperService.navigateToCreateIdService(this.instance.instanceId, this.instance.name);
